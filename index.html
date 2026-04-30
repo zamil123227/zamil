@@ -1,4 +1,4 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -29,20 +29,6 @@
             position: relative;
         }
 
-        .music-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: transparent;
-            border: 1px solid var(--brand-accent);
-            color: var(--brand-accent);
-            padding: 5px 12px;
-            font-size: 0.6rem;
-            border-radius: 20px;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
         .main-title {
             font-size: 3.5rem;
             font-weight: 900;
@@ -50,7 +36,6 @@
             margin: 0;
             text-transform: uppercase;
             color: var(--brand-accent);
-            text-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
         }
 
         .sub-tagline {
@@ -85,120 +70,85 @@
         .page { display: none; padding: 20px; min-height: 70vh; }
         .active-page { display: block !important; }
 
-        .filter-bar {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
+        /* Filter Bar */
+        .filter-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
         .filter-btn {
-            background: transparent;
-            border: 1px solid var(--text-grey);
-            color: var(--text-grey);
-            padding: 8px 15px;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 2px;
+            background: transparent; border: 1px solid var(--text-grey); color: var(--text-grey);
+            padding: 8px 15px; font-size: 0.65rem; text-transform: uppercase; cursor: pointer;
         }
+        .filter-btn.active-filter { border-color: var(--brand-accent); color: var(--brand-accent); }
 
-        .filter-btn.active-filter {
-            border-color: var(--brand-accent);
-            color: var(--brand-accent);
-        }
-
+        /* HOME SECTION */
         #home {
-            padding: 0;
-            height: calc(100vh - 180px); 
-            display: none;
-            grid-template-columns: 1fr 1fr;
-            background: var(--brand-white); 
+            padding: 0; height: calc(100vh - 180px); 
+            display: none; grid-template-columns: 1fr 1fr; background: var(--brand-white); 
         }
         #home.active-page { display: grid !important; }
-
-        .home-text-side {
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            color: var(--brand-black);
-        }
-
+        .home-text-side { padding: 40px; display: flex; flex-direction: column; justify-content: center; color: var(--brand-black); }
         .hero-title { font-size: 4rem; font-weight: 900; line-height: 0.9; margin: 0; color: #eec12e; }
+        .btn-visit { background: transparent; color: var(--brand-black); border: 1px solid var(--brand-black); padding: 10px 25px; font-weight: bold; font-size: 0.7rem; cursor: pointer; width: fit-content; text-transform: uppercase; margin-top: 20px; }
+        .home-image-side { background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000') center/cover no-repeat; }
 
-        .btn-visit {
-            background: transparent;
-            color: var(--brand-black);
-            border: 1px solid var(--brand-black);
-            padding: 10px 25px;
-            font-weight: bold;
-            font-size: 0.7rem;
-            cursor: pointer;
-            width: fit-content;
-            text-transform: uppercase;
-            margin-top: 20px;
-        }
-
-        .home-image-side {
-            background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000') center/cover no-repeat;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .card { background: var(--accent-grey); padding: 10px; border-radius: 4px; cursor: pointer; border: 1px solid transparent; transition: 0.3s; }
-        .card:hover { border-color: var(--brand-accent); }
+        /* GRID */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 1000px; margin: 0 auto; }
+        .card { background: var(--accent-grey); padding: 10px; border-radius: 4px; border: 1px solid transparent; transition: 0.3s; }
         .card.hidden { display: none; }
-        .card img { width: 100%; height: 220px; object-fit: cover; border-radius: 2px; }
-        .card h3 { font-size: 0.8rem; margin: 10px 0; color: var(--brand-white); text-transform: uppercase; }
 
+        .image-container {
+            position: relative; width: 100%; height: 250px; overflow: hidden; background: #000; cursor: pointer;
+        }
+
+        .image-container img { 
+            width: 100%; height: 100%; object-fit: cover; display: none; animation: galleryFade 0.4s ease;
+        }
+
+        .image-container img.active-img { display: block; }
+
+        @keyframes galleryFade { from { opacity: 0.6; } to { opacity: 1; } }
+
+        .gallery-nav {
+            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 5px; z-index: 5;
+        }
+
+        .nav-dot { width: 18px; height: 2px; background: rgba(255, 255, 255, 0.3); }
+        .nav-dot.active-dot { background: var(--brand-accent); }
+
+        .card h3 { font-size: 0.8rem; margin: 10px 0 5px 0; color: var(--brand-white); text-transform: uppercase; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+        /* BIG VIEW MODAL */
         .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); z-index: 1000; overflow-y: auto; padding: 20px 0;
         }
 
         .modal-content {
-            background: var(--accent-grey);
-            max-width: 450px;
-            width: 100%;
-            padding: 20px;
-            border: 1px solid var(--brand-accent);
-            text-align: center;
+            background: var(--brand-black); max-width: 480px; width: 90%; margin: auto;
+            border: 1px solid #222; padding: 20px; text-align: left;
         }
 
-        .modal-content img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 2px; }
-        .modal-desc { color: var(--text-grey); font-size: 0.8rem; margin: 15px 0; line-height: 1.6; }
+        .modal-gallery { position: relative; width: 100%; height: 400px; cursor: pointer; border: 1px solid #333; }
+        .modal-gallery img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .modal-gallery img.active-img { display: block; }
+
+        .modal-desc { color: var(--text-grey); font-size: 0.85rem; margin: 20px 0; line-height: 1.6; }
         
-        .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-add { background: var(--brand-accent); color: var(--brand-black); border: none; flex: 1; padding: 14px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
-        .btn-back { background: var(--brand-white); color: var(--brand-black); border: none; flex: 1; padding: 14px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
+        .size-selector { display: flex; gap: 10px; margin: 15px 0; }
+        .size-btn { 
+            flex: 1; padding: 12px; background: transparent; border: 1px solid #444; 
+            color: white; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; font-weight: bold;
+        }
+        .size-btn.selected { border-color: var(--brand-accent); color: var(--brand-accent); }
+
+        .modal-btns { display: flex; gap: 10px; margin-top: 30px; }
+        .btn-add { background: var(--brand-accent); color: var(--brand-black); border: none; flex: 2; padding: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .btn-back { background: var(--brand-white); color: var(--brand-black); border: none; flex: 1; padding: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
 
         .total-display { text-align: center; font-size: 2.5rem; font-weight: bold; margin: 40px 0; }
         .btn-whatsapp {
-            background: var(--whatsapp-green);
-            color: var(--brand-white);
-            border: none;
-            width: 100%;
-            max-width: 500px;
-            padding: 18px;
-            font-weight: bold;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            display: block;
-            margin: 20px auto;
+            background: var(--whatsapp-green); color: var(--brand-white); border: none;
+            width: 100%; max-width: 500px; padding: 18px; font-weight: bold; font-size: 0.75rem;
+            text-transform: uppercase; cursor: pointer; display: block; margin: 20px auto;
         }
 
         footer { text-align: center; padding: 40px; color: var(--text-grey); font-size: 0.6rem; letter-spacing: 1px; }
@@ -208,13 +158,13 @@
             .home-image-side { height: 350px; }
             .hero-title { font-size: 3rem; }
             .grid { grid-template-columns: 1fr; }
+            .modal-gallery { height: 350px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="music-toggle">Music: Off</div>
         <h1 class="main-title">ZAMIL'S</h1>
         <div class="sub-tagline">Streetwear Evolution</div>
     </header>
@@ -223,15 +173,24 @@
         <a onclick="showPage('home')" id="l-home" class="active">Home</a>
         <a onclick="showPage('shop')" id="l-shop">Collection</a>
         <a onclick="showPage('cart')" id="l-cart">Bag (<span id="count">0</span>)</a>
-        <a onclick="showPage('size')">Size Guide</a>
+        <a onclick="showPage('size')" id="l-size">Size Guide</a>
     </nav>
 
     <div id="productModal" class="modal">
         <div class="modal-content">
-            <img id="modalImg" src="">
-            <h2 id="modalTitle" style="text-transform: uppercase; margin: 15px 0 5px 0; font-size: 1.2rem;"></h2>
-            <p id="modalPrice" style="color: var(--brand-accent); font-weight: bold; font-size: 1.1rem;"></p>
+            <div id="modalGallery" class="modal-gallery" onclick="flipImage(this)">
+                <div class="gallery-nav"><div class="nav-dot active-dot"></div><div class="nav-dot"></div></div>
+                <img id="modalImg1" src="" class="active-img">
+                <img id="modalImg2" src="">
+            </div>
+            <h2 id="modalTitle" style="text-transform: uppercase; margin: 20px 0 5px 0; font-size: 1.4rem;"></h2>
+            <p id="modalPrice" style="color: var(--brand-accent); font-weight: bold; font-size: 1.2rem; margin: 0;"></p>
             <p id="modalDesc" class="modal-desc"></p>
+            <div class="size-selector">
+                <button class="size-btn" onclick="setS(this, 'M')">M</button>
+                <button class="size-btn" onclick="setS(this, 'L')">L</button>
+                <button class="size-btn" onclick="setS(this, 'XL')">XL</button>
+            </div>
             <div class="modal-btns">
                 <button class="btn-back" onclick="closeModal()">Back</button>
                 <button id="modalAddBtn" class="btn-add">Add to Bag</button>
@@ -254,107 +213,75 @@
             <button class="filter-btn" onclick="filterItems('boy', this)">Boy</button>
             <button class="filter-btn" onclick="filterItems('girl', this)">Girls</button>
         </div>
-
-        <div class="grid">
-            <div class="card" data-cat="boy" onclick="openDetails('Midnight Stealth', 450, 'https://i.postimg.cc/MK3qZd1D/IMG-2266.png', 'Premium heavyweight hoodie featuring oversized fit and stealth black finish.')">
-                <img src="https://i.postimg.cc/MK3qZd1D/IMG-2266.png">
-                <h3>Midnight Stealth</h3>
-                <p style="color: var(--brand-accent);">GHS 450</p>
+        <div class="grid" id="jogger-grid">
             </div>
-            <div class="card" data-cat="girl" onclick="openDetails('Ghost White', 480, 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600', 'Clean minimalist design with water-resistant fabric and reflective ZAMIL detailing.')">
-                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800">
-                <h3>Ghost White</h3>
-                <p style="color: var(--brand-accent);">GHS 480</p>
-            </div>
-            <div class="card" data-cat="boy" onclick="openDetails('Onyx Cargo', 520, 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600', 'Tactical utility cargos with multiple pockets and adjustable ankle straps.')">
-                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800">
-                <h3>Onyx Cargo</h3>
-                <p style="color: var(--brand-accent);">GHS 520</p>
-            </div>
-            <div class="card" data-cat="girl" onclick="openDetails('Cyber Tee', 350, 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600', 'Futuristic graphic tee made from high-grade cotton with neon accents.')">
-                <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800">
-                <h3>Cyber Tee</h3>
-                <p style="color: var(--brand-accent);">GHS 350</p>
-            </div>
-            <div class="card" data-cat="boy" onclick="openDetails('Urban Parka', 890, 'https://images.unsplash.com/photo-1544923246-77307dd654ca?w=600', 'Heavy-duty insulated parka designed for extreme urban environments.')">
-                <img src="https://images.unsplash.com/photo-1544923246-77307dd654ca?w=800">
-                <h3>Urban Parka</h3>
-                <p style="color: var(--brand-accent);">GHS 890</p>
-            </div>
-            <div class="card" data-cat="girl" onclick="openDetails('Aero Joggers', 390, 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600', 'Lightweight breathable joggers with a streamlined fit for girls.')">
-                <img src="https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800">
-                <h3>Aero Joggers</h3>
-                <p style="color: var(--brand-accent);">GHS 390</p>
-            </div>
-            <div class="card" data-cat="boy" onclick="openDetails('Graphite Knit', 420, 'https://images.unsplash.com/photo-1516826435551-36a8a09e4575?w=600', 'Deep grey knit sweater with a premium textured feel.')">
-                <img src="https://images.unsplash.com/photo-1516826435551-36a8a09e4575?w=800">
-                <h3>Graphite Knit</h3>
-                <p style="color: var(--brand-accent);">GHS 420</p>
-            </div>
-            <div class="card" data-cat="girl" onclick="openDetails('Skyline Hoodie', 460, 'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=600', 'Soft-touch blue hoodie with a relaxed aesthetic and ribbed cuffs.')">
-                <img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=800">
-                <h3>Skyline Hoodie</h3>
-                <p style="color: var(--brand-accent);">GHS 460</p>
-            </div>
-            <div class="card" data-cat="boy" onclick="openDetails('Phantom Vest', 380, 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600', 'Versatile layering vest with matte hardware and functional chest rig.')">
-                <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800">
-                <h3>Phantom Vest</h3>
-                <p style="color: var(--brand-accent);">GHS 380</p>
-            </div>
-            <div class="card" data-cat="girl" onclick="openDetails('Opal Windbreaker', 510, 'https://images.unsplash.com/photo-1548883354-94bcfe321cbb?w=600', 'Iridescent tech-shell that changes color in the light.')">
-                <img src="https://images.unsplash.com/photo-1548883354-94bcfe321cbb?w=800">
-                <h3>Opal Windbreaker</h3>
-                <p style="color: var(--brand-accent);">GHS 510</p>
-            </div>
-            <div class="card" data-cat="boy" onclick="openDetails('Legacy Crew', 410, 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600', 'Standard fit crewneck with high-density embroidered ZAMIL logo.')">
-                <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800">
-                <h3>Legacy Crew</h3>
-                <p style="color: var(--brand-accent);">GHS 410</p>
-            </div>
-            <div class="card" data-cat="girl" onclick="openDetails('Carbon Skirt', 320, 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=600', 'Cargo-inspired streetwear skirt with adjustable belt loops.')">
-                <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800">
-                <h3>Carbon Skirt</h3>
-                <p style="color: var(--brand-accent);">GHS 320</p>
-            </div>
-            <div class="card" data-cat="boy" onclick="openDetails('Vortex Tee', 330, 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600', 'Heavy cotton tee with a distorted ZAMIL typography print.')">
-                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800">
-                <h3>Vortex Tee</h3>
-                <p style="color: var(--brand-accent);">GHS 330</p>
-            </div>
-            <div class="card" data-cat="girl" onclick="openDetails('Dusk Crop', 290, 'https://images.unsplash.com/photo-1516750105099-4b8a83e217ee?w=600', 'Slim-fit cropped long sleeve in a charcoal washed finish.')">
-                <img src="https://images.unsplash.com/photo-1516750105099-4b8a83e217ee?w=800">
-                <h3>Dusk Crop</h3>
-                <p style="color: var(--brand-accent);">GHS 290</p>
-            </div>
-            <div class="card" data-cat="boy" onclick="openDetails('Apex Shorts', 340, 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=600', 'Premium mesh basketball shorts designed for high-performance streetwear.')">
-                <img src="https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=800">
-                <h3>Apex Shorts</h3>
-                <p style="color: var(--brand-accent);">GHS 340</p>
-            </div>
-        </div>
     </section>
 
     <section id="cart" class="page">
-        <h2 style="text-align: center; text-transform: uppercase;">Your Selection</h2>
-        <div id="cart-list" style="text-align: center; color: var(--text-grey); margin-bottom: 30px;">No items selected yet.</div>
+        <h2 style="text-align: center; text-transform: uppercase;">Your Bag</h2>
+        <div id="cart-list" style="text-align: center; color: var(--text-grey); margin-bottom: 30px;">Empty.</div>
         <div class="total-display">Total: GHS <span id="total-val">0</span></div>
         <button class="btn-whatsapp" onclick="process()">Complete Order via WhatsApp</button>
     </section>
 
     <section id="size" class="page">
-        <div style="border: 1px solid var(--brand-accent); padding: 30px; max-width: 400px; margin: 0 auto;">
+        <div style="border: 1px solid var(--brand-accent); padding: 30px; max-width: 400px; margin: 0 auto; text-align: center;">
             <h3 style="color: var(--brand-accent); text-transform: uppercase; margin-top: 0;">Size Chart</h3>
-            <p><b>M:</b> Chest 40" | Length 27"</p>
-            <p><b>L:</b> Chest 44" | Length 28"</p>
-            <p><b>XL:</b> Chest 48" | Length 29"</p>
-            <button class="btn-back" style="width: 100%; margin-top: 20px;" onclick="showPage('home')">Back Home</button>
+            <p><b>M:</b> Waist 30-32" | Length 39"</p>
+            <p><b>L:</b> Waist 33-35" | Length 40"</p>
+            <p><b>XL:</b> Waist 36-38" | Length 41"</p>
+            <button class="btn-visit" style="width: 100%; margin-top: 20px; border-color: var(--text-grey); color: white;" onclick="showPage('home')">Back Home</button>
         </div>
     </section>
 
     <footer>&copy; 2026 ZAMIL'S STREETWEAR EVOLUTION</footer>
 
     <script>
+        const products = [
+            // BOYS (10)
+            {cat:'boy', name:'Titan Cargo', price:350, img1:'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=500', img2:'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500', desc:'Tactical cargo joggers with reinforced knees.'},
+            {cat:'boy', name:'Stealth Jogger', price:320, img1:'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500', img2:'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500', desc:'Deep black minimalist joggers in tech-fleece.'},
+            {cat:'boy', name:'Nomad Utility', price:380, img1:'https://images.unsplash.com/photo-1491336477066-31156b5e4f35?w=500', img2:'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=500', desc:'Weather-resistant utility joggers for any terrain.'},
+            {cat:'boy', name:'Matrix Reflective', price:400, img1:'https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=500', img2:'https://images.unsplash.com/photo-1515446133109-60d1bc7ec276?w=500', desc:'Reflective detailing for night-time urban style.'},
+            {cat:'boy', name:'Carbon Ribbed', price:310, img1:'https://images.unsplash.com/photo-1554568218-0f1715e72254?w=500', img2:'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500', desc:'Ribbed texture for a unique structured fit.'},
+            {cat:'boy', name:'Rogue Tapered', price:330, img1:'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500', img2:'https://images.unsplash.com/photo-1503342392335-af8145eeee04?w=500', desc:'Classic tapered fit for an athletic silhouette.'},
+            {cat:'boy', name:'Apex Fleece', price:360, img1:'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500', img2:'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500', desc:'Super soft heavyweight fleece for extreme comfort.'},
+            {cat:'boy', name:'Vector Mesh', price:340, img1:'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500', img2:'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500', desc:'Breathable mesh-lined joggers for active days.'},
+            {cat:'boy', name:'Zenith Canvas', price:370, img1:'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500', img2:'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=500', desc:'Rugged canvas blend with oversized pockets.'},
+            {cat:'boy', name:'Drift Street', price:350, img1:'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=500', img2:'https://images.unsplash.com/photo-1551488831-60d0e6c278c2?w=500', desc:'Loose fit baggy joggers with graffiti accents.'},
+
+            // GIRLS (10)
+            {cat:'girl', name:'Luna Soft', price:320, img1:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500', img2:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500', desc:'High-waisted joggers in premium cloud-knit cotton.'},
+            {cat:'girl', name:'Nova Pastel', price:300, img1:'https://images.unsplash.com/photo-1532667449560-72a95c8d381b?w=500', img2:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500', desc:'Dreamy lavender joggers with elastic cuffs.'},
+            {cat:'girl', name:'Ember Flare', price:340, img1:'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=500', img2:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=500', desc:'Modern flare-cut joggers in burnt orange.'},
+            {cat:'girl', name:'Aura Velour', price:380, img1:'https://images.unsplash.com/photo-1604176354204-926873ff3da9?w=500', img2:'https://images.unsplash.com/photo-1617019114583-affb34d1b3cd?w=500', desc:'Luxury velour joggers for a premium street look.'},
+            {cat:'girl', name:'Mist Cuffed', price:310, img1:'https://images.unsplash.com/photo-1503342392335-af8145eeee04?w=500', img2:'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=500', desc:'Light grey relaxed fit with thick cuffed ankles.'},
+            {cat:'girl', name:'Bloom Satin', price:420, img1:'https://images.unsplash.com/photo-1550614000-4895a10e1bfd?w=500', img2:'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=500', desc:'Silky satin finish with drawstring waist.'},
+            {cat:'girl', name:'Solis Mesh', price:330, img1:'https://images.unsplash.com/photo-1571513722275-4b41940f54b8?w=500', img2:'https://images.unsplash.com/photo-1571513823274-0230302b178c?w=500', desc:'Double-layered mesh for high-energy style.'},
+            {cat:'girl', name:'Terra Cargo', price:360, img1:'https://images.unsplash.com/photo-1620331311520-246422ff83f9?w=500', img2:'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500', desc:'Earth-toned utility cargo joggers with slim fit.'},
+            {cat:'girl', name:'Vesper Silk', price:450, img1:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500', img2:'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500', desc:'Exclusive silk-blend streetwear trousers.'},
+            {cat:'girl', name:'Jade Knit', price:340, img1:'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500', img2:'https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?w=500', desc:'Waffle-knit joggers in forest green.'},
+        ];
+
         let bag = [];
+        let tempSize = "";
+
+        function initGrid() {
+            const grid = document.getElementById('jogger-grid');
+            grid.innerHTML = products.map(p => `
+                <div class="card" data-cat="${p.cat}">
+                    <div class="image-container" onclick="flipImage(this)">
+                        <div class="gallery-nav"><div class="nav-dot active-dot"></div><div class="nav-dot"></div></div>
+                        <img src="${p.img1}" class="active-img">
+                        <img src="${p.img2}">
+                    </div>
+                    <div onclick="openDetails('${p.name}', ${p.price}, '${p.img1}', '${p.img2}', '${p.desc}')">
+                        <h3>${p.name}</h3>
+                        <p style="color: var(--brand-accent); font-weight:bold;">GHS ${p.price}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
 
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
@@ -369,49 +296,70 @@
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
             btn.classList.add('active-filter');
             document.querySelectorAll('.card').forEach(card => {
-                if (category === 'all' || card.getAttribute('data-cat') === category) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
+                if (category === 'all' || card.getAttribute('data-cat') === category) card.classList.remove('hidden');
+                else card.classList.add('hidden');
             });
         }
 
-        function openDetails(name, price, img, desc) {
-            document.getElementById('modalImg').src = img;
+        function flipImage(container) {
+            const imgs = container.querySelectorAll('img');
+            const dots = container.querySelectorAll('.nav-dot');
+            let activeIdx = 0;
+            imgs.forEach((img, i) => { if(img.classList.contains('active-img')) activeIdx = i; img.classList.remove('active-img'); dots[i].classList.remove('active-dot'); });
+            let newIdx = (activeIdx + 1) % imgs.length;
+            imgs[newIdx].classList.add('active-img');
+            dots[newIdx].classList.add('active-dot');
+        }
+
+        function setS(btn, s) {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            tempSize = s;
+        }
+
+        function openDetails(name, price, img1, img2, desc) {
+            tempSize = "";
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('modalImg1').src = img1;
+            document.getElementById('modalImg2').src = img2;
+            document.getElementById('modalImg1').classList.add('active-img');
+            document.getElementById('modalImg2').classList.remove('active-img');
             document.getElementById('modalTitle').innerText = name;
             document.getElementById('modalPrice').innerText = 'GHS ' + price;
             document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('productModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
             document.getElementById('modalAddBtn').onclick = function() {
-                add(name, price);
+                if(!tempSize) return alert("Select a size!");
+                add(name, price, tempSize);
                 closeModal();
             };
-            document.getElementById('productModal').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('productModal').style.display = 'none';
-        }
+        function closeModal() { document.getElementById('productModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
-        function add(name, price) {
-            bag.push({name, price});
+        function add(name, price, size) {
+            bag.push({name, price, size});
             document.getElementById('count').innerText = bag.length;
             document.getElementById('total-val').innerText = bag.reduce((a, b) => a + b.price, 0);
+            updateCart();
+            alert(name + " added to bag!");
+        }
+
+        function updateCart() {
             const list = document.getElementById('cart-list');
-            list.innerHTML = bag.map(i => `<div style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid #222;"><span>${i.name}</span><span>GHS ${i.price}</span></div>`).join('');
-            alert(name + " added!");
+            if(bag.length === 0) list.innerHTML = "Empty.";
+            else list.innerHTML = bag.map(i => `<div style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid #222;"><span>${i.name} (${i.size})</span><span>GHS ${i.price}</span></div>`).join('');
         }
 
         function process() {
-            if(bag.length === 0) return alert("Your bag is empty!");
-            
+            if(bag.length === 0) return alert("Bag is empty!");
             const total = document.getElementById('total-val').innerText;
-            // FIXED: This map now creates a clear list of items with their prices
-            const itemDetails = bag.map(i => `${i.name} (GHS ${i.price})`).join("%0A"); 
-            const message = `Hello Zamil, I want to place an order:%0A%0A${itemDetails}%0A%0ATotal: GHS ${total}`;
-            
-            window.location.href = "https://wa.me/233503612876?text=" + message;
-        }s
+            const items = bag.map(i => `${i.name} [Size: ${i.size}] (GHS ${i.price})`).join("%0A"); 
+            window.location.href = "https://wa.me/233503612876?text=" + `Hello Zamil, Order Request:%0A%0A${items}%0A%0ATotal: GHS ${total}`;
+        }
+
+        initGrid();
     </script>
 </body>
 </html>
