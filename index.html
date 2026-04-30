@@ -1,0 +1,417 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAMIL'S | STREETWEAR EVOLUTION</title>
+    <style>
+        :root {
+            --brand-black: #000000;
+            --brand-white: #ffffff;
+            --brand-accent: #00ffcc; 
+            --whatsapp-green: #58cc71;
+            --accent-grey: #111111;
+            --text-grey: #888888;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--brand-black);
+            color: var(--brand-white);
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 40px 20px;
+            text-align: center;
+            background: var(--brand-black);
+            position: relative;
+        }
+
+        .music-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid var(--brand-accent);
+            color: var(--brand-accent);
+            padding: 5px 12px;
+            font-size: 0.6rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+            color: var(--brand-accent);
+            text-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+        }
+
+        .sub-tagline {
+            letter-spacing: 4px;
+            color: var(--brand-accent);
+            font-size: 0.75rem;
+            margin-top: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px;
+            background: var(--brand-black);
+            z-index: 100;
+        }
+
+        nav a {
+            color: var(--text-grey);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .active { color: var(--brand-white) !important; text-decoration: underline; text-underline-offset: 5px; }
+
+        .page { display: none; padding: 20px; min-height: 70vh; }
+        .active-page { display: block !important; }
+
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--text-grey);
+            color: var(--text-grey);
+            padding: 8px 15px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .filter-btn.active-filter {
+            border-color: var(--brand-accent);
+            color: var(--brand-accent);
+        }
+
+        #home {
+            padding: 0;
+            height: calc(100vh - 180px); 
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            background: var(--brand-white); 
+        }
+        #home.active-page { display: grid !important; }
+
+        .home-text-side {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: var(--brand-black);
+        }
+
+        .hero-title { font-size: 4rem; font-weight: 900; line-height: 0.9; margin: 0; color: #eec12e; }
+
+        .btn-visit {
+            background: transparent;
+            color: var(--brand-black);
+            border: 1px solid var(--brand-black);
+            padding: 10px 25px;
+            font-weight: bold;
+            font-size: 0.7rem;
+            cursor: pointer;
+            width: fit-content;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+
+        .home-image-side {
+            background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000') center/cover no-repeat;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .card { background: var(--accent-grey); padding: 10px; border-radius: 4px; cursor: pointer; border: 1px solid transparent; transition: 0.3s; }
+        .card:hover { border-color: var(--brand-accent); }
+        .card.hidden { display: none; }
+        .card img { width: 100%; height: 220px; object-fit: cover; border-radius: 2px; }
+        .card h3 { font-size: 0.8rem; margin: 10px 0; color: var(--brand-white); text-transform: uppercase; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--accent-grey);
+            max-width: 450px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid var(--brand-accent);
+            text-align: center;
+        }
+
+        .modal-content img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 2px; }
+        .modal-desc { color: var(--text-grey); font-size: 0.8rem; margin: 15px 0; line-height: 1.6; }
+        
+        .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-add { background: var(--brand-accent); color: var(--brand-black); border: none; flex: 1; padding: 14px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
+        .btn-back { background: var(--brand-white); color: var(--brand-black); border: none; flex: 1; padding: 14px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
+
+        .total-display { text-align: center; font-size: 2.5rem; font-weight: bold; margin: 40px 0; }
+        .btn-whatsapp {
+            background: var(--whatsapp-green);
+            color: var(--brand-white);
+            border: none;
+            width: 100%;
+            max-width: 500px;
+            padding: 18px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+
+        footer { text-align: center; padding: 40px; color: var(--text-grey); font-size: 0.6rem; letter-spacing: 1px; }
+
+        @media (max-width: 768px) {
+            #home { grid-template-columns: 1fr; height: auto; }
+            .home-image-side { height: 350px; }
+            .hero-title { font-size: 3rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="music-toggle">Music: Off</div>
+        <h1 class="main-title">ZAMIL'S</h1>
+        <div class="sub-tagline">Streetwear Evolution</div>
+    </header>
+
+    <nav>
+        <a onclick="showPage('home')" id="l-home" class="active">Home</a>
+        <a onclick="showPage('shop')" id="l-shop">Collection</a>
+        <a onclick="showPage('cart')" id="l-cart">Bag (<span id="count">0</span>)</a>
+        <a onclick="showPage('size')">Size Guide</a>
+    </nav>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <img id="modalImg" src="">
+            <h2 id="modalTitle" style="text-transform: uppercase; margin: 15px 0 5px 0; font-size: 1.2rem;"></h2>
+            <p id="modalPrice" style="color: var(--brand-accent); font-weight: bold; font-size: 1.1rem;"></p>
+            <p id="modalDesc" class="modal-desc"></p>
+            <div class="modal-btns">
+                <button class="btn-back" onclick="closeModal()">Back</button>
+                <button id="modalAddBtn" class="btn-add">Add to Bag</button>
+            </div>
+        </div>
+    </div>
+
+    <section id="home" class="page active-page">
+        <div class="home-text-side">
+            <h2 class="hero-title">NEW SEASON</h2>
+            <div style="border: 2px solid #eec12e; padding: 5px 15px; width: fit-content; margin: 15px 0; color: #eec12e; font-weight: bold; font-size: 0.8rem;">AVAILABLE NOW</div>
+            <button class="btn-visit" onclick="showPage('shop')">Visit Our Website</button>
+        </div>
+        <div class="home-image-side"></div>
+    </section>
+
+    <section id="shop" class="page">
+        <div class="filter-bar">
+            <button class="filter-btn active-filter" onclick="filterItems('all', this)">ALL</button>
+            <button class="filter-btn" onclick="filterItems('boy', this)">Boy</button>
+            <button class="filter-btn" onclick="filterItems('girl', this)">Girls</button>
+        </div>
+
+        <div class="grid">
+            <div class="card" data-cat="boy" onclick="openDetails('Midnight Stealth', 450, 'https://i.postimg.cc/MK3qZd1D/IMG-2266.png', 'Premium heavyweight hoodie featuring oversized fit and stealth black finish.')">
+                <img src="https://i.postimg.cc/MK3qZd1D/IMG-2266.png">
+                <h3>Midnight Stealth</h3>
+                <p style="color: var(--brand-accent);">GHS 450</p>
+            </div>
+            <div class="card" data-cat="girl" onclick="openDetails('Ghost White', 480, 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600', 'Clean minimalist design with water-resistant fabric and reflective ZAMIL detailing.')">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800">
+                <h3>Ghost White</h3>
+                <p style="color: var(--brand-accent);">GHS 480</p>
+            </div>
+            <div class="card" data-cat="boy" onclick="openDetails('Onyx Cargo', 520, 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600', 'Tactical utility cargos with multiple pockets and adjustable ankle straps.')">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800">
+                <h3>Onyx Cargo</h3>
+                <p style="color: var(--brand-accent);">GHS 520</p>
+            </div>
+            <div class="card" data-cat="girl" onclick="openDetails('Cyber Tee', 350, 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600', 'Futuristic graphic tee made from high-grade cotton with neon accents.')">
+                <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800">
+                <h3>Cyber Tee</h3>
+                <p style="color: var(--brand-accent);">GHS 350</p>
+            </div>
+            <div class="card" data-cat="boy" onclick="openDetails('Urban Parka', 890, 'https://images.unsplash.com/photo-1544923246-77307dd654ca?w=600', 'Heavy-duty insulated parka designed for extreme urban environments.')">
+                <img src="https://images.unsplash.com/photo-1544923246-77307dd654ca?w=800">
+                <h3>Urban Parka</h3>
+                <p style="color: var(--brand-accent);">GHS 890</p>
+            </div>
+            <div class="card" data-cat="girl" onclick="openDetails('Aero Joggers', 390, 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600', 'Lightweight breathable joggers with a streamlined fit for girls.')">
+                <img src="https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800">
+                <h3>Aero Joggers</h3>
+                <p style="color: var(--brand-accent);">GHS 390</p>
+            </div>
+            <div class="card" data-cat="boy" onclick="openDetails('Graphite Knit', 420, 'https://images.unsplash.com/photo-1516826435551-36a8a09e4575?w=600', 'Deep grey knit sweater with a premium textured feel.')">
+                <img src="https://images.unsplash.com/photo-1516826435551-36a8a09e4575?w=800">
+                <h3>Graphite Knit</h3>
+                <p style="color: var(--brand-accent);">GHS 420</p>
+            </div>
+            <div class="card" data-cat="girl" onclick="openDetails('Skyline Hoodie', 460, 'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=600', 'Soft-touch blue hoodie with a relaxed aesthetic and ribbed cuffs.')">
+                <img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=800">
+                <h3>Skyline Hoodie</h3>
+                <p style="color: var(--brand-accent);">GHS 460</p>
+            </div>
+            <div class="card" data-cat="boy" onclick="openDetails('Phantom Vest', 380, 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600', 'Versatile layering vest with matte hardware and functional chest rig.')">
+                <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800">
+                <h3>Phantom Vest</h3>
+                <p style="color: var(--brand-accent);">GHS 380</p>
+            </div>
+            <div class="card" data-cat="girl" onclick="openDetails('Opal Windbreaker', 510, 'https://images.unsplash.com/photo-1548883354-94bcfe321cbb?w=600', 'Iridescent tech-shell that changes color in the light.')">
+                <img src="https://images.unsplash.com/photo-1548883354-94bcfe321cbb?w=800">
+                <h3>Opal Windbreaker</h3>
+                <p style="color: var(--brand-accent);">GHS 510</p>
+            </div>
+            <div class="card" data-cat="boy" onclick="openDetails('Legacy Crew', 410, 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600', 'Standard fit crewneck with high-density embroidered ZAMIL logo.')">
+                <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800">
+                <h3>Legacy Crew</h3>
+                <p style="color: var(--brand-accent);">GHS 410</p>
+            </div>
+            <div class="card" data-cat="girl" onclick="openDetails('Carbon Skirt', 320, 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=600', 'Cargo-inspired streetwear skirt with adjustable belt loops.')">
+                <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800">
+                <h3>Carbon Skirt</h3>
+                <p style="color: var(--brand-accent);">GHS 320</p>
+            </div>
+            <div class="card" data-cat="boy" onclick="openDetails('Vortex Tee', 330, 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600', 'Heavy cotton tee with a distorted ZAMIL typography print.')">
+                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800">
+                <h3>Vortex Tee</h3>
+                <p style="color: var(--brand-accent);">GHS 330</p>
+            </div>
+            <div class="card" data-cat="girl" onclick="openDetails('Dusk Crop', 290, 'https://images.unsplash.com/photo-1516750105099-4b8a83e217ee?w=600', 'Slim-fit cropped long sleeve in a charcoal washed finish.')">
+                <img src="https://images.unsplash.com/photo-1516750105099-4b8a83e217ee?w=800">
+                <h3>Dusk Crop</h3>
+                <p style="color: var(--brand-accent);">GHS 290</p>
+            </div>
+            <div class="card" data-cat="boy" onclick="openDetails('Apex Shorts', 340, 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=600', 'Premium mesh basketball shorts designed for high-performance streetwear.')">
+                <img src="https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=800">
+                <h3>Apex Shorts</h3>
+                <p style="color: var(--brand-accent);">GHS 340</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cart" class="page">
+        <h2 style="text-align: center; text-transform: uppercase;">Your Selection</h2>
+        <div id="cart-list" style="text-align: center; color: var(--text-grey); margin-bottom: 30px;">No items selected yet.</div>
+        <div class="total-display">Total: GHS <span id="total-val">0</span></div>
+        <button class="btn-whatsapp" onclick="process()">Complete Order via WhatsApp</button>
+    </section>
+
+    <section id="size" class="page">
+        <div style="border: 1px solid var(--brand-accent); padding: 30px; max-width: 400px; margin: 0 auto;">
+            <h3 style="color: var(--brand-accent); text-transform: uppercase; margin-top: 0;">Size Chart</h3>
+            <p><b>M:</b> Chest 40" | Length 27"</p>
+            <p><b>L:</b> Chest 44" | Length 28"</p>
+            <p><b>XL:</b> Chest 48" | Length 29"</p>
+            <button class="btn-back" style="width: 100%; margin-top: 20px;" onclick="showPage('home')">Back Home</button>
+        </div>
+    </section>
+
+    <footer>&copy; 2026 ZAMIL'S STREETWEAR EVOLUTION</footer>
+
+    <script>
+        let bag = [];
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(id).classList.add('active-page');
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            const link = document.getElementById('l-' + id);
+            if(link) link.classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function filterItems(category, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+            btn.classList.add('active-filter');
+            document.querySelectorAll('.card').forEach(card => {
+                if (category === 'all' || card.getAttribute('data-cat') === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        function openDetails(name, price, img, desc) {
+            document.getElementById('modalImg').src = img;
+            document.getElementById('modalTitle').innerText = name;
+            document.getElementById('modalPrice').innerText = 'GHS ' + price;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('modalAddBtn').onclick = function() {
+                add(name, price);
+                closeModal();
+            };
+            document.getElementById('productModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        function add(name, price) {
+            bag.push({name, price});
+            document.getElementById('count').innerText = bag.length;
+            document.getElementById('total-val').innerText = bag.reduce((a, b) => a + b.price, 0);
+            const list = document.getElementById('cart-list');
+            list.innerHTML = bag.map(i => `<div style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid #222;"><span>${i.name}</span><span>GHS ${i.price}</span></div>`).join('');
+            alert(name + " added!");
+        }
+
+        function process() {
+            if(bag.length === 0) return alert("Your bag is empty!");
+            
+            const total = document.getElementById('total-val').innerText;
+            // FIXED: This map now creates a clear list of items with their prices
+            const itemDetails = bag.map(i => `${i.name} (GHS ${i.price})`).join("%0A"); 
+            const message = `Hello Zamil, I want to place an order:%0A%0A${itemDetails}%0A%0ATotal: GHS ${total}`;
+            
+            window.location.href = "https://wa.me/233503612876?text=" + message;
+        }s
+    </script>
+</body>
+</html>
