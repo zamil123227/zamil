@@ -9,24 +9,25 @@
             --brand-black: #000000;
             --brand-white: #ffffff;
             --brand-accent: #00ffcc; 
+            --soft-bg: #e5e7eb;
+            --glass: rgba(255, 255, 255, 0.7);
             --whatsapp-green: #58cc71;
-            --accent-grey: #111111;
-            --text-grey: #888888;
+            --text-grey: #666666;
         }
 
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-            background-color: var(--brand-black);
-            color: var(--brand-white);
+            background-color: var(--soft-bg);
+            color: var(--brand-black);
             overflow-x: hidden;
+            padding-bottom: 80px;
         }
 
         header {
             padding: 40px 20px;
             text-align: center;
-            background: var(--brand-black);
-            position: relative;
+            background: transparent;
         }
 
         .main-title {
@@ -35,16 +36,16 @@
             letter-spacing: 2px;
             margin: 0;
             text-transform: uppercase;
-            color: var(--brand-accent);
         }
 
         .sub-tagline {
             letter-spacing: 4px;
-            color: var(--brand-accent);
+            color: var(--brand-black);
             font-size: 0.75rem;
             margin-top: 5px;
             font-weight: bold;
             text-transform: uppercase;
+            opacity: 0.7;
         }
 
         nav {
@@ -52,8 +53,17 @@
             justify-content: center;
             gap: 20px;
             padding: 15px;
-            background: var(--brand-black);
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: fit-content;
+            border-radius: 100px;
             z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         nav a {
@@ -63,102 +73,109 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             cursor: pointer;
+            padding: 8px 16px;
+            transition: 0.3s;
         }
 
-        .active { color: var(--brand-white) !important; text-decoration: underline; text-underline-offset: 5px; }
+        .active { color: var(--brand-black) !important; background: white; border-radius: 50px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 
         .page { display: none; padding: 20px; min-height: 70vh; }
         .active-page { display: block !important; }
 
-        /* Filter Bar */
-        .filter-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
-        .filter-btn {
-            background: transparent; border: 1px solid var(--text-grey); color: var(--text-grey);
-            padding: 8px 15px; font-size: 0.65rem; text-transform: uppercase; cursor: pointer;
+        /* HERO SECTION */
+        .hero-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 40px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
         }
-        .filter-btn.active-filter { border-color: var(--brand-accent); color: var(--brand-accent); }
 
-        /* HOME SECTION */
-        #home {
-            padding: 0; height: calc(100vh - 180px); 
-            display: none; grid-template-columns: 1fr 1fr; background: var(--brand-white); 
+        .hero-content { padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+        .hero-label { text-transform: uppercase; font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 10px; }
+        .hero-main-title { font-size: 3.5rem; font-weight: 900; line-height: 1; margin: 0 0 20px 0; }
+        .hero-image { background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000') center/cover no-repeat; min-height: 500px; }
+
+        .btn-pill {
+            background: var(--brand-black);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 100px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
         }
-        #home.active-page { display: grid !important; }
-        .home-text-side { padding: 40px; display: flex; flex-direction: column; justify-content: center; color: var(--brand-black); }
-        .hero-title { font-size: 4rem; font-weight: 900; line-height: 0.9; margin: 0; color: #eec12e; }
-        .btn-visit { background: transparent; color: var(--brand-black); border: 1px solid var(--brand-black); padding: 10px 25px; font-weight: bold; font-size: 0.7rem; cursor: pointer; width: fit-content; text-transform: uppercase; margin-top: 20px; }
-        .home-image-side { background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000') center/cover no-repeat; }
 
-        /* GRID */
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 1000px; margin: 0 auto; }
-        .card { background: var(--accent-grey); padding: 10px; border-radius: 4px; border: 1px solid transparent; transition: 0.3s; }
-        .card.hidden { display: none; }
+        /* SLIDER LOGIC */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; }
+        .card { background: white; padding: 15px; border-radius: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
 
         .image-container {
-            position: relative; width: 100%; height: 250px; overflow: hidden; background: #000; cursor: pointer;
+            position: relative; 
+            width: 100%; 
+            height: 280px; 
+            overflow: hidden; 
+            border-radius: 20px; 
+            background: #f3f4f6;
         }
 
-        .image-container img { 
-            width: 100%; height: 100%; object-fit: cover; display: none; animation: galleryFade 0.4s ease;
+        .slider-track {
+            display: flex;
+            width: 200%; /* Two images */
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .image-container img.active-img { display: block; }
-
-        @keyframes galleryFade { from { opacity: 0.6; } to { opacity: 1; } }
-
-        .gallery-nav {
-            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 5px; z-index: 5;
+        .slider-track img {
+            width: 50%; /* Each image takes half of the track (which is 100% of container) */
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
         }
 
-        .nav-dot { width: 18px; height: 2px; background: rgba(255, 255, 255, 0.3); }
-        .nav-dot.active-dot { background: var(--brand-accent); }
+        .slide-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.9);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-        .card h3 { font-size: 0.8rem; margin: 10px 0 5px 0; color: var(--brand-white); text-transform: uppercase; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-
-        /* BIG VIEW MODAL */
+        /* MODAL */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98); z-index: 1000; overflow-y: auto; padding: 20px 0;
+            background: rgba(0,0,0,0.1); backdrop-filter: blur(15px); z-index: 1000;
         }
-
-        .modal-content {
-            background: var(--brand-black); max-width: 480px; width: 90%; margin: auto;
-            border: 1px solid #222; padding: 20px; text-align: left;
+        .modal-content { 
+            background: white; max-width: 450px; width: 90%; margin: 5vh auto; 
+            border-radius: 40px; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.1);
         }
-
-        .modal-gallery { position: relative; width: 100%; height: 400px; cursor: pointer; border: 1px solid #333; }
-        .modal-gallery img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        .modal-gallery img.active-img { display: block; }
-
-        .modal-desc { color: var(--text-grey); font-size: 0.85rem; margin: 20px 0; line-height: 1.6; }
         
-        .size-selector { display: flex; gap: 10px; margin: 15px 0; }
-        .size-btn { 
-            flex: 1; padding: 12px; background: transparent; border: 1px solid #444; 
-            color: white; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; font-weight: bold;
-        }
-        .size-btn.selected { border-color: var(--brand-accent); color: var(--brand-accent); }
+        .opt-btn { padding: 10px 20px; background: #f3f4f6; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 0.7rem; }
+        .opt-btn.selected { background: var(--brand-black); color: white; }
 
-        .modal-btns { display: flex; gap: 10px; margin-top: 30px; }
-        .btn-add { background: var(--brand-accent); color: var(--brand-black); border: none; flex: 2; padding: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
-        .btn-back { background: var(--brand-white); color: var(--brand-black); border: none; flex: 1; padding: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
-
-        .total-display { text-align: center; font-size: 2.5rem; font-weight: bold; margin: 40px 0; }
-        .btn-whatsapp {
-            background: var(--whatsapp-green); color: var(--brand-white); border: none;
-            width: 100%; max-width: 500px; padding: 18px; font-weight: bold; font-size: 0.75rem;
-            text-transform: uppercase; cursor: pointer; display: block; margin: 20px auto;
-        }
-
-        footer { text-align: center; padding: 40px; color: var(--text-grey); font-size: 0.6rem; letter-spacing: 1px; }
+        footer { text-align: center; padding: 60px; color: var(--text-grey); font-size: 0.6rem; letter-spacing: 1px; }
 
         @media (max-width: 768px) {
-            #home { grid-template-columns: 1fr; height: auto; }
-            .home-image-side { height: 350px; }
-            .hero-title { font-size: 3rem; }
+            .hero-container { grid-template-columns: 1fr; margin: 10px; }
+            .hero-content { padding: 40px 25px; text-align: center; align-items: center; }
+            .hero-main-title { font-size: 2.5rem; }
+            .hero-image { height: 350px; order: -1; }
             .grid { grid-template-columns: 1fr; }
-            .modal-gallery { height: 350px; }
         }
     </style>
 </head>
@@ -173,190 +190,191 @@
         <a onclick="showPage('home')" id="l-home" class="active">Home</a>
         <a onclick="showPage('shop')" id="l-shop">Collection</a>
         <a onclick="showPage('cart')" id="l-cart">Bag (<span id="count">0</span>)</a>
-        <a onclick="showPage('size')" id="l-size">Size Guide</a>
+        <a onclick="showPage('size')" id="l-size">Sizes</a>
     </nav>
 
     <div id="productModal" class="modal">
         <div class="modal-content">
-            <div id="modalGallery" class="modal-gallery" onclick="flipImage(this)">
-                <div class="gallery-nav"><div class="nav-dot active-dot"></div><div class="nav-dot"></div></div>
-                <img id="modalImg1" src="" class="active-img">
-                <img id="modalImg2" src="">
+            <div class="image-container" style="height: 300px;">
+                <div class="slider-track" id="modalSlider">
+                    <img id="modalImg1" src="">
+                    <img id="modalImg2" src="">
+                </div>
+                <button class="slide-btn" onclick="rotateModal()">❯</button>
             </div>
-            <h2 id="modalTitle" style="text-transform: uppercase; margin: 20px 0 5px 0; font-size: 1.4rem;"></h2>
-            <p id="modalPrice" style="color: var(--brand-accent); font-weight: bold; font-size: 1.2rem; margin: 0;"></p>
-            <p id="modalDesc" class="modal-desc"></p>
-            <div class="size-selector">
-                <button class="size-btn" onclick="setS(this, 'M')">M</button>
-                <button class="size-btn" onclick="setS(this, 'L')">L</button>
-                <button class="size-btn" onclick="setS(this, 'XL')">XL</button>
+            <h2 id="modalTitle" style="margin: 20px 0 5px 0; font-weight: 900;"></h2>
+            <p id="modalPrice" style="color: var(--text-grey); font-weight: bold; margin-bottom: 20px;"></p>
+            
+            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Color</div>
+            <div style="display:flex; gap:10px; margin-bottom:15px;" id="color-opts">
+                <button class="opt-btn" onclick="setOpt(this, 'color', 'Sand')">Sand</button>
+                <button class="opt-btn" onclick="setOpt(this, 'color', 'Black')">Black</button>
             </div>
-            <div class="modal-btns">
-                <button class="btn-back" onclick="closeModal()">Back</button>
-                <button id="modalAddBtn" class="btn-add">Add to Bag</button>
+
+            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Size</div>
+            <div style="display:flex; gap:10px; margin-bottom:25px;" id="size-opts">
+                <button class="opt-btn" onclick="setOpt(this, 'size', 'M')">M</button>
+                <button class="opt-btn" onclick="setOpt(this, 'size', 'L')">L</button>
+                <button class="opt-btn" onclick="setOpt(this, 'size', 'XL')">XL</button>
+            </div>
+
+            <div style="display:flex; gap:10px;">
+                <button class="btn-pill" style="background:#eee; color:black; flex:1;" onclick="closeModal()">Back</button>
+                <button id="modalAddBtn" class="btn-pill" style="flex:2;">Add to Bag</button>
             </div>
         </div>
     </div>
 
     <section id="home" class="page active-page">
-        <div class="home-text-side">
-            <h2 class="hero-title">NEW SEASON</h2>
-            <div style="border: 2px solid #eec12e; padding: 5px 15px; width: fit-content; margin: 15px 0; color: #eec12e; font-weight: bold; font-size: 0.8rem;">AVAILABLE NOW</div>
-            <button class="btn-visit" onclick="showPage('shop')">Visit Our Website</button>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-label">Available Now</div>
+                <h2 class="hero-main-title">Style your inner cool.</h2>
+                <p style="color: var(--text-grey); margin-bottom: 30px; font-size: 0.9rem;">Experience the next evolution of streetwear with our 2026 collection.</p>
+                <button class="btn-pill" onclick="showPage('shop')">Shop Now</button>
+            </div>
+            <div class="hero-image"></div>
         </div>
-        <div class="home-image-side"></div>
     </section>
 
     <section id="shop" class="page">
-        <div class="filter-bar">
-            <button class="filter-btn active-filter" onclick="filterItems('all', this)">ALL</button>
-            <button class="filter-btn" onclick="filterItems('boy', this)">Boy</button>
-            <button class="filter-btn" onclick="filterItems('girl', this)">Girls</button>
-        </div>
-        <div class="grid" id="jogger-grid">
+        <div style="display:flex; justify-content: space-between; align-items: center; max-width: 1000px; margin: 0 auto 30px;">
+            <h2 style="font-weight: 900;">New Arrival</h2>
+            <div style="display:flex; gap:10px;">
+                <button class="opt-btn" onclick="filterItems('boy', this)">Boy</button>
+                <button class="opt-btn" onclick="filterItems('girl', this)">Girl</button>
             </div>
+        </div>
+        <div class="grid" id="main-grid"></div>
     </section>
 
     <section id="cart" class="page">
-        <h2 style="text-align: center; text-transform: uppercase;">Your Bag</h2>
-        <div id="cart-list" style="text-align: center; color: var(--text-grey); margin-bottom: 30px;">Empty.</div>
-        <div class="total-display">Total: GHS <span id="total-val">0</span></div>
-        <button class="btn-whatsapp" onclick="process()">Complete Order via WhatsApp</button>
+        <div style="background: white; border-radius: 40px; padding: 40px; max-width: 500px; margin: 0 auto;">
+            <h2 style="text-align: center; font-weight: 900;">Bag</h2>
+            <div id="cart-list" style="margin: 20px 0; border-top: 1px solid #eee; padding-top: 20px;"></div>
+            <div style="display:flex; justify-content: space-between; font-weight: 900; font-size: 1.5rem; margin-top: 20px;">
+                <span>Total</span>
+                <span>GHS <span id="total-val">0</span></span>
+            </div>
+            <button class="btn-pill" style="width: 100%; margin-top: 30px; background: var(--whatsapp-green);" onclick="process()">Checkout WhatsApp</button>
+        </div>
     </section>
 
     <section id="size" class="page">
-        <div style="border: 1px solid var(--brand-accent); padding: 30px; max-width: 400px; margin: 0 auto; text-align: center;">
-            <h3 style="color: var(--brand-accent); text-transform: uppercase; margin-top: 0;">Size Chart</h3>
+        <div style="background: white; padding: 40px; border-radius: 40px; max-width: 400px; margin: 0 auto; text-align: center;">
+            <h3 style="font-weight: 900; text-transform: uppercase;">Size Guide</h3>
             <p><b>M:</b> Waist 30-32" | Length 39"</p>
             <p><b>L:</b> Waist 33-35" | Length 40"</p>
             <p><b>XL:</b> Waist 36-38" | Length 41"</p>
-            <button class="btn-visit" style="width: 100%; margin-top: 20px; border-color: var(--text-grey); color: white;" onclick="showPage('home')">Back Home</button>
+            <button class="btn-pill" style="margin-top: 20px;" onclick="showPage('home')">Back Home</button>
         </div>
     </section>
 
     <footer>&copy; 2026 ZAMIL'S STREETWEAR EVOLUTION</footer>
 
     <script>
-        const products = [
-            // BOYS (10)
-            {cat:'boy', name:'Titan Cargo', price:350, img1:'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=500', img2:'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500', desc:'Tactical cargo joggers with reinforced knees.'},
-            {cat:'boy', name:'Stealth Jogger', price:320, img1:'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500', img2:'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500', desc:'Deep black minimalist joggers in tech-fleece.'},
-            {cat:'boy', name:'Nomad Utility', price:380, img1:'https://images.unsplash.com/photo-1491336477066-31156b5e4f35?w=500', img2:'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=500', desc:'Weather-resistant utility joggers for any terrain.'},
-            {cat:'boy', name:'Matrix Reflective', price:400, img1:'https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=500', img2:'https://images.unsplash.com/photo-1515446133109-60d1bc7ec276?w=500', desc:'Reflective detailing for night-time urban style.'},
-            {cat:'boy', name:'Carbon Ribbed', price:310, img1:'https://images.unsplash.com/photo-1554568218-0f1715e72254?w=500', img2:'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500', desc:'Ribbed texture for a unique structured fit.'},
-            {cat:'boy', name:'Rogue Tapered', price:330, img1:'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500', img2:'https://images.unsplash.com/photo-1503342392335-af8145eeee04?w=500', desc:'Classic tapered fit for an athletic silhouette.'},
-            {cat:'boy', name:'Apex Fleece', price:360, img1:'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500', img2:'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500', desc:'Super soft heavyweight fleece for extreme comfort.'},
-            {cat:'boy', name:'Vector Mesh', price:340, img1:'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500', img2:'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500', desc:'Breathable mesh-lined joggers for active days.'},
-            {cat:'boy', name:'Zenith Canvas', price:370, img1:'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500', img2:'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=500', desc:'Rugged canvas blend with oversized pockets.'},
-            {cat:'boy', name:'Drift Street', price:350, img1:'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=500', img2:'https://images.unsplash.com/photo-1551488831-60d0e6c278c2?w=500', desc:'Loose fit baggy joggers with graffiti accents.'},
-
-            // GIRLS (10)
-            {cat:'girl', name:'Luna Soft', price:320, img1:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500', img2:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500', desc:'High-waisted joggers in premium cloud-knit cotton.'},
-            {cat:'girl', name:'Nova Pastel', price:300, img1:'https://images.unsplash.com/photo-1532667449560-72a95c8d381b?w=500', img2:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500', desc:'Dreamy lavender joggers with elastic cuffs.'},
-            {cat:'girl', name:'Ember Flare', price:340, img1:'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=500', img2:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=500', desc:'Modern flare-cut joggers in burnt orange.'},
-            {cat:'girl', name:'Aura Velour', price:380, img1:'https://images.unsplash.com/photo-1604176354204-926873ff3da9?w=500', img2:'https://images.unsplash.com/photo-1617019114583-affb34d1b3cd?w=500', desc:'Luxury velour joggers for a premium street look.'},
-            {cat:'girl', name:'Mist Cuffed', price:310, img1:'https://images.unsplash.com/photo-1503342392335-af8145eeee04?w=500', img2:'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=500', desc:'Light grey relaxed fit with thick cuffed ankles.'},
-            {cat:'girl', name:'Bloom Satin', price:420, img1:'https://images.unsplash.com/photo-1550614000-4895a10e1bfd?w=500', img2:'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=500', desc:'Silky satin finish with drawstring waist.'},
-            {cat:'girl', name:'Solis Mesh', price:330, img1:'https://images.unsplash.com/photo-1571513722275-4b41940f54b8?w=500', img2:'https://images.unsplash.com/photo-1571513823274-0230302b178c?w=500', desc:'Double-layered mesh for high-energy style.'},
-            {cat:'girl', name:'Terra Cargo', price:360, img1:'https://images.unsplash.com/photo-1620331311520-246422ff83f9?w=500', img2:'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500', desc:'Earth-toned utility cargo joggers with slim fit.'},
-            {cat:'girl', name:'Vesper Silk', price:450, img1:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500', img2:'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500', desc:'Exclusive silk-blend streetwear trousers.'},
-            {cat:'girl', name:'Jade Knit', price:340, img1:'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500', img2:'https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?w=500', desc:'Waffle-knit joggers in forest green.'},
-        ];
+        const products = [];
+        for(let i=1; i<=10; i++) {
+            products.push({
+                id: i,
+                cat: i <= 5 ? 'boy' : 'girl',
+                name: (i <= 5 ? 'Boy Jogger ' : 'Girl Jogger ') + i,
+                price: 350,
+                img1: 'https://i.postimg.cc/MK3qZd1D/IMG-2266.png',
+                img2: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=1000' // Added second photo
+            });
+        }
 
         let bag = [];
-        let tempSize = "";
+        let selection = { size: "", color: "" };
 
         function initGrid() {
-            const grid = document.getElementById('jogger-grid');
+            const grid = document.getElementById('main-grid');
             grid.innerHTML = products.map(p => `
                 <div class="card" data-cat="${p.cat}">
-                    <div class="image-container" onclick="flipImage(this)">
-                        <div class="gallery-nav"><div class="nav-dot active-dot"></div><div class="nav-dot"></div></div>
-                        <img src="${p.img1}" class="active-img">
-                        <img src="${p.img2}">
+                    <div class="image-container">
+                        <div class="slider-track" id="track-${p.id}">
+                            <img src="${p.img1}" onclick="openDetails('${p.name}', ${p.price}, '${p.img1}', '${p.img2}')">
+                            <img src="${p.img2}" onclick="openDetails('${p.name}', ${p.price}, '${p.img1}', '${p.img2}')">
+                        </div>
+                        <button class="slide-btn" onclick="rotateSlide(${p.id})">❯</button>
                     </div>
-                    <div onclick="openDetails('${p.name}', ${p.price}, '${p.img1}', '${p.img2}', '${p.desc}')">
-                        <h3>${p.name}</h3>
-                        <p style="color: var(--brand-accent); font-weight:bold;">GHS ${p.price}</p>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
+                        <div>
+                            <h3 style="font-size: 0.8rem; margin:0; font-weight:800;">${p.name}</h3>
+                            <p style="color: var(--text-grey); font-size:0.7rem; margin:5px 0 0 0;">GHS ${p.price}</p>
+                        </div>
+                        <button onclick="openDetails('${p.name}', ${p.price}, '${p.img1}', '${p.img2}')" style="width:30px; height:30px; border-radius:50%; border:none; background:black; color:white; cursor:pointer;">+</button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function rotateSlide(id) {
+            const track = document.getElementById('track-' + id);
+            const currentTransform = track.style.transform;
+            track.style.transform = (currentTransform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
+        }
+
+        function rotateModal() {
+            const track = document.getElementById('modalSlider');
+            const currentTransform = track.style.transform;
+            track.style.transform = (currentTransform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
         }
 
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(id).classList.add('active-page');
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            const link = document.getElementById('l-' + id);
-            if(link) link.classList.add('active');
+            document.getElementById('l-' + id).classList.add('active');
             window.scrollTo(0,0);
         }
 
-        function filterItems(category, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
-            btn.classList.add('active-filter');
-            document.querySelectorAll('.card').forEach(card => {
-                if (category === 'all' || card.getAttribute('data-cat') === category) card.classList.remove('hidden');
-                else card.classList.add('hidden');
+        function filterItems(cat, btn) {
+            document.querySelectorAll('.card').forEach(c => {
+                c.style.display = (c.dataset.cat === cat) ? 'block' : 'none';
             });
         }
 
-        function flipImage(container) {
-            const imgs = container.querySelectorAll('img');
-            const dots = container.querySelectorAll('.nav-dot');
-            let activeIdx = 0;
-            imgs.forEach((img, i) => { if(img.classList.contains('active-img')) activeIdx = i; img.classList.remove('active-img'); dots[i].classList.remove('active-dot'); });
-            let newIdx = (activeIdx + 1) % imgs.length;
-            imgs[newIdx].classList.add('active-img');
-            dots[newIdx].classList.add('active-dot');
-        }
-
-        function setS(btn, s) {
-            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            tempSize = s;
-        }
-
-        function openDetails(name, price, img1, img2, desc) {
-            tempSize = "";
-            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+        function openDetails(name, price, img1, img2) {
+            selection = { size: "", color: "" };
+            document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('modalSlider').style.transform = 'translateX(0%)';
             document.getElementById('modalImg1').src = img1;
             document.getElementById('modalImg2').src = img2;
-            document.getElementById('modalImg1').classList.add('active-img');
-            document.getElementById('modalImg2').classList.remove('active-img');
             document.getElementById('modalTitle').innerText = name;
             document.getElementById('modalPrice').innerText = 'GHS ' + price;
-            document.getElementById('modalDesc').innerText = desc;
             document.getElementById('productModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            document.getElementById('modalAddBtn').onclick = function() {
-                if(!tempSize) return alert("Select a size!");
-                add(name, price, tempSize);
+            document.getElementById('modalAddBtn').onclick = () => {
+                if(!selection.size || !selection.color) return alert("Select Color and Size!");
+                bag.push({name, price, ...selection});
+                document.getElementById('count').innerText = bag.length;
+                updateCart();
                 closeModal();
             };
         }
 
-        function closeModal() { document.getElementById('productModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
-
-        function add(name, price, size) {
-            bag.push({name, price, size});
-            document.getElementById('count').innerText = bag.length;
-            document.getElementById('total-val').innerText = bag.reduce((a, b) => a + b.price, 0);
-            updateCart();
-            alert(name + " added to bag!");
+        function setOpt(btn, type, val) {
+            btn.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selection[type] = val;
         }
+
+        function closeModal() { document.getElementById('productModal').style.display = 'none'; }
 
         function updateCart() {
             const list = document.getElementById('cart-list');
-            if(bag.length === 0) list.innerHTML = "Empty.";
-            else list.innerHTML = bag.map(i => `<div style="display:flex; justify-content:space-between; padding:15px; border-bottom:1px solid #222;"><span>${i.name} (${i.size})</span><span>GHS ${i.price}</span></div>`).join('');
+            list.innerHTML = bag.map(i => `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span>${i.name} (${i.size})</span>
+                <span>GHS ${i.price}</span>
+            </div>`).join('');
+            document.getElementById('total-val').innerText = bag.reduce((a,b) => a + b.price, 0);
         }
 
         function process() {
-            if(bag.length === 0) return alert("Bag is empty!");
-            const total = document.getElementById('total-val').innerText;
-            const items = bag.map(i => `${i.name} [Size: ${i.size}] (GHS ${i.price})`).join("%0A"); 
-            window.location.href = "https://wa.me/233503612876?text=" + `Hello Zamil, Order Request:%0A%0A${items}%0A%0ATotal: GHS ${total}`;
+            if(!bag.length) return alert("Bag is empty");
+            const items = bag.map(i => `${i.name} [${i.color}/${i.size}]`).join("%0A");
+            window.location.href = `https://wa.me/233503612876?text=Order from Zamil's:%0A${items}%0A%0ATotal: GHS ${document.getElementById('total-val').innerText}`;
         }
 
         initGrid();
