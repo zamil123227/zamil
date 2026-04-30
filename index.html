@@ -9,10 +9,11 @@
             --brand-black: #000000;
             --brand-white: #ffffff;
             --brand-accent: #00ffcc; 
-            --soft-bg: #e5e7eb;
+            --soft-bg: #e5e7eb; /* Soft grey background restored */
             --glass: rgba(255, 255, 255, 0.7);
             --whatsapp-green: #58cc71;
             --text-grey: #666666;
+            --remove-red: #ff4d4d;
         }
 
         body {
@@ -24,6 +25,7 @@
             padding-bottom: 80px;
         }
 
+        /* HEADER PRESERVED */
         header {
             padding: 40px 20px;
             text-align: center;
@@ -36,6 +38,7 @@
             letter-spacing: 2px;
             margin: 0;
             text-transform: uppercase;
+            color: var(--brand-black); 
         }
 
         .sub-tagline {
@@ -48,6 +51,7 @@
             opacity: 0.7;
         }
 
+        /* FIXED BOTTOM NAV */
         nav {
             display: flex;
             justify-content: center;
@@ -60,6 +64,7 @@
             left: 50%;
             transform: translateX(-50%);
             width: fit-content;
+            margin: 0 auto;
             border-radius: 100px;
             z-index: 100;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -82,7 +87,7 @@
         .page { display: none; padding: 20px; min-height: 70vh; }
         .active-page { display: block !important; }
 
-        /* HERO SECTION */
+        /* HERO SECTION RESTORED */
         .hero-container {
             max-width: 1000px;
             margin: 20px auto;
@@ -94,10 +99,32 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.05);
         }
 
-        .hero-content { padding: 60px; display: flex; flex-direction: column; justify-content: center; }
-        .hero-label { text-transform: uppercase; font-size: 0.7rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 10px; }
-        .hero-main-title { font-size: 3.5rem; font-weight: 900; line-height: 1; margin: 0 0 20px 0; }
-        .hero-image { background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000') center/cover no-repeat; min-height: 500px; }
+        .hero-content {
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-label {
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .hero-main-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1;
+            margin: 0 0 20px 0;
+        }
+
+        .hero-image {
+            background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000') center/cover no-repeat;
+            min-height: 500px;
+        }
 
         .btn-pill {
             background: var(--brand-black);
@@ -109,50 +136,30 @@
             font-size: 0.8rem;
             cursor: pointer;
             text-transform: uppercase;
+            width: fit-content;
             transition: 0.3s;
         }
 
-        /* SLIDER LOGIC */
+        .btn-pill:hover { transform: scale(1.05); }
+
+        /* GRID & SLIDER */
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; }
         .card { background: white; padding: 15px; border-radius: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
 
         .image-container {
-            position: relative; 
-            width: 100%; 
-            height: 280px; 
-            overflow: hidden; 
-            border-radius: 20px; 
-            background: #f3f4f6;
+            position: relative; width: 100%; height: 280px; overflow: hidden; border-radius: 20px; background: #f3f4f6;
         }
 
         .slider-track {
-            display: flex;
-            width: 200%; /* Two images */
-            height: 100%;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; width: 200%; height: 100%; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .slider-track img {
-            width: 50%; /* Each image takes half of the track (which is 100% of container) */
-            height: 100%;
-            object-fit: cover;
-            cursor: pointer;
-        }
+        .slider-track img { width: 50%; height: 100%; object-fit: cover; cursor: pointer; }
 
         .slide-btn {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255,255,255,0.9);
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-weight: bold;
-            z-index: 10;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.9); border: none; width: 35px; height: 35px; border-radius: 50%;
+            cursor: pointer; font-weight: bold; z-index: 10;
         }
 
         /* MODAL */
@@ -168,10 +175,16 @@
         .opt-btn { padding: 10px 20px; background: #f3f4f6; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 0.7rem; }
         .opt-btn.selected { background: var(--brand-black); color: white; }
 
+        .remove-btn {
+            background: #ffebeb; color: var(--remove-red); border: none;
+            width: 25px; height: 25px; border-radius: 50%; cursor: pointer;
+            font-weight: bold; font-size: 1rem; line-height: 1; transition: 0.2s;
+        }
+
         footer { text-align: center; padding: 60px; color: var(--text-grey); font-size: 0.6rem; letter-spacing: 1px; }
 
         @media (max-width: 768px) {
-            .hero-container { grid-template-columns: 1fr; margin: 10px; }
+            .hero-container { grid-template-columns: 1fr; margin: 10px; border-radius: 30px; }
             .hero-content { padding: 40px 25px; text-align: center; align-items: center; }
             .hero-main-title { font-size: 2.5rem; }
             .hero-image { height: 350px; order: -1; }
@@ -252,7 +265,7 @@
         <div style="background: white; border-radius: 40px; padding: 40px; max-width: 500px; margin: 0 auto;">
             <h2 style="text-align: center; font-weight: 900;">Bag</h2>
             <div id="cart-list" style="margin: 20px 0; border-top: 1px solid #eee; padding-top: 20px;"></div>
-            <div style="display:flex; justify-content: space-between; font-weight: 900; font-size: 1.5rem; margin-top: 20px;">
+            <div style="display:flex; justify-content: space-between; font-weight: 900; font-size: 1.5rem; margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
                 <span>Total</span>
                 <span>GHS <span id="total-val">0</span></span>
             </div>
@@ -281,7 +294,7 @@
                 name: (i <= 5 ? 'Boy Jogger ' : 'Girl Jogger ') + i,
                 price: 350,
                 img1: 'https://i.postimg.cc/MK3qZd1D/IMG-2266.png',
-                img2: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=1000' // Added second photo
+                img2: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=1000' 
             });
         }
 
@@ -312,14 +325,12 @@
 
         function rotateSlide(id) {
             const track = document.getElementById('track-' + id);
-            const currentTransform = track.style.transform;
-            track.style.transform = (currentTransform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
+            track.style.transform = (track.style.transform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
         }
 
         function rotateModal() {
             const track = document.getElementById('modalSlider');
-            const currentTransform = track.style.transform;
-            track.style.transform = (currentTransform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
+            track.style.transform = (track.style.transform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
         }
 
         function showPage(id) {
@@ -347,11 +358,41 @@
             document.getElementById('productModal').style.display = 'block';
             document.getElementById('modalAddBtn').onclick = () => {
                 if(!selection.size || !selection.color) return alert("Select Color and Size!");
-                bag.push({name, price, ...selection});
-                document.getElementById('count').innerText = bag.length;
+                bag.push({id: Date.now(), name, price, ...selection});
                 updateCart();
                 closeModal();
             };
+        }
+
+        function updateCart() {
+            const list = document.getElementById('cart-list');
+            if(bag.length === 0) {
+                list.innerHTML = `<p style="text-align:center; color:#999; padding:20px 0;">Your bag is empty</p>`;
+                document.getElementById('total-val').innerText = 0;
+                document.getElementById('count').innerText = 0;
+                return;
+            }
+            
+            list.innerHTML = bag.map(item => `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <div>
+                        <span style="font-weight:bold; font-size:0.85rem; display:block;">${item.name}</span>
+                        <span style="color:var(--text-grey); font-size:0.7rem;">${item.color} / ${item.size}</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <span style="font-weight:900;">GHS ${item.price}</span>
+                        <button class="remove-btn" onclick="removeItem(${item.id})">×</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('total-val').innerText = bag.reduce((a,b) => a + b.price, 0);
+            document.getElementById('count').innerText = bag.length;
+        }
+
+        function removeItem(uniqueId) {
+            bag = bag.filter(item => item.id !== uniqueId);
+            updateCart();
         }
 
         function setOpt(btn, type, val) {
@@ -362,23 +403,19 @@
 
         function closeModal() { document.getElementById('productModal').style.display = 'none'; }
 
-        function updateCart() {
-            const list = document.getElementById('cart-list');
-            list.innerHTML = bag.map(i => `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <span>${i.name} (${i.size})</span>
-                <span>GHS ${i.price}</span>
-            </div>`).join('');
-            document.getElementById('total-val').innerText = bag.reduce((a,b) => a + b.price, 0);
-        }
-
         function process() {
             if(!bag.length) return alert("Bag is empty");
             const items = bag.map(i => `${i.name} [${i.color}/${i.size}]`).join("%0A");
-            window.location.href = `https://wa.me/233503612876?text=Order from Zamil's:%0A${items}%0A%0ATotal: GHS ${document.getElementById('total-val').innerText}`;
+            const total = document.getElementById('total-val').innerText;
+            window.location.href = `https://wa.me/233503612876?text=Order from Zamil's:%0A${items}%0A%0ATotal: GHS ${total}`;
+
+            setTimeout(() => {
+                bag = [];
+                updateCart();
+            }, 1000);
         }
 
         initGrid();
     </script>
 </body>
 </html>
-
