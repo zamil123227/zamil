@@ -31,23 +31,6 @@
             padding-bottom: 80px;
         }
 
-        /* OFFLINE SCREEN */
-        #offline-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--brand-black);
-            color: white;
-            z-index: 9999;
-            text-align: center;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
         header { padding: 40px 20px; text-align: center; background: transparent; }
         .main-title { font-size: 3.5rem; font-weight: 900; letter-spacing: 2px; margin: 0; text-transform: uppercase; color: var(--brand-black); }
         .sub-tagline { letter-spacing: 4px; color: var(--brand-black); font-size: 0.75rem; margin-top: 5px; font-weight: bold; text-transform: uppercase; opacity: 0.7; }
@@ -95,12 +78,6 @@
     </style>
 </head>
 <body>
-
-    <div id="offline-overlay">
-        <h1 style="font-size: 3rem; margin-bottom: 10px;">ZAMIL'S</h1>
-        <p style="letter-spacing: 2px; font-weight: bold;">CONNECTION LOST</p>
-        <p style="opacity: 0.6; font-size: 0.8rem; margin-top: 20px;">Please turn on your data to shop.</p>
-    </div>
 
     <header>
         <h1 class="main-title">ZAMIL'S</h1>
@@ -191,20 +168,6 @@
     <footer>&copy; 2026 ZAMIL'S STREETWEAR EVOLUTION</footer>
 
     <script>
-        // DATA MONITOR
-        function updateOnlineStatus() {
-            const overlay = document.getElementById('offline-overlay');
-            if (navigator.onLine) {
-                overlay.style.display = 'none';
-            } else {
-                overlay.style.display = 'flex';
-            }
-        }
-
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-        updateOnlineStatus(); // Check immediately on load
-
         const products = [];
         for(let i=1; i<=10; i++) {
             products.push({
@@ -291,42 +254,33 @@
                 document.getElementById('count').innerText = 0;
                 return;
             }
-            
             list.innerHTML = bag.map(item => `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                    <div>
-                        <span style="font-weight:bold; font-size:0.85rem; display:block;">${item.name}</span>
-                        <span style="color:var(--text-grey); font-size:0.7rem;">${item.color} / ${item.size}</span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:15px;">
-                        <span style="font-weight:900;">GHS ${item.price}</span>
-                        <button class="remove-btn" onclick="removeItem(${item.id})">×</button>
-                    </div>
+                    <div><span style="font-weight:bold; font-size:0.85rem; display:block;">${item.name}</span>
+                    <span style="color:var(--text-grey); font-size:0.7rem;">${item.color} / ${item.size}</span></div>
+                    <div style="display:flex; align-items:center; gap:15px;"><span style="font-weight:900;">GHS ${item.price}</span>
+                    <button class="remove-btn" onclick="removeItem(${item.id})">×</button></div>
                 </div>
             `).join('');
-            
             document.getElementById('total-val').innerText = bag.reduce((a,b) => a + b.price, 0);
             document.getElementById('count').innerText = bag.length;
         }
 
-        function removeItem(uniqueId) {
-            bag = bag.filter(item => item.id !== uniqueId);
-            updateCart();
-        }
-
-        function setOpt(btn, type, val) {
-            btn.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            selection[type] = val;
-        }
-
+        function removeItem(uniqueId) { bag = bag.filter(item => item.id !== uniqueId); updateCart(); }
+        function setOpt(btn, type, val) { btn.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); selection[type] = val; }
         function closeModal() { document.getElementById('productModal').style.display = 'none'; }
 
         function process() {
+            if(!navigator.onLine) return alert("You are currently offline. Please turn on your data to send your order via WhatsApp.");
             if(!bag.length) return alert("Bag is empty");
-            const items = bag.map(i => `${i.name} [${i.color}/${i.size}]`).join("%0A");
+            
+            const greeting = "Hello Zamil I want to purchase this product. Is it still available?%0A%0A";
+            const orderDetails = bag.map(i => `• ${i.name} [${i.color}/${i.size}] - GHS ${i.price}`).join("%0A");
             const total = document.getElementById('total-val').innerText;
-            window.location.href = `https://wa.me/233503612876?text=Order from Zamil's:%0A${items}%0A%0ATotal: GHS ${total}`;
+            const totalLine = `%0A%0A*Total: GHS ${total}*`;
+            
+            window.location.href = `https://wa.me/233503612876?text=${greeting}${orderDetails}${totalLine}`;
+            
             setTimeout(() => { bag = []; updateCart(); }, 1000);
         }
 
