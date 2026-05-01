@@ -15,7 +15,7 @@
             --brand-black: #000000;
             --brand-white: #ffffff;
             --brand-accent: #00ffcc; 
-            --soft-bg: #e5e7eb; /* Soft grey background restored */
+            --soft-bg: #e5e7eb;
             --glass: rgba(255, 255, 255, 0.7);
             --whatsapp-green: #58cc71;
             --text-grey: #666666;
@@ -31,161 +31,57 @@
             padding-bottom: 80px;
         }
 
-        /* HEADER PRESERVED */
-        header {
-            padding: 40px 20px;
-            text-align: center;
-            background: transparent;
-        }
-
-        .main-title {
-            font-size: 3.5rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            margin: 0;
-            text-transform: uppercase;
-            color: var(--brand-black); 
-        }
-
-        .sub-tagline {
-            letter-spacing: 4px;
-            color: var(--brand-black);
-            font-size: 0.75rem;
-            margin-top: 5px;
-            font-weight: bold;
-            text-transform: uppercase;
-            opacity: 0.7;
-        }
-
-        /* FIXED BOTTOM NAV */
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 15px;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
+        /* OFFLINE SCREEN */
+        #offline-overlay {
+            display: none;
             position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: fit-content;
-            margin: 0 auto;
-            border-radius: 100px;
-            z-index: 100;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--brand-black);
+            color: white;
+            z-index: 9999;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
-        nav a {
-            color: var(--text-grey);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            padding: 8px 16px;
-            transition: 0.3s;
+        header { padding: 40px 20px; text-align: center; background: transparent; }
+        .main-title { font-size: 3.5rem; font-weight: 900; letter-spacing: 2px; margin: 0; text-transform: uppercase; color: var(--brand-black); }
+        .sub-tagline { letter-spacing: 4px; color: var(--brand-black); font-size: 0.75rem; margin-top: 5px; font-weight: bold; text-transform: uppercase; opacity: 0.7; }
+
+        nav {
+            display: flex; justify-content: center; gap: 20px; padding: 15px; background: var(--glass);
+            backdrop-filter: blur(10px); position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: fit-content; margin: 0 auto; border-radius: 100px; z-index: 100; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
+        nav a { color: var(--text-grey); text-decoration: none; font-weight: bold; font-size: 0.7rem; text-transform: uppercase; cursor: pointer; padding: 8px 16px; transition: 0.3s; }
         .active { color: var(--brand-black) !important; background: white; border-radius: 50px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 
         .page { display: none; padding: 20px; min-height: 70vh; }
         .active-page { display: block !important; }
 
-        /* HERO SECTION RESTORED */
-        .hero-container {
-            max-width: 1000px;
-            margin: 20px auto;
-            background: white;
-            border-radius: 40px;
-            overflow: hidden;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-        }
+        .hero-container { max-width: 1000px; margin: 20px auto; background: white; border-radius: 40px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+        .hero-content { padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+        .hero-main-title { font-size: 3.5rem; font-weight: 900; line-height: 1; margin: 0 0 20px 0; }
+        .hero-image { background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000') center/cover no-repeat; min-height: 500px; }
+        .btn-pill { background: var(--brand-black); color: white; border: none; padding: 15px 35px; border-radius: 100px; font-weight: bold; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; width: fit-content; transition: 0.3s; }
 
-        .hero-content {
-            padding: 60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .hero-label {
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .hero-main-title {
-            font-size: 3.5rem;
-            font-weight: 900;
-            line-height: 1;
-            margin: 0 0 20px 0;
-        }
-
-        .hero-image {
-            background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000') center/cover no-repeat;
-            min-height: 500px;
-        }
-
-        .btn-pill {
-            background: var(--brand-black);
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            border-radius: 100px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            cursor: pointer;
-            text-transform: uppercase;
-            width: fit-content;
-            transition: 0.3s;
-        }
-
-        .btn-pill:hover { transform: scale(1.05); }
-
-        /* GRID & SLIDER */
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; }
         .card { background: white; padding: 15px; border-radius: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
-
-        .image-container {
-            position: relative; width: 100%; height: 280px; overflow: hidden; border-radius: 20px; background: #f3f4f6;
-        }
-
-        .slider-track {
-            display: flex; width: 200%; height: 100%; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
+        .image-container { position: relative; width: 100%; height: 280px; overflow: hidden; border-radius: 20px; background: #f3f4f6; }
+        .slider-track { display: flex; width: 200%; height: 100%; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .slider-track img { width: 50%; height: 100%; object-fit: cover; cursor: pointer; }
+        .slide-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: bold; z-index: 10; }
 
-        .slide-btn {
-            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-            background: rgba(255,255,255,0.9); border: none; width: 35px; height: 35px; border-radius: 50%;
-            cursor: pointer; font-weight: bold; z-index: 10;
-        }
-
-        /* MODAL */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.1); backdrop-filter: blur(15px); z-index: 1000;
-        }
-        .modal-content { 
-            background: white; max-width: 450px; width: 90%; margin: 5vh auto; 
-            border-radius: 40px; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.1);
-        }
-        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.1); backdrop-filter: blur(15px); z-index: 1000; }
+        .modal-content { background: white; max-width: 450px; width: 90%; margin: 5vh auto; border-radius: 40px; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.1); }
         .opt-btn { padding: 10px 20px; background: #f3f4f6; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 0.7rem; }
         .opt-btn.selected { background: var(--brand-black); color: white; }
-
-        .remove-btn {
-            background: #ffebeb; color: var(--remove-red); border: none;
-            width: 25px; height: 25px; border-radius: 50%; cursor: pointer;
-            font-weight: bold; font-size: 1rem; line-height: 1; transition: 0.2s;
-        }
+        .remove-btn { background: #ffebeb; color: var(--remove-red); border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 1rem; line-height: 1; }
 
         footer { text-align: center; padding: 60px; color: var(--text-grey); font-size: 0.6rem; letter-spacing: 1px; }
 
@@ -199,6 +95,12 @@
     </style>
 </head>
 <body>
+
+    <div id="offline-overlay">
+        <h1 style="font-size: 3rem; margin-bottom: 10px;">ZAMIL'S</h1>
+        <p style="letter-spacing: 2px; font-weight: bold;">CONNECTION LOST</p>
+        <p style="opacity: 0.6; font-size: 0.8rem; margin-top: 20px;">Please turn on your data to shop.</p>
+    </div>
 
     <header>
         <h1 class="main-title">ZAMIL'S</h1>
@@ -223,20 +125,17 @@
             </div>
             <h2 id="modalTitle" style="margin: 20px 0 5px 0; font-weight: 900;"></h2>
             <p id="modalPrice" style="color: var(--text-grey); font-weight: bold; margin-bottom: 20px;"></p>
-            
             <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Color</div>
             <div style="display:flex; gap:10px; margin-bottom:15px;" id="color-opts">
                 <button class="opt-btn" onclick="setOpt(this, 'color', 'Sand')">Sand</button>
                 <button class="opt-btn" onclick="setOpt(this, 'color', 'Black')">Black</button>
             </div>
-
             <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Size</div>
             <div style="display:flex; gap:10px; margin-bottom:25px;" id="size-opts">
                 <button class="opt-btn" onclick="setOpt(this, 'size', 'M')">M</button>
                 <button class="opt-btn" onclick="setOpt(this, 'size', 'L')">L</button>
                 <button class="opt-btn" onclick="setOpt(this, 'size', 'XL')">XL</button>
             </div>
-
             <div style="display:flex; gap:10px;">
                 <button class="btn-pill" style="background:#eee; color:black; flex:1;" onclick="closeModal()">Back</button>
                 <button id="modalAddBtn" class="btn-pill" style="flex:2;">Add to Bag</button>
@@ -292,6 +191,20 @@
     <footer>&copy; 2026 ZAMIL'S STREETWEAR EVOLUTION</footer>
 
     <script>
+        // DATA MONITOR
+        function updateOnlineStatus() {
+            const overlay = document.getElementById('offline-overlay');
+            if (navigator.onLine) {
+                overlay.style.display = 'none';
+            } else {
+                overlay.style.display = 'flex';
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus(); // Check immediately on load
+
         const products = [];
         for(let i=1; i<=10; i++) {
             products.push({
@@ -414,11 +327,7 @@
             const items = bag.map(i => `${i.name} [${i.color}/${i.size}]`).join("%0A");
             const total = document.getElementById('total-val').innerText;
             window.location.href = `https://wa.me/233503612876?text=Order from Zamil's:%0A${items}%0A%0ATotal: GHS ${total}`;
-
-            setTimeout(() => {
-                bag = [];
-                updateCart();
-            }, 1000);
+            setTimeout(() => { bag = []; updateCart(); }, 1000);
         }
 
         initGrid();
