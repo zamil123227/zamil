@@ -47,15 +47,19 @@
         .page { display: none; padding: 20px; min-height: 70vh; }
         .active-page { display: block !important; }
 
+        /* SEARCH BAR STYLE */
+        .search-container { max-width: 1000px; margin: 0 auto 25px; }
+        .search-input { 
+            width: 100%; padding: 18px 25px; border-radius: 100px; border: 1px solid #ddd; 
+            outline: none; font-size: 0.9rem; box-sizing: border-box; background: white; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: 0.3s;
+        }
+
         .hero-container { max-width: 1000px; margin: 20px auto; background: white; border-radius: 40px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
         .hero-content { padding: 60px; display: flex; flex-direction: column; justify-content: center; }
         .hero-main-title { font-size: 3.5rem; font-weight: 900; line-height: 1; margin: 0 0 20px 0; }
         .hero-image { background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000') center/cover no-repeat; min-height: 500px; }
         .btn-pill { background: var(--brand-black); color: white; border: none; padding: 15px 35px; border-radius: 100px; font-weight: bold; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; width: fit-content; transition: 0.3s; }
-
-        .search-container { max-width: 1000px; margin: 0 auto 20px; }
-        .search-input { width: 100%; padding: 15px 25px; border-radius: 100px; border: 1px solid #ddd; outline: none; font-family: inherit; font-size: 0.9rem; box-sizing: border-box; transition: 0.3s; }
-        .search-input:focus { border-color: var(--brand-black); box-shadow: 0 0 0 4px rgba(0,0,0,0.05); }
 
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; }
         .card { background: white; padding: 15px; border-radius: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
@@ -65,11 +69,15 @@
         .slide-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: bold; z-index: 10; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.1); backdrop-filter: blur(15px); z-index: 1000; }
-        .modal-content { background: white; max-width: 450px; width: 90%; margin: 5vh auto; border-radius: 40px; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.1); }
-        .opt-btn { padding: 10px 20px; background: #f3f4f6; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 0.7rem; }
+        .modal-content { background: white; max-width: 450px; width: 90%; margin: 5vh auto; border-radius: 40px; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; }
+        .opt-btn { padding: 8px 12px; background: #f3f4f6; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.65rem; min-width: 40px; }
         .opt-btn.selected { background: var(--brand-black); color: white; }
-        .remove-btn { background: #ffebeb; color: var(--remove-red); border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 1rem; line-height: 1; }
 
+        /* QTY SELECTOR */
+        .qty-controls { display: flex; align-items: center; gap: 15px; background: #f3f4f6; border-radius: 100px; padding: 5px 15px; width: fit-content; margin-bottom: 25px; }
+        .qty-btn { background: none; border: none; font-size: 1.2rem; font-weight: bold; cursor: pointer; padding: 5px 10px; }
+
+        .remove-btn { background: #ffebeb; color: var(--remove-red); border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 1rem; line-height: 1; }
         footer { text-align: center; padding: 60px; color: var(--text-grey); font-size: 0.6rem; letter-spacing: 1px; }
 
         @media (max-width: 768px) {
@@ -95,28 +103,63 @@
         <a onclick="showPage('size')" id="l-size">Sizes</a>
     </nav>
 
+    <!-- PRODUCT MODAL -->
     <div id="productModal" class="modal">
         <div class="modal-content">
-            <div class="image-container" style="height: 300px;">
+            <div class="image-container" style="height: 250px;">
                 <div class="slider-track" id="modalSlider">
                     <img id="modalImg1" src="">
                     <img id="modalImg2" src="">
                 </div>
                 <button class="slide-btn" onclick="rotateModal()">❯</button>
             </div>
-            <h2 id="modalTitle" style="margin: 20px 0 5px 0; font-weight: 900;"></h2>
-            <p id="modalPrice" style="color: var(--text-grey); font-weight: bold; margin-bottom: 20px;"></p>
+            
+            <h2 id="modalTitle" style="margin: 15px 0 5px 0; font-weight: 900;"></h2>
+            <p id="modalPrice" style="color: var(--text-grey); font-weight: bold; margin-bottom: 15px;"></p>
+            
             <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Color</div>
             <div style="display:flex; gap:10px; margin-bottom:15px;" id="color-opts">
                 <button class="opt-btn" onclick="setOpt(this, 'color', 'Sand')">Sand</button>
                 <button class="opt-btn" onclick="setOpt(this, 'color', 'Black')">Black</button>
             </div>
+
             <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Size</div>
-            <div style="display:flex; gap:10px; margin-bottom:25px;" id="size-opts">
+            <div style="display:flex; gap:6px; flex-wrap: wrap; margin-bottom:15px;" id="size-opts">
+                <button class="opt-btn" onclick="setOpt(this, 'size', 'S')">S</button>
                 <button class="opt-btn" onclick="setOpt(this, 'size', 'M')">M</button>
                 <button class="opt-btn" onclick="setOpt(this, 'size', 'L')">L</button>
                 <button class="opt-btn" onclick="setOpt(this, 'size', 'XL')">XL</button>
+                <button class="opt-btn" onclick="setOpt(this, 'size', '2XL')">2XL</button>
             </div>
+
+            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Exact Waist</div>
+            <div style="display:flex; gap:6px; flex-wrap: wrap; margin-bottom:15px;" id="waist-opts">
+                <button class="opt-btn" onclick="setOpt(this, 'waist', '28')">28</button>
+                <button class="opt-btn" onclick="setOpt(this, 'waist', '30')">30</button>
+                <button class="opt-btn" onclick="setOpt(this, 'waist', '32')">32</button>
+                <button class="opt-btn" onclick="setOpt(this, 'waist', '34')">34</button>
+                <button class="opt-btn" onclick="setOpt(this, 'waist', '36')">36</button>
+                <button class="opt-btn" onclick="setOpt(this, 'waist', '38')">38</button>
+                <button class="opt-btn" onclick="setOpt(this, 'waist', '40')">40</button>
+            </div>
+
+            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Exact Length</div>
+            <div style="display:flex; gap:6px; flex-wrap: wrap; margin-bottom:25px;" id="length-opts">
+                <button class="opt-btn" onclick="setOpt(this, 'length', '38')">38</button>
+                <button class="opt-btn" onclick="setOpt(this, 'length', '39')">39</button>
+                <button class="opt-btn" onclick="setOpt(this, 'length', '40')">40</button>
+                <button class="opt-btn" onclick="setOpt(this, 'length', '41')">41</button>
+                <button class="opt-btn" onclick="setOpt(this, 'length', '42')">42</button>
+                <button class="opt-btn" onclick="setOpt(this, 'length', '44')">44</button>
+            </div>
+
+            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Quantity</div>
+            <div class="qty-controls">
+                <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                <span id="modalQty" style="font-weight:900;">1</span>
+                <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+
             <div style="display:flex; gap:10px;">
                 <button class="btn-pill" style="background:#eee; color:black; flex:1;" onclick="closeModal()">Back</button>
                 <button id="modalAddBtn" class="btn-pill" style="flex:2;">Add to Bag</button>
@@ -124,6 +167,7 @@
         </div>
     </div>
 
+    <!-- HOME PAGE -->
     <section id="home" class="page active-page">
         <div class="hero-container">
             <div class="hero-content">
@@ -136,21 +180,22 @@
         </div>
     </section>
 
+    <!-- SHOP PAGE -->
     <section id="shop" class="page">
         <div class="search-container">
-            <input type="text" id="productSearch" class="search-input" placeholder="Search our collection..." onkeyup="filterProducts()">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search for items..." onkeyup="handleSearch()">
         </div>
         <div style="display:flex; justify-content: space-between; align-items: center; max-width: 1000px; margin: 0 auto 30px;">
             <h2 style="font-weight: 900;">New Arrival</h2>
             <div style="display:flex; gap:10px;">
                 <button class="opt-btn" onclick="filterItems('boy', this)">Boy</button>
                 <button class="opt-btn" onclick="filterItems('girl', this)">Girl</button>
-                <button class="opt-btn selected" id="all-btn" onclick="filterItems('all', this)">All</button>
             </div>
         </div>
         <div class="grid" id="main-grid"></div>
     </section>
 
+    <!-- CART PAGE -->
     <section id="cart" class="page">
         <div style="background: white; border-radius: 40px; padding: 40px; max-width: 500px; margin: 0 auto;">
             <h2 style="text-align: center; font-weight: 900;">Bag</h2>
@@ -163,13 +208,19 @@
         </div>
     </section>
 
+    <!-- SIZE GUIDE PAGE -->
     <section id="size" class="page">
-        <div style="background: white; padding: 40px; border-radius: 40px; max-width: 400px; margin: 0 auto; text-align: center;">
-            <h3 style="font-weight: 900; text-transform: uppercase;">Size Guide</h3>
-            <p><b>M:</b> Waist 30-32" | Length 39"</p>
-            <p><b>L:</b> Waist 33-35" | Length 40"</p>
-            <p><b>XL:</b> Waist 36-38" | Length 41"</p>
-            <button class="btn-pill" style="margin-top: 20px;" onclick="showPage('home')">Back Home</button>
+        <div style="background: white; padding: 40px; border-radius: 40px; max-width: 450px; margin: 0 auto; text-align: center;">
+            <h3 style="font-weight: 900; text-transform: uppercase; margin-bottom: 10px;">Size Guide</h3>
+            <p style="margin-bottom: 20px; color: var(--text-grey); font-size: 0.8rem;">Select your size and exact custom numbers for the best fit.</p>
+            <div style="text-align: left; display: inline-block; width: 100%;">
+               <p style="font-size:0.85rem; border-bottom:1px solid #eee; padding:5px 0;"><b>S:</b> Waist 28-30" | Length 38-39"</p>
+               <p style="font-size:0.85rem; border-bottom:1px solid #eee; padding:5px 0;"><b>M:</b> Waist 30-32" | Length 39-40"</p>
+               <p style="font-size:0.85rem; border-bottom:1px solid #eee; padding:5px 0;"><b>L:</b> Waist 33-35" | Length 40-41"</p>
+               <p style="font-size:0.85rem; border-bottom:1px solid #eee; padding:5px 0;"><b>XL:</b> Waist 36-38" | Length 41-42"</p>
+               <p style="font-size:0.85rem; border-bottom:1px solid #eee; padding:5px 0;"><b>2XL:</b> Waist 39-40" | Length 42-44"</p>
+            </div>
+            <button class="btn-pill" style="margin-top: 30px;" onclick="showPage('home')">Back Home</button>
         </div>
     </section>
 
@@ -189,8 +240,7 @@
         }
 
         let bag = [];
-        let selection = { size: "", color: "" };
-        let currentCategory = 'all';
+        let selection = { size: "", waist: "", length: "", color: "", qty: 1 };
 
         function initGrid() {
             const grid = document.getElementById('main-grid');
@@ -214,57 +264,50 @@
             `).join('');
         }
 
-        function rotateSlide(id) {
-            const track = document.getElementById('track-' + id);
-            track.style.transform = (track.style.transform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
-        }
-
-        function rotateModal() {
-            const track = document.getElementById('modalSlider');
-            track.style.transform = (track.style.transform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
-        }
-
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.getElementById(id).classList.add('active-page');
-            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            document.getElementById('l-' + id).classList.add('active');
-            window.scrollTo(0,0);
-        }
-
-        function filterItems(cat, btn) {
-            currentCategory = cat;
-            document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            filterProducts(); // Re-run combined filter
-        }
-
-        function filterProducts() {
-            const query = document.getElementById('productSearch').value.toLowerCase();
-            document.querySelectorAll('.card').forEach(c => {
-                const name = c.querySelector('h3').innerText.toLowerCase();
-                const matchesCat = (currentCategory === 'all' || c.dataset.cat === currentCategory);
-                const matchesSearch = name.includes(query);
-                
-                c.style.display = (matchesCat && matchesSearch) ? 'block' : 'none';
+        function handleSearch() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.card').forEach(card => {
+                const name = card.querySelector('h3').innerText.toLowerCase();
+                card.style.display = name.includes(term) ? 'block' : 'none';
             });
         }
 
+        function filterItems(cat, btn) {
+            document.getElementById('searchInput').value = '';
+            document.querySelectorAll('#shop .opt-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            document.querySelectorAll('.card').forEach(c => c.style.display = (c.dataset.cat === cat) ? 'block' : 'none');
+        }
+
         function openDetails(name, price, img1, img2) {
-            selection = { size: "", color: "" };
-            document.querySelectorAll('#color-opts .opt-btn, #size-opts .opt-btn').forEach(b => b.classList.remove('selected'));
-            document.getElementById('modalSlider').style.transform = 'translateX(0%)';
+            selection = { size: "", waist: "", length: "", color: "", qty: 1 };
+            document.getElementById('modalQty').innerText = "1";
+            document.querySelectorAll('.modal .opt-btn').forEach(b => b.classList.remove('selected'));
             document.getElementById('modalImg1').src = img1;
             document.getElementById('modalImg2').src = img2;
             document.getElementById('modalTitle').innerText = name;
             document.getElementById('modalPrice').innerText = 'GHS ' + price;
             document.getElementById('productModal').style.display = 'block';
+            
             document.getElementById('modalAddBtn').onclick = () => {
-                if(!selection.size || !selection.color) return alert("Select Color and Size!");
-                bag.push({id: Date.now(), name, price, ...selection});
+                if(!selection.size || !selection.waist || !selection.length || !selection.color) return alert("Please select all options!");
+                
+                const existing = bag.find(item => 
+                    item.name === name && item.size === selection.size && 
+                    item.color === selection.color && item.waist === selection.waist && item.length === selection.length
+                );
+
+                if (existing) { existing.qty += selection.qty; } 
+                else { bag.push({id: Date.now(), name, price, ...selection}); }
+
                 updateCart();
                 closeModal();
             };
+        }
+
+        function changeQty(val) {
+            selection.qty = Math.max(1, selection.qty + val);
+            document.getElementById('modalQty').innerText = selection.qty;
         }
 
         function updateCart() {
@@ -277,32 +320,43 @@
             }
             list.innerHTML = bag.map(item => `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                    <div><span style="font-weight:bold; font-size:0.85rem; display:block;">${item.name}</span>
-                    <span style="color:var(--text-grey); font-size:0.7rem;">${item.color} / ${item.size}</span></div>
-                    <div style="display:flex; align-items:center; gap:15px;"><span style="font-weight:900;">GHS ${item.price}</span>
+                    <div><span style="font-weight:bold; font-size:0.85rem; display:block;">${item.name} (x${item.qty})</span>
+                    <span style="color:var(--text-grey); font-size:0.7rem;">${item.color} | ${item.size} (W:${item.waist} L:${item.length})</span></div>
+                    <div style="display:flex; align-items:center; gap:15px;"><span style="font-weight:900;">GHS ${item.price * item.qty}</span>
                     <button class="remove-btn" onclick="removeItem(${item.id})">×</button></div>
                 </div>
             `).join('');
-            document.getElementById('total-val').innerText = bag.reduce((a,b) => a + b.price, 0);
-            document.getElementById('count').innerText = bag.length;
+            document.getElementById('total-val').innerText = bag.reduce((a,b) => a + (b.price * b.qty), 0);
+            document.getElementById('count').innerText = bag.reduce((a,b) => a + b.qty, 0);
         }
 
         function removeItem(uniqueId) { bag = bag.filter(item => item.id !== uniqueId); updateCart(); }
         function setOpt(btn, type, val) { btn.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); selection[type] = val; }
         function closeModal() { document.getElementById('productModal').style.display = 'none'; }
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(id).classList.add('active-page');
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            document.getElementById('l-' + id).classList.add('active');
+            window.scrollTo(0,0);
+        }
 
         function process() {
-            if(!navigator.onLine) return alert("You are currently offline. Please turn on your data to send your order via WhatsApp.");
             if(!bag.length) return alert("Bag is empty");
-            
-            const greeting = "Hello Zamil I want to purchase this product. Is it still available?%0A%0A";
-            const orderDetails = bag.map(i => `• ${i.name} [${i.color}/${i.size}] - GHS ${i.price}`).join("%0A");
+            const greeting = "Hello Zamil, I want to purchase these items:%0A%0A";
+            const orderDetails = bag.map(i => `• ${i.name} x${i.qty}%0A  [${i.color} | Size: ${i.size} | W:${i.waist} L:${i.length}]%0A  Subtotal: GHS ${i.price * i.qty}`).join("%0A%0A");
             const total = document.getElementById('total-val').innerText;
-            const totalLine = `%0A%0A*Total: GHS ${total}*`;
-            
-            window.location.href = `https://wa.me/233503612876?text=${greeting}${orderDetails}${totalLine}`;
-            
-            setTimeout(() => { bag = []; updateCart(); }, 1000);
+            window.location.href = `https://wa.me/233503612876?text=${greeting}${orderDetails}%0A%0A*Total Order: GHS ${total}*`;
+        }
+
+        function rotateSlide(id) {
+            const track = document.getElementById('track-' + id);
+            track.style.transform = (track.style.transform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
+        }
+
+        function rotateModal() {
+            const track = document.getElementById('modalSlider');
+            track.style.transform = (track.style.transform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
         }
 
         initGrid();
