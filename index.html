@@ -226,8 +226,8 @@
         
         <div style="max-width: 1000px; margin: 0 auto 30px;">
             <h2 style="font-weight: 900; margin: 0;">New Arrival</h2>
-            <!-- NEW CATEGORY BUTTONS ADDED HERE -->
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <div style="display: flex; gap: 10px; margin-top: 15px; overflow-x: auto;">
+                <button class="opt-btn selected" onclick="filterItems('all', this)">All</button>
                 <button class="opt-btn" onclick="filterItems('joggers', this)">Joggers</button>
                 <button class="opt-btn" onclick="filterItems('shorts', this)">Shorts</button>
                 <button class="opt-btn" onclick="filterItems('shoes', this)">Shoes</button>
@@ -333,7 +333,7 @@
         }
         setInterval(autoSlideHome, 4000);
 
-        // Product Data (Updated to 20 items as requested)
+        // Product Data (20 Items)
         const products = [
             { id: 1, cat: 'joggers', name: 'Reflective Ghost Joggers', price: 195, sizes: ['M', 'L', 'XL'], img1: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1000' },
             { id: 2, cat: 'joggers', name: 'Desert Earth Cargoes', price: 210, sizes: ['L', 'XL', 'XXL'], img1: 'https://images.unsplash.com/photo-1624372933930-019672958566?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=1000' },
@@ -358,7 +358,7 @@
         ];
 
         let bag = [];
-        let selection = { size: "", color: "", qty: 1 };
+        let selection = { size: "", color: "Black", qty: 1 };
 
         function initGrid() {
             const grid = document.getElementById('main-grid');
@@ -384,7 +384,7 @@
 
         function openDetails(id) {
             const p = products.find(item => item.id == id);
-            selection = { size: "", color: "", qty: 1 };
+            selection = { size: "", color: "Black", qty: 1 };
             document.getElementById('modalQty').innerText = "1";
             document.querySelectorAll('.modal .opt-btn').forEach(b => b.classList.remove('selected'));
             
@@ -401,7 +401,7 @@
             document.getElementById('productModal').style.display = 'block';
             
             document.getElementById('modalAddBtn').onclick = () => {
-                if(!selection.size || !selection.color) return alert("Please select color and size!");
+                if(!selection.size) return alert("Please select a size!");
                 bag.push({id: Date.now(), name: p.name, price: p.price, ...selection});
                 updateCart();
                 closeModal();
@@ -420,7 +420,13 @@
             document.getElementById('searchInput').value = '';
             document.querySelectorAll('#shop .opt-btn').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            document.querySelectorAll('.card').forEach(c => c.style.display = (c.dataset.cat === cat) ? 'block' : 'none');
+            document.querySelectorAll('.card').forEach(c => {
+                if (cat === 'all') {
+                    c.style.display = 'block';
+                } else {
+                    c.style.display = (c.dataset.cat === cat) ? 'block' : 'none';
+                }
+            });
         }
 
         function changeQty(val) {
@@ -451,6 +457,7 @@
         function removeItem(uniqueId) { bag = bag.filter(item => item.id !== uniqueId); updateCart(); }
         function setOpt(btn, type, val) { btn.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); selection[type] = val; }
         function closeModal() { document.getElementById('productModal').style.display = 'none'; }
+        
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(id).classList.add('active-page');
