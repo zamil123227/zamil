@@ -31,23 +31,45 @@
             padding-bottom: 80px;
         }
 
-        header { padding: 40px 20px; text-align: center; background: transparent; }
+        /* FULLSCREEN OVERLAY STYLE */
+        #fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        #fullscreen-overlay img {
+            max-width: 95%;
+            max-height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+        .close-fs {
+            position: absolute;
+            top: 30px; right: 30px;
+            color: white; font-size: 30px; font-weight: bold;
+            cursor: pointer;
+        }
+
+        header { padding: 30px 20px; text-align: center; background: transparent; }
         .main-title { font-size: 3.5rem; font-weight: 900; letter-spacing: 2px; margin: 0; text-transform: uppercase; color: var(--brand-black); }
         .sub-tagline { letter-spacing: 4px; color: var(--brand-black); font-size: 0.75rem; margin-top: 5px; font-weight: bold; text-transform: uppercase; opacity: 0.7; }
 
         nav {
             display: flex; justify-content: center; gap: 20px; padding: 15px; background: var(--glass);
-            backdrop-filter: blur(10px); position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: fit-content; margin: 0 auto; border-radius: 100px; z-index: 100; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px); position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: fit-content; margin: 6 auto; border-radius: 100px; z-index: 100; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        nav a { color: var(--text-grey); text-decoration: none; font-weight: bold; font-size: 0.7rem; text-transform: uppercase; cursor: pointer; padding: 8px 16px; transition: 0.3s; }
+        nav a { color: var(--text-grey); text-decoration: none; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; cursor: pointer; padding: 8px 16px; transition: 0.3s; }
         .active { color: var(--brand-black) !important; background: white; border-radius: 50px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
 
         .page { display: none; padding: 20px; min-height: 70vh; }
         .active-page { display: block !important; }
 
-        /* SEARCH BAR STYLE */
         .search-container { max-width: 1000px; margin: 0 auto 25px; }
         .search-input { 
             width: 100%; padding: 18px 25px; border-radius: 100px; border: 1px solid #ddd; 
@@ -55,11 +77,24 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: 0.3s;
         }
 
-        .hero-container { max-width: 1000px; margin: 20px auto; background: white; border-radius: 40px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+        .hero-container { 
+            max-width: 1000px; 
+            margin: 20px auto; 
+            background: white; 
+            border-radius: 40px; 
+            overflow: hidden; 
+            display: grid; 
+            grid-template-columns: 1fr 1.2fr;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            min-height: 750px;
+        }
         .hero-content { padding: 60px; display: flex; flex-direction: column; justify-content: center; }
-        .hero-main-title { font-size: 3.5rem; font-weight: 900; line-height: 1; margin: 0 0 20px 0; }
-        .hero-image { background: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=2000') center/cover no-repeat; min-height: 500px; }
-        .btn-pill { background: var(--brand-black); color: white; border: none; padding: 15px 35px; border-radius: 100px; font-weight: bold; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; width: fit-content; transition: 0.3s; }
+        .hero-main-title { font-size: 3.5rem; font-weight: 900; line-height: 1; margin: 60 0 20px 0; }
+        
+        .hero-image { position: relative; overflow: hidden; width: 100%; height: 100%; }
+        #home-slider { display: flex; width: 500%; height: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .home-slide { width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; }
+        .home-dot { width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: 0.3s; }
 
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; }
         .card { background: white; padding: 15px; border-radius: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
@@ -68,28 +103,35 @@
         .slider-track img { width: 50%; height: 100%; object-fit: cover; cursor: pointer; }
         .slide-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: bold; z-index: 10; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.1); backdrop-filter: blur(15px); z-index: 1000; }
-        .modal-content { background: white; max-width: 450px; width: 90%; margin: 5vh auto; border-radius: 40px; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; }
-        .opt-btn { padding: 8px 12px; background: #f3f4f6; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.65rem; min-width: 40px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height:100%; background: rgba(0,0,0,0.1); backdrop-filter: blur(150px); z-index: 1000; }
+        .modal-content { background: white; max-width: 330px; width: 90%; margin: 0vh auto; border-radius: 50px; padding: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; }
+        .opt-btn { padding: 8px 12px; background: #f3f4f6; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.65rem; min-width: 30px; }
         .opt-btn.selected { background: var(--brand-black); color: white; }
 
-        /* QTY SELECTOR */
         .qty-controls { display: flex; align-items: center; gap: 15px; background: #f3f4f6; border-radius: 100px; padding: 5px 15px; width: fit-content; margin-bottom: 25px; }
         .qty-btn { background: none; border: none; font-size: 1.2rem; font-weight: bold; cursor: pointer; padding: 5px 10px; }
 
         .remove-btn { background: #ffebeb; color: var(--remove-red); border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 1rem; line-height: 1; }
+        .btn-pill { background: var(--brand-black); color: white; border: none; padding: 15px 35px; border-radius: 100px; font-weight: bold; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; width: fit-content; transition: 0.3s; }
         footer { text-align: center; padding: 60px; color: var(--text-grey); font-size: 0.6rem; letter-spacing: 1px; }
 
         @media (max-width: 768px) {
-            .hero-container { grid-template-columns: 1fr; margin: 10px; border-radius: 30px; }
+            .hero-container { grid-template-columns: 1fr; margin: 10px; border-radius: 30px; min-height: auto; }
             .hero-content { padding: 40px 25px; text-align: center; align-items: center; }
             .hero-main-title { font-size: 2.5rem; }
-            .hero-image { height: 350px; order: -1; }
-            .grid { grid-template-columns: 1fr; }
+            .hero-image { height: 550px; order: -1; }
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .category-scroll { overflow-x: auto; white-space: nowrap; padding-bottom: 10px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- FULLSCREEN IMAGE OVERLAY -->
+    <div id="fullscreen-overlay" onclick="closeFS()">
+        <span class="close-fs">&times;</span>
+        <img id="fs-img-tag" src="">
+    </div>
 
     <header>
         <h1 class="main-title">ZAMIL'S</h1>
@@ -106,51 +148,31 @@
     <!-- PRODUCT MODAL -->
     <div id="productModal" class="modal">
         <div class="modal-content">
-            <div class="image-container" style="height: 250px;">
+            <div class="image-container">
                 <div class="slider-track" id="modalSlider">
-                    <img id="modalImg1" src="">
-                    <img id="modalImg2" src="">
+                    <img id="modalImg1" src="" onclick="openFS(this.src)">
+                    <img id="modalImg2" src="" onclick="openFS(this.src)">
                 </div>
                 <button class="slide-btn" onclick="rotateModal()">❯</button>
             </div>
-            
             <h2 id="modalTitle" style="margin: 15px 0 5px 0; font-weight: 900;"></h2>
             <p id="modalPrice" style="color: var(--text-grey); font-weight: bold; margin-bottom: 15px;"></p>
             
+            <div id="productDetails" style="font-size: 0.7rem; color: #444; margin-bottom: 15px; line-height: 1.4;">
+                • Color: Black<br>
+                • Material: Premium cotton<br>
+                • Style: Streetwear / Casual<br>
+                • Features: Soft fabric, oversized fit, front print, hoodie attached
+            </div>
+
             <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Color</div>
             <div style="display:flex; gap:10px; margin-bottom:15px;" id="color-opts">
-                <button class="opt-btn" onclick="setOpt(this, 'color', 'Sand')">Sand</button>
                 <button class="opt-btn" onclick="setOpt(this, 'color', 'Black')">Black</button>
             </div>
-
-            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Size</div>
-            <div style="display:flex; gap:6px; flex-wrap: wrap; margin-bottom:15px;" id="size-opts">
-                <button class="opt-btn" onclick="setOpt(this, 'size', 'S')">S</button>
-                <button class="opt-btn" onclick="setOpt(this, 'size', 'M')">M</button>
-                <button class="opt-btn" onclick="setOpt(this, 'size', 'L')">L</button>
-                <button class="opt-btn" onclick="setOpt(this, 'size', 'XL')">XL</button>
-                <button class="opt-btn" onclick="setOpt(this, 'size', '2XL')">2XL</button>
-            </div>
-
-            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Exact Waist</div>
-            <div style="display:flex; gap:6px; flex-wrap: wrap; margin-bottom:15px;" id="waist-opts">
-                <button class="opt-btn" onclick="setOpt(this, 'waist', '28')">28</button>
-                <button class="opt-btn" onclick="setOpt(this, 'waist', '30')">30</button>
-                <button class="opt-btn" onclick="setOpt(this, 'waist', '32')">32</button>
-                <button class="opt-btn" onclick="setOpt(this, 'waist', '34')">34</button>
-                <button class="opt-btn" onclick="setOpt(this, 'waist', '36')">36</button>
-                <button class="opt-btn" onclick="setOpt(this, 'waist', '38')">38</button>
-                <button class="opt-btn" onclick="setOpt(this, 'waist', '40')">40</button>
-            </div>
-
-            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Exact Length</div>
-            <div style="display:flex; gap:6px; flex-wrap: wrap; margin-bottom:25px;" id="length-opts">
-                <button class="opt-btn" onclick="setOpt(this, 'length', '38')">38</button>
-                <button class="opt-btn" onclick="setOpt(this, 'length', '39')">39</button>
-                <button class="opt-btn" onclick="setOpt(this, 'length', '40')">40</button>
-                <button class="opt-btn" onclick="setOpt(this, 'length', '41')">41</button>
-                <button class="opt-btn" onclick="setOpt(this, 'length', '42')">42</button>
-                <button class="opt-btn" onclick="setOpt(this, 'length', '44')">44</button>
+  
+            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Select Size</div>
+            <div style="display:flex; gap:6px; flex-wrap: wrap; margin-bottom:25px;" id="size-options-container">
+                <!-- Sizes dynamically added -->
             </div>
 
             <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Quantity</div>
@@ -159,11 +181,11 @@
                 <span id="modalQty" style="font-weight:900;">1</span>
                 <button class="qty-btn" onclick="changeQty(1)">+</button>
             </div>
-
-            <div style="display:flex; gap:10px;">
+            <div style="display:flex; gap:10px; margin-top: 0px;">
                 <button class="btn-pill" style="background:#eee; color:black; flex:1;" onclick="closeModal()">Back</button>
                 <button id="modalAddBtn" class="btn-pill" style="flex:2;">Add to Bag</button>
             </div>
+            <p style="font-size: 0.6rem; color: #e67e22; text-align: center; margin-top: 15px; font-weight: bold;">🚚 Delivery available across Ghana</p>
         </div>
     </div>
 
@@ -176,22 +198,42 @@
                 <p style="color: var(--text-grey); margin-bottom: 30px; font-size: 0.9rem;">Experience the next evolution of streetwear with our 2026 collection.</p>
                 <button class="btn-pill" onclick="showPage('shop')">Shop Now</button>
             </div>
-            <div class="hero-image"></div>
+            
+            <div class="hero-image">
+                <div id="home-slider">
+                    <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000');"></div>
+                    <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?q=80&w=1000');"></div>
+                    <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1000');"></div>
+                    <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000');"></div>
+                    <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000');"></div>
+                </div>
+                <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px;">
+                    <div class="home-dot" style="opacity: 1;"></div>
+                    <div class="home-dot"></div>
+                    <div class="home-dot"></div>
+                    <div class="home-dot"></div>
+                    <div class="home-dot"></div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- SHOP PAGE -->
     <section id="shop" class="page">
         <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="Search for items..." onkeyup="handleSearch()">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search collection..." onkeyup="handleSearch()">
         </div>
-        <div style="display:flex; justify-content: space-between; align-items: center; max-width: 1000px; margin: 0 auto 30px;">
-            <h2 style="font-weight: 900;">New Arrival</h2>
-            <div style="display:flex; gap:10px;">
-                <button class="opt-btn" onclick="filterItems('boy', this)">Boy</button>
-                <button class="opt-btn" onclick="filterItems('girl', this)">Girl</button>
+        
+        <div style="max-width: 1000px; margin: 0 auto 30px;">
+            <h2 style="font-weight: 900; margin: 0;">New Arrival</h2>
+            <div style="display: flex; gap: 10px; margin-top: 15px; overflow-x: auto;">
+                <button class="opt-btn selected" onclick="filterItems('all', this)">All</button>
+                <button class="opt-btn" onclick="filterItems('joggers', this)">Joggers</button>
+                <button class="opt-btn" onclick="filterItems('shorts', this)">Shorts</button>
+                <button class="opt-btn" onclick="filterItems('shoes', this)">Shoes</button>
             </div>
         </div>
+        
         <div class="grid" id="main-grid"></div>
     </section>
 
@@ -210,37 +252,69 @@
 
     <!-- SIZE GUIDE PAGE -->
     <section id="size" class="page">
-        <div style="background: white; padding: 40px; border-radius: 40px; max-width: 450px; margin: 0 auto; text-align: center;">
-            <h3 style="font-weight: 900; text-transform: uppercase; margin-bottom: 10px;">Size Guide</h3>
-            <p style="margin-bottom: 20px; color: var(--text-grey); font-size: 0.8rem;">Select your size and exact custom numbers for the best fit.</p>
-            <div style="text-align: left; display: inline-block; width: 100%;">
-               <p style="font-size:0.85rem; border-bottom:1px solid #eee; padding:5px 0;"><b>S:</b> Waist 28-30" | Length 38-39"</p>
-               <p style="font-size:0.85rem; border-bottom:1px solid #eee; padding:5px 0;"><b>M:</b> Waist 30-32" | Length 39-40"</p>
-               <p style="font-size:0.85rem; border-bottom:1px solid #eee; padding:5px 0;"><b>L:</b> Waist 33-35" | Length 40-41"</p>
-               <p style="font-size:0.85rem; border-bottom:1px solid #eee; padding:5px 0;"><b>XL:</b> Waist 36-38" | Length 41-42"</p>
-               <p style="font-size:0.85rem; border-bottom:1px solid #eee; padding:5px 0;"><b>2XL:</b> Waist 39-40" | Length 42-44"</p>
-            </div>
-            <button class="btn-pill" style="margin-top: 30px;" onclick="showPage('home')">Back Home</button>
+        <div style="background: white; padding: 40px; border-radius: 40px; max-width: 500px; margin: 0 auto;">
+            <h3 style="font-weight: 900; text-transform: uppercase; margin-bottom: 10px; text-align: center;">Size & Fit Guide</h3>
+            <p style="margin-bottom: 30px; color: var(--text-grey); font-size: 0.85rem; text-align: center; line-height: 1.5;">
+                Our garments are designed for a premium streetwear fit.
+            </p>
+            <button class="btn-pill" style="width: 100%;" onclick="showPage('home')">Continue Shopping</button>
         </div>
     </section>
 
     <footer>&copy; 2026 ZAMIL'S STREETWEAR EVOLUTION</footer>
 
     <script>
-        const products = [];
-        for(let i=1; i<=10; i++) {
-            products.push({
-                id: i,
-                cat: i <= 5 ? 'boy' : 'girl',
-                name: (i <= 5 ? 'Boy Jogger ' : 'Girl Jogger ') + i,
-                price: 350,
-                img1: 'https://i.postimg.cc/MK3qZd1D/IMG-2266.png',
-                img2: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=1000' 
-            });
+        // FULLSCREEN IMAGE FUNCTIONS
+        function openFS(src) {
+            document.getElementById('fs-img-tag').src = src;
+            document.getElementById('fullscreen-overlay').style.display = 'flex';
+        }
+        function closeFS() {
+            document.getElementById('fullscreen-overlay').style.display = 'none';
         }
 
+        // Slideshow Logic
+        let homeIndex = 0;
+        const totalSlides = 5;
+        const homeDots = document.querySelectorAll('.home-dot');
+        const homeSlider = document.getElementById('home-slider');
+
+        function autoSlideHome() {
+            homeIndex = (homeIndex + 1) % totalSlides;
+            const movePercent = homeIndex * (100 / totalSlides);
+            homeSlider.style.transform = `translateX(-${movePercent}%)`;
+            homeDots.forEach((dot, i) => {
+                dot.style.opacity = i === homeIndex ? "1" : "0.4";
+            });
+        }
+        setInterval(autoSlideHome, 4000);
+
+        // Product Data (20 Items)
+        const products = [
+            { id: 1, cat: 'joggers', name: 'Reflective Ghost Joggers', price: 195, sizes: ['M', 'L', 'XL'], img1: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1000' },
+            { id: 2, cat: 'joggers', name: 'Desert Earth Cargoes', price: 210, sizes: ['L', 'XL', 'XXL'], img1: 'https://images.unsplash.com/photo-1624372933930-019672958566?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=1000' },
+            { id: 3, cat: 'joggers', name: 'Midnight Stealth Sweats', price: 180, sizes: ['S', 'M', 'L'], img1: 'https://images.unsplash.com/photo-1580458148391-8c4951bc1465?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?q=80&w=1000' },
+            { id: 4, cat: 'joggers', name: 'Arctic White Utility', price: 225, sizes: ['M', 'L'], img1: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1515347619252-60a4bdad882a?q=80&w=1000' },
+            { id: 5, cat: 'joggers', name: 'Onyx Tech-Fleece', price: 250, sizes: ['M', 'L', 'XL'], img1: 'https://images.unsplash.com/photo-1606105967022-56360c0271d7?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?q=80&w=1000' },
+            { id: 6, cat: 'joggers', name: 'Graphite Loose-Fit', price: 175, sizes: ['S', 'M', 'L', 'XL'], img1: 'https://images.unsplash.com/photo-1491336477066-31156b5e4f35?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1475178626620-a4d074967452?q=80&w=1000' },
+            { id: 7, cat: 'joggers', name: 'Neon-Stitch Trackies', price: 190, sizes: ['M', 'L'], img1: 'https://images.unsplash.com/photo-1548883354-94bcfe321cbb?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?q=80&w=1000' },
+            { id: 8, cat: 'joggers', name: 'Vintage Washed Grey', price: 200, sizes: ['L', 'XL'], img1: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000' },
+            { id: 9, cat: 'shorts', name: 'Nylon Active Shorts', price: 95, sizes: ['M', 'L', 'XL'], img1: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1617113930975-f9c7243ae527?q=80&w=1000' },
+            { id: 10, cat: 'shorts', name: 'Heavy Mesh Baller', price: 110, sizes: ['L', 'XL'], img1: 'https://images.unsplash.com/photo-1523398002811-999ca8dec234?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1539185441755-769473a23570?q=80&w=1000' },
+            { id: 11, cat: 'shorts', name: 'Raw Edge Denim', price: 135, sizes: ['30', '32', '34'], img1: 'https://images.unsplash.com/photo-1582552938357-32b906df40cb?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?q=80&w=1000' },
+            { id: 12, cat: 'shorts', name: 'Essential Cotton Khaki', price: 85, sizes: ['M', 'L', 'XL'], img1: 'https://images.unsplash.com/photo-1565084888279-aca607ecce0c?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1560232564-999c8613437c?q=80&w=1000' },
+            { id: 13, cat: 'shorts', name: 'Hybrid Swim-Street', price: 120, sizes: ['M', 'L'], img1: 'https://images.unsplash.com/photo-1603554476223-c6617f763f5e?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=1000' },
+            { id: 14, cat: 'shorts', name: 'Acid Wash Graffiti', price: 145, sizes: ['L', 'XL'], img1: 'https://images.unsplash.com/photo-1594932224828-b4b059bdbf0f?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000' },
+            { id: 15, cat: 'shoes', name: 'Evolution Runner X', price: 480, sizes: ['41', '42', '43', '44'], img1: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000' },
+            { id: 16, cat: 'shoes', name: 'Cloud-Step High-Tops', price: 550, sizes: ['40', '41', '42', '43'], img1: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1512374382149-433a72b9a5a5?q=80&w=1000' },
+            { id: 17, cat: 'shoes', name: 'Cyberpunk Low-Cut', price: 420, sizes: ['42', '43', '44', '45'], img1: 'https://images.unsplash.com/photo-1525966222034-adcdd8b29d9b?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1000' },
+            { id: 18, cat: 'shoes', name: 'Retro Urban Trainer', price: 380, sizes: ['39', '40', '41', '42'], img1: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?q=80&w=1000' },
+            { id: 19, cat: 'shoes', name: 'Volt Impact Sneakers', price: 495, sizes: ['41', '42', '43'], img1: 'https://images.unsplash.com/photo-1514989940723-e8e51635b782?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1605348532760-6753d2c43329?q=80&w=1000' },
+            { id: 20, cat: 'shoes', name: 'Sand-Storm Suede Boots', price: 590, sizes: ['42', '43', '44'], img1: 'https://images.unsplash.com/photo-1520639889457-41804bc0a653?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1549416878-b9ca35c2d47a?q=80&w=1000' }
+        ];
+
         let bag = [];
-        let selection = { size: "", waist: "", length: "", color: "", qty: 1 };
+        let selection = { size: "", color: "Black", qty: 1 };
 
         function initGrid() {
             const grid = document.getElementById('main-grid');
@@ -248,8 +322,8 @@
                 <div class="card" data-cat="${p.cat}">
                     <div class="image-container">
                         <div class="slider-track" id="track-${p.id}">
-                            <img src="${p.img1}" onclick="openDetails('${p.name}', ${p.price}, '${p.img1}', '${p.img2}')">
-                            <img src="${p.img2}" onclick="openDetails('${p.name}', ${p.price}, '${p.img1}', '${p.img2}')">
+                            <img src="${p.img1}" onclick="openFS('${p.img1}')">
+                            <img src="${p.img2}" onclick="openFS('${p.img2}')">
                         </div>
                         <button class="slide-btn" onclick="rotateSlide(${p.id})">❯</button>
                     </div>
@@ -258,10 +332,36 @@
                             <h3 style="font-size: 0.8rem; margin:0; font-weight:800;">${p.name}</h3>
                             <p style="color: var(--text-grey); font-size:0.7rem; margin:5px 0 0 0;">GHS ${p.price}</p>
                         </div>
-                        <button onclick="openDetails('${p.name}', ${p.price}, '${p.img1}', '${p.img2}')" style="width:30px; height:30px; border-radius:50%; border:none; background:black; color:white; cursor:pointer;">+</button>
+                        <button onclick="openDetails(${p.id})" style="width:30px; height:30px; border-radius:50%; border:none; background:black; color:white; cursor:pointer;">+</button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function openDetails(id) {
+            const p = products.find(item => item.id == id);
+            selection = { size: "", color: "Black", qty: 1 };
+            document.getElementById('modalQty').innerText = "1";
+            document.querySelectorAll('.modal .opt-btn').forEach(b => b.classList.remove('selected'));
+            
+            document.getElementById('modalImg1').src = p.img1;
+            document.getElementById('modalImg2').src = p.img2;
+            document.getElementById('modalTitle').innerText = p.name;
+            document.getElementById('modalPrice').innerText = 'GHS ' + p.price;
+
+            const sizeContainer = document.getElementById('size-options-container');
+            sizeContainer.innerHTML = p.sizes.map(s => `
+                <button class="opt-btn" onclick="setOpt(this, 'size', '${s}')">${s}</button>
+            `).join('');
+
+            document.getElementById('productModal').style.display = 'block';
+            
+            document.getElementById('modalAddBtn').onclick = () => {
+                if(!selection.size) return alert("Please select a size!");
+                bag.push({id: Date.now(), name: p.name, price: p.price, ...selection});
+                updateCart();
+                closeModal();
+            };
         }
 
         function handleSearch() {
@@ -276,33 +376,13 @@
             document.getElementById('searchInput').value = '';
             document.querySelectorAll('#shop .opt-btn').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            document.querySelectorAll('.card').forEach(c => c.style.display = (c.dataset.cat === cat) ? 'block' : 'none');
-        }
-
-        function openDetails(name, price, img1, img2) {
-            selection = { size: "", waist: "", length: "", color: "", qty: 1 };
-            document.getElementById('modalQty').innerText = "1";
-            document.querySelectorAll('.modal .opt-btn').forEach(b => b.classList.remove('selected'));
-            document.getElementById('modalImg1').src = img1;
-            document.getElementById('modalImg2').src = img2;
-            document.getElementById('modalTitle').innerText = name;
-            document.getElementById('modalPrice').innerText = 'GHS ' + price;
-            document.getElementById('productModal').style.display = 'block';
-            
-            document.getElementById('modalAddBtn').onclick = () => {
-                if(!selection.size || !selection.waist || !selection.length || !selection.color) return alert("Please select all options!");
-                
-                const existing = bag.find(item => 
-                    item.name === name && item.size === selection.size && 
-                    item.color === selection.color && item.waist === selection.waist && item.length === selection.length
-                );
-
-                if (existing) { existing.qty += selection.qty; } 
-                else { bag.push({id: Date.now(), name, price, ...selection}); }
-
-                updateCart();
-                closeModal();
-            };
+            document.querySelectorAll('.card').forEach(c => {
+                if (cat === 'all') {
+                    c.style.display = 'block';
+                } else {
+                    c.style.display = (c.dataset.cat === cat) ? 'block' : 'none';
+                }
+            });
         }
 
         function changeQty(val) {
@@ -321,7 +401,7 @@
             list.innerHTML = bag.map(item => `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                     <div><span style="font-weight:bold; font-size:0.85rem; display:block;">${item.name} (x${item.qty})</span>
-                    <span style="color:var(--text-grey); font-size:0.7rem;">${item.color} | ${item.size} (W:${item.waist} L:${item.length})</span></div>
+                    <span style="color:var(--text-grey); font-size:0.7rem;">${item.color} | Size: ${item.size}</span></div>
                     <div style="display:flex; align-items:center; gap:15px;"><span style="font-weight:900;">GHS ${item.price * item.qty}</span>
                     <button class="remove-btn" onclick="removeItem(${item.id})">×</button></div>
                 </div>
@@ -333,6 +413,7 @@
         function removeItem(uniqueId) { bag = bag.filter(item => item.id !== uniqueId); updateCart(); }
         function setOpt(btn, type, val) { btn.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); selection[type] = val; }
         function closeModal() { document.getElementById('productModal').style.display = 'none'; }
+        
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(id).classList.add('active-page');
@@ -343,10 +424,9 @@
 
         function process() {
             if(!bag.length) return alert("Bag is empty");
-            const greeting = "Hello Zamil, I want to purchase these items:%0A%0A";
-            const orderDetails = bag.map(i => `• ${i.name} x${i.qty}%0A  [${i.color} | Size: ${i.size} | W:${i.waist} L:${i.length}]%0A  Subtotal: GHS ${i.price * i.qty}`).join("%0A%0A");
+            const details = bag.map(i => `• ${i.name} x${i.qty} (${i.color}, Size: ${i.size})`).join("%0A");
             const total = document.getElementById('total-val').innerText;
-            window.location.href = `https://wa.me/233503612876?text=${greeting}${orderDetails}%0A%0A*Total Order: GHS ${total}*`;
+            window.location.href = `https://wa.me/233503612876?text=New Order:%0A${details}%0A%0ATotal: GHS ${total}`;
         }
 
         function rotateSlide(id) {
