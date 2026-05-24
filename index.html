@@ -8,27 +8,28 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ZAMIL'S">
-    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=180">
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
 
     <style>
         :root {
             --brand-black: #000000;
             --brand-white: #ffffff;
-            --brand-accent: #00ffcc; 
-            --soft-bg: #e5e7eb;
-            --glass: rgba(255, 255, 255, 0.7);
-            --whatsapp-green: #58cc71;
+            --soft-bg: #f9f9f9;
+            --glass: rgba(255, 255, 255, 0.85);
             --text-grey: #666666;
-            --remove-red: #ff4d4d;
+            --border-light: #e5e7eb;
+            --heart-red: #ff4d4d;
         }
 
         body {
             margin: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--soft-bg);
             color: var(--brand-black);
             overflow-x: hidden;
-            padding-bottom: 80px;
+            padding-bottom: 120px;
         }
 
         /* FULLSCREEN OVERLAY STYLE */
@@ -46,6 +47,7 @@
             max-height: 90%;
             border-radius: 10px;
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            object-fit: contain;
         }
         .close-fs {
             position: absolute;
@@ -54,83 +56,227 @@
             cursor: pointer;
         }
 
-        header { padding: 30px 20px; text-align: center; background: transparent; }
-        .main-title { font-size: 3.5rem; font-weight: 900; letter-spacing: 2px; margin: 0; text-transform: uppercase; color: var(--brand-black); }
-        .sub-tagline { letter-spacing: 4px; color: var(--brand-black); font-size: 0.75rem; margin-top: 5px; font-weight: bold; text-transform: uppercase; opacity: 0.7; }
+        header { padding: 25px 20px 10px; text-align: center; background: transparent; }
+        .main-title { font-size: 2.8rem; font-weight: 900; letter-spacing: 1px; margin: 0; text-transform: uppercase; color: var(--brand-black); }
+        .sub-tagline { letter-spacing: 3px; color: var(--brand-black); font-size: 0.7rem; margin-top: 4px; font-weight: bold; text-transform: uppercase; opacity: 0.6; }
 
         nav {
-            display: flex; justify-content: center; gap: 20px; padding: 15px; background: var(--glass);
-            backdrop-filter: blur(5px); position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: fit-content; margin: 6 auto; border-radius: 100px; z-index: 100; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex; justify-content: center; gap: 0px; padding: 12px 20px; background: var(--glass);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: fit-content; margin: 0 auto; border-radius: 100px; z-index: 100; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
-        nav a { color: var(--text-grey); text-decoration: none; font-weight: bold; font-size: 0.8rem; text-transform: uppercase; cursor: pointer; padding: 8px 16px; transition: 0.3s; }
-        .active { color: var(--brand-black) !important; background: white; border-radius: 50px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        nav a { color: var(--text-grey); text-decoration: none; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; cursor: pointer; padding: 10px 16px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; }
+        .active { color: var(--brand-white) !important; background: var(--brand-black); border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
-        .page { display: none; padding: 20px; min-height: 70vh; }
+        .page { display: none; padding: 15px; min-height: 75vh; box-sizing: border-box; }
         .active-page { display: block !important; }
 
-        .search-container { max-width: 1000px; margin: 0 auto 25px; }
+        .search-wrapper { display: flex; gap: 12px; max-width: 1000px; margin: 0 auto 20px; width: 100%; box-sizing: border-box; }
+        .search-container { position: relative; flex: 1; }
+        .search-container svg { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); opacity: 0.4; }
         .search-input { 
-            width: 100%; padding: 18px 25px; border-radius: 100px; border: 1px solid #ddd; 
-            outline: none; font-size: 0.9rem; box-sizing: border-box; background: white; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: 0.3s;
+            width: 100%; padding: 16px 16px 16px 52px; border-radius: 20px; border: none; 
+            outline: none; font-size: 0.95rem; box-sizing: border-box; background: #f0f0f0; 
+            color: #333; transition: 0.3s; font-weight: 500;
+        }
+        .filter-settings-btn {
+            background: #f0f0f0; border: none; border-radius: 20px; width: 54px; height: 54px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
         }
 
-        .hero-container { 
-            max-width: 1000px; 
-            margin: 20px auto; 
-            background: white; 
-            border-radius: 40px; 
-            overflow: hidden; 
-            display: grid; 
-            grid-template-columns: 1fr 1.2fr;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-            min-height: 750px;
+        .collection-banner {
+            max-width: 1000px; margin: 0 auto 25px; border-radius: 24px; overflow: hidden;
+            position: relative; background: #1a1a1a; min-height: 240px; display: flex; align-items: center;
         }
-        .hero-content { padding: 60px; display: flex; flex-direction: column; justify-content: center; }
-        .hero-main-title { font-size: 3.5rem; font-weight: 900; line-height: 1; margin: 60 0 20px 0; }
-        
-        .hero-image { position: relative; overflow: hidden; width: 100%; height: 100%; }
-        #home-slider { display: flex; width: 500%; height: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        .home-slide { width: 100%; height: 100%; background-size: cover; background-position: center; background-repeat: no-repeat; }
-        .home-dot { width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: 0.3s; }
+        .banner-bg-img {
+            position: absolute; right: 0; top: 0; height: 100%; width: 55%; 
+            background-image: url('https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000');
+            background-size: cover; background-position: center center; z-index: 1;
+        }
+        .banner-bg-img::before {
+            content: ''; position: absolute; left: 0; top: 0; width: 30%; height: 100%;
+            background: linear-gradient(to right, #1a1a1a, transparent);
+        }
+        .banner-content {
+            position: relative; z-index: 2; padding: 35px; max-width: 55%; color: white;
+        }
+        .banner-tag { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: #aaa; font-weight: 700; margin-bottom: 6px; }
+        .banner-title { font-size: 2rem; font-weight: 900; line-height: 1.1; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+        .banner-desc { font-size: 0.85rem; color: #ccc; margin: 0 0 20px 0; font-weight: 400; }
+        .banner-btn { background: white; color: black; border: none; padding: 10px 22px; border-radius: 12px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; cursor: pointer; }
+
+        .categories-scroll {
+            display: flex; gap: 8px; overflow-x: auto; white-space: nowrap; 
+            max-width: 1000px; margin: 0 auto 25px; padding: 5px 2px;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .categories-scroll::-webkit-scrollbar { display: none; }
+        .cat-pill {
+            background: white; color: #111; border: none; padding: 10px 22px; 
+            border-radius: 14px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+            transition: 0.25s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .cat-pill.selected { background: black; color: white; font-weight: 700; }
 
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; }
-        .card { background: white; padding: 15px; border-radius: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
-        .image-container { position: relative; width: 100%; height: 280px; overflow: hidden; border-radius: 20px; background: #f3f4f6; }
-        .slider-track { display: flex; width: 200%; height: 100%; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .slider-track img { width: 50%; height: 100%; object-fit: cover; cursor: pointer; }
-        .slide-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: bold; z-index: 10; }
+        .card { background: transparent; border-radius: 0px; box-shadow: none; display: flex; flex-direction: column; }
+        
+        .image-container { position: relative; width: 100%; height: 260px; overflow: hidden; border-radius: 20px; background: #fff; }
+        .image-container img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        
+        .wishlist-heart-btn {
+            position: absolute; top: 12px; right: 12px; background: white; border: none;
+            width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.2s ease; z-index: 10;
+        }
+        .wishlist-heart-btn:active { transform: scale(0.85); }
+        .wishlist-heart-btn.favorited svg { fill: var(--heart-red); stroke: var(--heart-red); }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height:100%; background: rgba(0,0,0,0.1); backdrop-filter: blur(150px); z-index: 1000; }
-        .modal-content { background: white; max-width: 330px; width: 90%; margin: 0vh auto; border-radius: 50px; padding: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; }
-        .opt-btn { padding: 8px 12px; background: #f3f4f6; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.65rem; min-width: 30px; }
-        .opt-btn.selected { background: var(--brand-black); color: white; }
+        .card-details-box { display: flex; flex-direction: column; padding: 12px 2px 5px; position: relative; }
+        .card-title { font-size: 0.85rem; margin: 0 0 3px 0; font-weight: 700; color: #222; }
+        .card-meta { font-size: 0.75rem; margin: 0 0 8px 0; color: #777; font-weight: 500; }
+        .card-price { font-size: 0.85rem; margin: 0; font-weight: 800; color: #000; }
+        .card-add-trigger {
+            position: absolute; right: 2px; bottom: 5px; width: 28px; height: 28px; 
+            border-radius: 50%; border: none; background: black; color: white; 
+            cursor: pointer; font-weight: bold; font-size: 1rem; display: flex; 
+            align-items: center; justify-content: center;
+        }
 
-        .qty-controls { display: flex; align-items: center; gap: 15px; background: #f3f4f6; border-radius: 100px; padding: 5px 15px; width: fit-content; margin-bottom: 25px; }
-        .qty-btn { background: none; border: none; font-size: 1.2rem; font-weight: bold; cursor: pointer; padding: 5px 10px; }
+        .modal { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.4); z-index: 1000; align-items: flex-end; justify-content: center;
+        }
+        .modal-content { 
+            background: white; max-width: 500px; width: 100%; border-radius: 30px 30px 0 0; 
+            padding: 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.15); max-height: 92vh; 
+            overflow-y: auto; position: relative; box-sizing: border-box; display: flex; flex-direction: column;
+        }
+        
+        /* MODAL HERO INTERACTIVE CAROUSEL */
+        .modal-hero-area { position: relative; width: 100%; height: 380px; background: #f5f5f5; flex-shrink: 0; }
+        .modal-hero-area img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease; }
+        
+        .modal-arrow-btn {
+            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.85);
+            border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; z-index: 6; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .modal-arrow-btn:hover { background: white; }
+        .modal-arrow-left { left: 15px; }
+        .modal-arrow-right { right: 15px; }
 
-        .remove-btn { background: #ffebeb; color: var(--remove-red); border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 1rem; line-height: 1; }
-        .btn-pill { background: var(--brand-black); color: white; border: none; padding: 15px 35px; border-radius: 100px; font-weight: bold; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; width: fit-content; transition: 0.3s; }
-        footer { text-align: center; padding: 60px; color: var(--text-grey); font-size: 0.6rem; letter-spacing: 1px; }
+        /* THUMBNAILS CONTAINER STYLE */
+        .modal-thumb-row { display: flex; gap: 8px; margin: 15px 0 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .modal-thumb-row::-webkit-scrollbar { display: none; }
+        .modal-thumb-img { width: 54px; height: 54px; border-radius: 10px; object-fit: cover; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: 0.2s; }
+        .modal-thumb-img.selected { border-color: black; transform: scale(1.05); }
+
+        .modal-nav-overlay {
+            position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 5;
+        }
+        .modal-circle-nav-btn {
+            background: rgba(255, 255, 255, 0.9); border: none; width: 40px; height: 40px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .modal-circle-nav-btn.favorited svg { fill: var(--heart-red); stroke: var(--heart-red); }
+        
+        .modal-img-counter {
+            position: absolute; bottom: 20px; right: 20px; background: rgba(0, 0, 0, 0.6);
+            color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.5px; z-index: 6;
+        }
+
+        .modal-body-container { padding: 24px; }
+        
+        .color-label-head { font-size: 0.8rem; color: #777; font-weight: 500; margin-bottom: 8px; }
+        .color-swatch-box { display: flex; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+        .color-swatch {
+            width: 32px; height: 32px; border-radius: 8px; cursor: pointer; position: relative;
+            box-sizing: border-box; border: 1px solid rgba(0,0,0,0.06); transition: 0.2s ease;
+        }
+        .color-swatch.selected { outline: 2px solid #000; outline-offset: 3px; }
+
+        .size-label-head { font-size: 0.8rem; color: #777; font-weight: 500; margin-bottom: 8px; }
+        .size-row-options { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+        .size-outline-box {
+            min-width: 44px; height: 32px; border: 1px solid var(--border-light); background: white;
+            color: #222; font-size: 0.8rem; font-weight: 500; display: flex; align-items: center;
+            justify-content: center; border-radius: 8px; cursor: pointer; transition: 0.2s; padding: 0 6px; box-sizing: border-box;
+        }
+        .size-outline-box.selected { background: black; color: white; border-color: black; font-weight: 700; }
+
+        .action-tray-footer { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
+        .btn-add-main-action { 
+            background: var(--brand-black); color: white; border: none; height: 50px;
+            border-radius: 12px; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px;
+            cursor: pointer; text-transform: uppercase; flex: 1; text-align: center; display: flex; align-items: center; justify-content: center;
+        }
+
+        .cart-qty-selector {
+            display: flex; align-items: center; border: 1px solid #e5e7eb;
+            border-radius: 12px; width: fit-content; margin-top: 10px; background: white; overflow: hidden;
+        }
+        .cart-qty-btn { background: none; border: none; font-size: 1rem; color: #666; cursor: pointer; padding: 6px 14px; font-weight: 500; transition: background 0.2s; }
+        .cart-qty-btn:hover { background: #f9f9f9; }
+        .cart-qty-val { font-weight: 600; font-size: 0.9rem; min-width: 20px; text-align: center; color: #000; }
+
+        .btn-pill { background: var(--brand-black); color: white; border: none; padding: 15px 35px; border-radius: 100px; font-weight: bold; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; width: fit-content; transition: 0.3s; text-align: center; }
+        
+        .form-group { margin-top: 15px; }
+        .form-label { display: block; font-size: 0.8rem; font-weight: 700; color: #333; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-input, .form-select { width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 0.9rem; outline: none; box-sizing: border-box; font-family: inherit; background: white; }
+        
+        .checkout-actions-container { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
+        .btn-checkout-paystack { width: 100%; background: #000000; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; padding: 18px; border-radius: 15px; border: none; box-sizing: border-box; cursor: pointer; }
+        .btn-checkout-cod { width: 100%; background: white; color: black; border: 2px solid black; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; padding: 16px; border-radius: 15px; box-sizing: border-box; cursor: pointer; transition: 0.2s; }
+        .btn-checkout-cod:hover { background: #f5f5f5; }
+
+        footer { text-align: center; padding: 40px 20px 60px; color: var(--text-grey); font-size: 0.6rem; letter-spacing: 1px; }
+
+        .hero-container { 
+            max-width: 1000px; margin: 20px auto; background: white; border-radius: 40px; 
+            overflow: hidden; display: grid; grid-template-columns: 1fr 1.2fr;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03); min-height: 650px;
+        }
+        .hero-content { padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+        .hero-main-title { font-size: 3.5rem; font-weight: 900; line-height: 1; margin: 20px 0; }
+        .hero-image { position: relative; overflow: hidden; width: 100%; height: 100%; }
+        
+        .slider-wrapper { width: 100%; height: 100%; overflow: hidden; position: relative; }
+        #home-slider { display: flex; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .home-slide { width: 100%; height: 100%; flex-shrink: 0; background-size: cover; background-position: center; background-repeat: no-repeat; }
+        .home-dot { width: 8px; height: 8px; border-radius: 50%; background: white; opacity: 0.4; transition: 0.3s; }
 
         @media (max-width: 768px) {
             .hero-container { grid-template-columns: 1fr; margin: 10px; border-radius: 30px; min-height: auto; }
             .hero-content { padding: 40px 25px; text-align: center; align-items: center; }
             .hero-main-title { font-size: 2.5rem; }
             .hero-image { height: 550px; order: -1; }
-            .grid { grid-template-columns: repeat(2, 1fr); }
-            .category-scroll { overflow-x: auto; white-space: nowrap; padding-bottom: 10px; }
+            
+            .collection-banner { margin: 5px 0 20px; min-height: 180px; }
+            .banner-content { padding: 20px; max-width: 65%; }
+            .banner-title { font-size: 1.35rem; }
+            .banner-desc { font-size: 0.75rem; margin-bottom: 12px; }
+            .banner-btn { padding: 8px 16px; font-size: 0.65rem; border-radius: 8px; }
+            
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 2px; }
+            .image-container { height: 210px; border-radius: 16px; }
+            .card-title { font-size: 0.8rem; }
+            .card-meta { font-size: 0.7rem; margin-bottom: 4px; }
+            .card-price { font-size: 0.8rem; }
+            
+            .modal-content { border-radius: 24px 24px 0 0; }
+            .modal-hero-area { height: 320px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- FULLSCREEN IMAGE OVERLAY -->
     <div id="fullscreen-overlay" onclick="closeFS()">
         <span class="close-fs">&times;</span>
-        <img id="fs-img-tag" src="">
+        <img id="fs-img-tag" src="" alt="Fullscreen view">
     </div>
 
     <header>
@@ -142,72 +288,83 @@
         <a onclick="showPage('home')" id="l-home" class="active">Home</a>
         <a onclick="showPage('shop')" id="l-shop">Collection</a>
         <a onclick="showPage('cart')" id="l-cart">Bag (<span id="count">0</span>)</a>
-        <a onclick="showPage('size')" id="l-size">Sizes</a>
+        <a onclick="showPage('wishlist')" id="l-wishlist">Favorit (<span id="fav-count">0</span>)</a>
     </nav>
 
-    <!-- PRODUCT MODAL -->
-    <div id="productModal" class="modal">
+    <div id="productModal" class="modal" onclick="if(event.target===this) closeModal()">
         <div class="modal-content">
-            <div class="image-container">
-                <div class="slider-track" id="modalSlider">
-                    <img id="modalImg1" src="" onclick="openFS(this.src)">
-                    <img id="modalImg2" src="" onclick="openFS(this.src)">
+            <div class="modal-hero-area">
+                <div class="modal-nav-overlay">
+                    <button class="modal-circle-nav-btn" onclick="closeModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    </button>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="modal-circle-nav-btn" id="modalShareBtn" title="Share Product">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        </button>
+                        <button class="modal-circle-nav-btn" id="modalWishBtn" title="Favorite Product">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        </button>
+                    </div>
                 </div>
-                <button class="slide-btn" onclick="rotateModal()">❯</button>
-            </div>
-            <h2 id="modalTitle" style="margin: 15px 0 5px 0; font-weight: 900;"></h2>
-            <p id="modalPrice" style="color: var(--text-grey); font-weight: bold; margin-bottom: 15px;"></p>
-            
-            <div id="productDetails" style="font-size: 0.7rem; color: #444; margin-bottom: 15px; line-height: 1.4;">
-                • Color: Black<br>
-                • Material: Premium cotton<br>
-                • Style: Streetwear / Casual<br>
-                • Features: Soft fabric, oversized fit, front print, hoodie attached
+                
+                <button class="modal-arrow-btn modal-arrow-left" onclick="changeDetailSlide(-1)">‹</button>
+                <img id="modalImg" src="" onclick="openFS(this.src)" alt="Product Zoom View">
+                <button class="modal-arrow-btn modal-arrow-right" onclick="changeDetailSlide(1)">›</button>
+                
+                <div class="modal-img-counter" id="imageIndexTracker">1/3</div>
             </div>
 
-            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Color</div>
-            <div style="display:flex; gap:10px; margin-bottom:15px;" id="color-opts">
-                <button class="opt-btn" onclick="setOpt(this, 'color', 'Black')">Black</button>
-            </div>
-  
-            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Select Size</div>
-            <div style="display:flex; gap:6px; flex-wrap: wrap; margin-bottom:25px;" id="size-options-container">
-                <!-- Sizes dynamically added -->
-            </div>
+            <div class="modal-body-container">
+                <h2 id="modalTitle" style="margin: 0 0 8px 0; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px;"></h2>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span id="modalPrice" style="font-weight: 800; font-size: 1.3rem; color: #000;"></span>
+                    <div style="display: flex; align-items: center; gap: 4px; font-size: 0.9rem; font-weight: bold;">
+                        <span>4.8</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#f1c40f" stroke="#f1c40f"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        <span style="color: #888; font-weight: 400; font-size: 0.85rem;">(142)</span>
+                    </div>
+                </div>
 
-            <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; margin-bottom:8px;">Quantity</div>
-            <div class="qty-controls">
-                <button class="qty-btn" onclick="changeQty(-1)">−</button>
-                <span id="modalQty" style="font-weight:900;">1</span>
-                <button class="qty-btn" onclick="changeQty(1)">+</button>
+                <div class="modal-thumb-row" id="modalThumbnailsStrip"></div>
+                
+                <p id="productDetails" style="font-size: 0.9rem; color: #555; margin: 0 0 24px 0; line-height: 1.5; font-weight: 400;"></p>
+
+                <div class="color-label-head">Color</div>
+                <div class="color-swatch-box" id="color-opts"></div>
+      
+                <div class="size-label-head">Size</div>
+                <div class="size-row-options" id="size-options-container"></div>
+
+                <div class="action-tray-footer">
+                    <button id="modalAddBtn" class="btn-add-main-action">Add To Cart</button>
+                </div>
+                <p style="font-size: 0.7rem; color: #777; text-align: center; margin: 20px 0 5px; font-weight: 500;">⚡ Fast secure delivery across Ghana</p>
             </div>
-            <div style="display:flex; gap:10px; margin-top: 0px;">
-                <button class="btn-pill" style="background:#eee; color:black; flex:1;" onclick="closeModal()">Back</button>
-                <button id="modalAddBtn" class="btn-pill" style="flex:2;">Add to Bag</button>
-            </div>
-            <p style="font-size: 0.6rem; color: #e67e22; text-align: center; margin-top: 15px; font-weight: bold;">🚚 Delivery available across Ghana</p>
         </div>
     </div>
 
-    <!-- HOME PAGE -->
     <section id="home" class="page active-page">
         <div class="hero-container">
             <div class="hero-content">
-                <div class="hero-label">Available Now</div>
+                <div class="hero-label" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; opacity: 0.5;">Available Now</div>
                 <h2 class="hero-main-title">Style your inner cool.</h2>
-                <p style="color: var(--text-grey); margin-bottom: 30px; font-size: 0.9rem;">Experience the next evolution of streetwear with our 2026 collection.</p>
+                <p style="color: var(--text-grey); margin-bottom: 30px; font-size: 0.9rem; line-height: 1.5;">Experience the next evolution of streetwear with our 2026 collection.</p>
                 <button class="btn-pill" onclick="showPage('shop')">Shop Now</button>
             </div>
             
             <div class="hero-image">
-                <div id="home-slider">
-                    <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000');"></div>
-                    <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?q=80&w=1000');"></div>
-                    <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1000');"></div>
-                    <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000');"></div>
-                    <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000');"></div>
+                <div class="slider-wrapper">
+                    <div id="home-slider">
+                        <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000');"></div>
+                        <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000');"></div>
+                        <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000');"></div>
+                        <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000');"></div>
+                        <div class="home-slide" style="background-image: url('https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000');"></div>
+                    </div>
                 </div>
-                <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px;">
+                <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 5;">
                     <div class="home-dot" style="opacity: 1;"></div>
                     <div class="home-dot"></div>
                     <div class="home-dot"></div>
@@ -218,97 +375,136 @@
         </div>
     </section>
 
-    <!-- SHOP PAGE -->
     <section id="shop" class="page">
-        <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="Search collection..." onkeyup="handleSearch()">
+        <div class="search-wrapper">
+            <div class="search-container">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search for products..." onkeyup="handleSearch()">
+            </div>
+            <button class="filter-settings-btn" onclick="alert('Filters assigned: sorting newest items first.')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+            </button>
+        </div>
+
+        <div class="collection-banner">
+            <div class="banner-bg-img"></div>
+            <div class="banner-content">
+                <div class="banner-tag">New Arrivals</div>
+                <h2 class="banner-title">Summer Collection</h2>
+                <p class="banner-desc">Fresh fits. New energy.</p>
+                <button class="banner-btn" onclick="filterItems('all', document.getElementById('default-all-pill'))">Shop Now</button>
+            </div>
         </div>
         
-        <div style="max-width: 1000px; margin: 0 auto 30px;">
-            <h2 style="font-weight: 900; margin: 0;">New Arrival</h2>
-            <div style="display: flex; gap: 10px; margin-top: 15px; overflow-x: auto;">
-                <button class="opt-btn selected" onclick="filterItems('all', this)">All</button>
-                <button class="opt-btn" onclick="filterItems('joggers', this)">Joggers</button>
-                <button class="opt-btn" onclick="filterItems('shorts', this)">Shorts</button>
-                <button class="opt-btn" onclick="filterItems('shoes', this)">Shoes</button>
-            </div>
+        <div class="categories-scroll">
+            <button id="default-all-pill" class="cat-pill selected" onclick="filterItems('all', this)">All</button>
+            <button class="cat-pill" onclick="filterItems('joggers', this)">Joggers</button>
+            <button class="cat-pill" onclick="filterItems('cargo-pants', this)">Cargo Pants</button>
+            <button class="cat-pill" onclick="filterItems('t-shirts', this)">T-Shirts</button>
+            <button class="cat-pill" onclick="filterItems('hoodies', this)">Hoodies</button>
+            <button class="cat-pill" onclick="filterItems('sneakers', this)">Sneakers</button>
+        </div>
+
+        <div style="max-width:1000px; margin: 0 auto 15px; display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; font-size:1.15rem; font-weight:800; letter-spacing:-0.3px;">Featured Products</h3>
+            <span style="font-size:0.8rem; font-weight:700; color:#555; cursor:pointer;" onclick="filterItems('all', document.getElementById('default-all-pill'))">View all &rsaquo;</span>
         </div>
         
         <div class="grid" id="main-grid"></div>
     </section>
 
-    <!-- CART PAGE -->
     <section id="cart" class="page">
-        <div style="background: white; border-radius: 40px; padding: 40px; max-width: 500px; margin: 0 auto;">
-            <h2 style="text-align: center; font-weight: 900;">Bag</h2>
-            <div id="cart-list" style="margin: 20px 0; border-top: 1px solid #eee; padding-top: 20px;"></div>
-            <div style="display:flex; justify-content: space-between; font-weight: 900; font-size: 1.5rem; margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
-                <span>Total</span>
-                <span>GHS <span id="total-val">0</span></span>
-            </div>
-            <button class="btn-pill" style="width: 100%; margin-top: 30px; background: var(--whatsapp-green);" onclick="process()">Checkout WhatsApp</button>
-        </div>
-    </section>
-
-    <!-- SIZE GUIDE PAGE -->
-    <section id="size" class="page">
-        <div style="background: white; padding: 40px; border-radius: 40px; max-width: 500px; margin: 0 auto;">
-            <h3 style="font-weight: 900; text-transform: uppercase; margin-bottom: 10px; text-align: center;">Size & Fit Guide</h3>
-            <p style="margin-bottom: 30px; color: var(--text-grey); font-size: 0.85rem; text-align: center; line-height: 1.5;">
-                Our joggers are designed for a premium streetwear fit. Follow the guide below to ensure your custom pair fits perfectly.
-            </p>
+        <div style="background: white; border-radius: 30px; padding: 30px 20px; max-width: 550px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.02); box-sizing: border-box;">
+            <div id="cart-list"></div>
             
-            <div style="display: flex; gap: 15px; margin-bottom: 30px;">
-                <div style="flex: 1; text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=500" style="width: 100%; border-radius: 20px; object-fit: cover; height: 180px;" alt="Waist Guide">
-                    <span style="font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-top: 8px; display: block;">Waist Measurement</span>
+            <div id="cart-summary" style="margin-top: 25px; background: #f9f9f9; padding: 20px; border-radius: 20px; box-sizing: border-box;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: #444; margin-bottom: 12px;">
+                    <span>Subtotal</span>
+                    <span style="font-weight: 600; color: #000;">GH₵ <span id="subtotal-val">0.00</span></span>
                 </div>
-                <div style="flex: 1; text-align: center;">
-                    <img src="https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=500" style="width: 100%; border-radius: 20px; object-fit: cover; height: 180px;" alt="Length Guide">
-                    <span style="font-size: 0.6rem; font-weight: 800; text-transform: uppercase; margin-top: 8px; display: block;">Length/Inseam</span>
+                <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: #444; padding-bottom: 15px; border-bottom: 1px solid #e5e7eb;">
+                    <span>Delivery Fee</span>
+                    <span style="font-weight: 600; color: #000;">GH₵ <span id="delivery-val">0.00</span></span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 1.3rem; margin-top: 15px; color: #000;">
+                    <span>Total</span>
+                    <span>GH₵ <span id="total-val">0.00</span></span>
                 </div>
             </div>
 
-            <div style="text-align: left; width: 100%; background: #f9f9f9; padding: 20px; border-radius: 25px; margin-bottom: 25px;">
-                <h4 style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-bottom: 15px;">Standard Conversions</h4>
+            <div style="margin-top: 25px; padding-top: 10px; border-top: 1px dashed #e5e7eb;">
+                <h3 style="margin: 0 0 15px; font-size: 1.1rem; font-weight: 800; letter-spacing: -0.3px;">DELIVERY INFORMATION</h3>
                 
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0;">
-                    <span style="font-weight: 900;">Small (S)</span>
-                    <span style="color: var(--text-grey); font-size: 0.85rem;">W: 28-30" | L: 38-39"</span>
+                <div class="form-group">
+                    <label for="customer-email" class="form-label">Email Address *</label>
+                    <input type="email" id="customer-email" class="form-input" placeholder="e.g. name@example.com">
                 </div>
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0;">
-                    <span style="font-weight: 900;">Medium (M)</span>
-                    <span style="color: var(--text-grey); font-size: 0.85rem;">W: 30-32" | L: 39-40"</span>
+
+                <div class="form-group">
+                    <label for="customer-phone" class="form-label">Phone Number *</label>
+                    <input type="tel" id="customer-phone" class="form-input" placeholder="e.g. 0503612876">
                 </div>
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0;">
-                    <span style="font-weight: 900;">Large (L)</span>
-                    <span style="color: var(--text-grey); font-size: 0.85rem;">W: 33-35" | L: 40-41"</span>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px;">
+                    <div>
+                        <label for="customer-region" class="form-label">Region *</label>
+                        <select id="customer-region" class="form-select">
+                            <option value="">Select Region</option>
+                            <option value="Greater Accra">Greater Accra</option>
+                            <option value="Ashanti">Ashanti</option>
+                            <option value="Eastern">Eastern</option>
+                            <option value="Western">Western</option>
+                            <option value="Central">Central</option>
+                            <option value="Volta">Volta</option>
+                            <option value="Northern">Northern</option>
+                            <option value="Bono">Bono</option>
+                            <option value="Bono East">Bono East</option>
+                            <option value="Ahafo">Ahafo</option>
+                            <option value="Upper East">Upper East</option>
+                            <option value="Upper West">Upper West</option>
+                            <option value="Savannah">Savannah</option>
+                            <option value="North East">North East</option>
+                            <option value="Oti">Oti</option>
+                            <option value="Western North">Western North</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="customer-city" class="form-label">City / Town *</label>
+                        <input type="text" id="customer-city" class="form-input" placeholder="e.g. Accra / Kumasi">
+                    </div>
                 </div>
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0;">
-                    <span style="font-weight: 900;">X-Large (XL)</span>
-                    <span style="color: var(--text-grey); font-size: 0.85rem;">W: 36-38" | L: 41-42"</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0;">
-                    <span style="font-weight: 900;">2X-Large (2XL)</span>
-                    <span style="color: var(--text-grey); font-size: 0.85rem;">W: 39-40" | L: 42-44"</span>
+
+                <div class="form-group">
+                    <label for="customer-address" class="form-label">Digital Address / Street Info *</label>
+                    <input type="text" id="customer-address" class="form-input" placeholder="e.g. GA-123-4567 or near Stadium Gate">
                 </div>
             </div>
 
-            <div style="border-left: 3px solid var(--brand-black); padding-left: 15px; margin-bottom: 30px;">
-                <p style="font-size: 0.75rem; font-style: italic; color: var(--text-grey);">
-                    <strong>ZAMIL'S Tip:</strong> For a more stacked "streetwear" look at the ankles, choose a length 1-2 inches longer than your usual measurement.
-                </p>
+            <div class="checkout-actions-container">
+                <button class="btn-checkout-paystack" onclick="processPayment('paystack')">
+                    <span>PAY ONLINE VIA PAYSTACK</span>
+                    <span style="font-size: 1.1rem; font-weight: 300;">→</span>
+                </button>
+                
+                <button class="btn-checkout-cod" onclick="processPayment('cod')">
+                    <span>PAY ON DELIVERY (CASH/MOMO)</span>
+                    <span style="font-size: 1.1rem; font-weight: 300;">📦</span>
+                </button>
             </div>
-
-            <button class="btn-pill" style="width: 100%;" onclick="showPage('home')">Continue Shopping</button>
         </div>
     </section>
 
+    <section id="wishlist" class="page">
+        <div style="max-width: 1000px; margin: 0 auto 20px;">
+            <h3 style="margin:0 0 5px 0; font-size:1.5rem; font-weight:900; letter-spacing:-0.5px; text-transform: uppercase; text-align: center;">Your Favorites</h3>
+            <p style="margin: 0 0 25px 0; color: var(--text-grey); font-size: 0.85rem; text-align: center;">Items you have saved to your personal collection.</p>
+        </div>
+        <div class="grid" id="wishlist-grid"></div>
+    </section>
 
     <footer>&copy; 2026 ZAMIL'S STREETWEAR EVOLUTION</footer>
 
     <script>
-        // FULLSCREEN IMAGE FUNCTIONS
         function openFS(src) {
             document.getElementById('fs-img-tag').src = src;
             document.getElementById('fullscreen-overlay').style.display = 'flex';
@@ -317,173 +513,470 @@
             document.getElementById('fullscreen-overlay').style.display = 'none';
         }
 
-        // Slideshow Logic
         let homeIndex = 0;
         const totalSlides = 5;
         const homeDots = document.querySelectorAll('.home-dot');
         const homeSlider = document.getElementById('home-slider');
 
         function autoSlideHome() {
+            if(!homeSlider) return;
             homeIndex = (homeIndex + 1) % totalSlides;
-            const movePercent = homeIndex * (100 / totalSlides);
-            homeSlider.style.transform = `translateX(-${movePercent}%)`;
+            homeSlider.style.transform = `translateX(-${homeIndex * 100}%)`;
             homeDots.forEach((dot, i) => {
                 dot.style.opacity = i === homeIndex ? "1" : "0.4";
             });
         }
         setInterval(autoSlideHome, 4000);
 
-        // Product Data (20 Items)
         const products = [
-            { id: 1, cat: 'joggers', name: 'Reflective Ghost Joggers', price: 195, sizes: ['M', 'L', 'XL'], img1: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1000' },
-            { id: 2, cat: 'joggers', name: 'Desert Earth Cargoes', price: 210, sizes: ['L', 'XL', 'XXL'], img1: 'https://images.unsplash.com/photo-1624372933930-019672958566?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=1000' },
-            { id: 3, cat: 'joggers', name: 'Midnight Stealth Sweats', price: 180, sizes: ['S', 'M', 'L'], img1: 'https://images.unsplash.com/photo-1580458148391-8c4951bc1465?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?q=80&w=1000' },
-            { id: 4, cat: 'joggers', name: 'Arctic White Utility', price: 225, sizes: ['M', 'L'], img1: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1515347619252-60a4bdad882a?q=80&w=1000' },
-            { id: 5, cat: 'joggers', name: 'Onyx Tech-Fleece', price: 250, sizes: ['M', 'L', 'XL'], img1: 'https://images.unsplash.com/photo-1606105967022-56360c0271d7?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?q=80&w=1000' },
-            { id: 6, cat: 'joggers', name: 'Graphite Loose-Fit', price: 175, sizes: ['S', 'M', 'L', 'XL'], img1: 'https://images.unsplash.com/photo-1491336477066-31156b5e4f35?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1475178626620-a4d074967452?q=80&w=1000' },
-            { id: 7, cat: 'joggers', name: 'Neon-Stitch Trackies', price: 190, sizes: ['M', 'L'], img1: 'https://images.unsplash.com/photo-1548883354-94bcfe321cbb?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?q=80&w=1000' },
-            { id: 8, cat: 'joggers', name: 'Vintage Washed Grey', price: 200, sizes: ['L', 'XL'], img1: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000' },
-            { id: 9, cat: 'shorts', name: 'Nylon Active Shorts', price: 95, sizes: ['M', 'L', 'XL'], img1: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1617113930975-f9c7243ae527?q=80&w=1000' },
-            { id: 10, cat: 'shorts', name: 'Heavy Mesh Baller', price: 110, sizes: ['L', 'XL'], img1: 'https://images.unsplash.com/photo-1523398002811-999ca8dec234?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1539185441755-769473a23570?q=80&w=1000' },
-            { id: 11, cat: 'shorts', name: 'Raw Edge Denim', price: 135, sizes: ['30', '32', '34'], img1: 'https://images.unsplash.com/photo-1582552938357-32b906df40cb?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?q=80&w=1000' },
-            { id: 12, cat: 'shorts', name: 'Essential Cotton Khaki', price: 85, sizes: ['M', 'L', 'XL'], img1: 'https://images.unsplash.com/photo-1565084888279-aca607ecce0c?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1560232564-999c8613437c?q=80&w=1000' },
-            { id: 13, cat: 'shorts', name: 'Hybrid Swim-Street', price: 120, sizes: ['M', 'L'], img1: 'https://images.unsplash.com/photo-1603554476223-c6617f763f5e?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=1000' },
-            { id: 14, cat: 'shorts', name: 'Acid Wash Graffiti', price: 145, sizes: ['L', 'XL'], img1: 'https://images.unsplash.com/photo-1594932224828-b4b059bdbf0f?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000' },
-            { id: 15, cat: 'shoes', name: 'Evolution Runner X', price: 480, sizes: ['41', '42', '43', '44'], img1: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000' },
-            { id: 16, cat: 'shoes', name: 'Cloud-Step High-Tops', price: 550, sizes: ['40', '41', '42', '43'], img1: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1512374382149-433a72b9a5a5?q=80&w=1000' },
-            { id: 17, cat: 'shoes', name: 'Cyberpunk Low-Cut', price: 420, sizes: ['42', '43', '44', '45'], img1: 'https://images.unsplash.com/photo-1525966222034-adcdd8b29d9b?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1000' },
-            { id: 18, cat: 'shoes', name: 'Retro Urban Trainer', price: 380, sizes: ['39', '40', '41', '42'], img1: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?q=80&w=1000' },
-            { id: 19, cat: 'shoes', name: 'Volt Impact Sneakers', price: 495, sizes: ['41', '42', '43'], img1: 'https://images.unsplash.com/photo-1514989940723-e8e51635b782?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1605348532760-6753d2c43329?q=80&w=1000' },
-            { id: 20, cat: 'shoes', name: 'Sand-Storm Suede Boots', price: 590, sizes: ['42', '43', '44'], img1: 'https://images.unsplash.com/photo-1520639889457-41804bc0a653?q=80&w=1000', img2: 'https://images.unsplash.com/photo-1549416878-b9ca35c2d47a?q=80&w=1000' }
+            { 
+                id: 1, 
+                cat: 'joggers', 
+                name: 'Essential Joggers', 
+                price: 380, 
+                sizes: ['S', 'M', 'L', 'XL'], 
+                colors: [{name:'Black', hex:'#111'}, {name:'Grey', hex:'#9e9e9e'}], 
+                img1: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000', 
+                images: [
+                    'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000',
+                    'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000',
+                    'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000'
+                ],
+                details: 'High quality essential track pants built with premium breathable heavy-weave fleece yarn. Tailored deep side-seam zipper pockets, an elastic drawstring waistband, and a curated minimalist streetwear silhouette designed for daily rotations.', 
+                meta: 'Black / Grey' 
+            },
+            { 
+                id: 2, 
+                cat: 'cargo-pants', 
+                name: 'Tactical Cargo Pants', 
+                price: 450, 
+                sizes: ['S', 'M', 'L', 'XL', 'XXL'], 
+                colors: [{name:'Black', hex:'#111'}, {name:'Olive Green', hex:'#3b4432'}, {name:'Khaki', hex:'#c3b091'}], 
+                img1: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1000', 
+                images: [
+                    'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1000', 
+                    'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 
+                    'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000'
+                ],
+                details: 'Engineered high-spec tactical cargo pants. Structured with ultra-durable cotton ripstop canvas, modular geometric utility pockets, reinforced accent stitch lines, and adjustable ankle strap configurations for tailored techwear fits.', 
+                meta: 'Multi-Color Pack' 
+            },
+            { 
+                id: 3, 
+                cat: 't-shirts', 
+                name: 'Heavyweight Oversized Tee', 
+                price: 280, 
+                sizes: ['M', 'L', 'XL', 'XXL'], 
+                colors: [{name:'Charcoal Black', hex:'#111'}, {name:'Chalk White', hex:'#fff'}], 
+                img1: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000', 
+                images: [
+                    'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000', 
+                    'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1000',
+                    'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000'
+                ],
+                details: 'Signature drop-shoulder boxy silhouette knitted from 260GSM organic combed long-staple cotton. Featuring clean high-density silicone typography on the back collar mesh line and structural tight-fit ribbing that preserves shape.', 
+                meta: 'Charcoal Black' 
+            },
+            { 
+                id: 4, 
+                cat: 'hoodies', 
+                name: 'Cyber Graphic Hoodie', 
+                price: 550, 
+                sizes: ['M', 'L', 'XL'], 
+                colors: [{name:'Matte Black', hex:'#111'}, {name:'Charcoal', hex:'#2f3542'}], 
+                img1: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000', 
+                images: [
+                    'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000', 
+                    'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 
+                    'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000'
+                ],
+                details: 'Luxury isolated loopback cotton construction weighing 420GSM. Designed with custom dystopian screen-printed iconography across the spine, raw-edge aesthetic overlays, and a thick double-layered hood without strings for clean visuals.', 
+                meta: 'Matte Black' 
+            },
+            { 
+                id: 5, 
+                cat: 'sneakers', 
+                name: 'Zamil Retro Court Sneakers', 
+                price: 750, 
+                sizes: ['41', '42', '43', '44', '45'], 
+                colors: [{name:'Off-White Premium', hex:'#f5f5f5'}], 
+                img1: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000', 
+                images: [
+                    'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000',
+                    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000',
+                    'https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=1000'
+                ],
+                details: 'Premium structured full-grain calf leather shoes built on a customized vintage rubber cupsole cup matrix. Upgraded with responsive OrthoLite modular inner padding and subtle side perforated styling cues.', 
+                meta: 'Off-White Premium' 
+            },
+            { 
+                id: 6, 
+                cat: 't-shirts', 
+                name: 'Minimal Basic Tee', 
+                price: 220, 
+                sizes: ['S', 'M', 'L', 'XL'], 
+                colors: [{name:'Beige Suede', hex:'#e1d7c6'}, {name:'Core Black', hex:'#111'}, {name:'Pure White', hex:'#fff'}], 
+                img1: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 
+                images: [
+                    'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 
+                    'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000', 
+                    'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1000'
+                ],
+                details: 'Premium tailored daily wear standard. Woven with luxurious sand-washed combed cotton interlock blends, creating an incredibly soft texture that regulates body temperature through modern active lifestyle movements.', 
+                meta: 'Beige Suede' 
+            }
         ];
 
         let bag = [];
-        let selection = { size: "", color: "Black", qty: 1 };
+        let wishlist = []; 
+        let selection = { id: null, size: "", color: "", qty: 1, img: "" };
+        let activeDetailImgIndex = 0;
+        let activeProductMediaList = [];
+        const FIXED_DELIVERY_FEE = 35; 
 
-        function initGrid() {
-            const grid = document.getElementById('main-grid');
-            grid.innerHTML = products.map(p => `
+        function renderGridContainer(targetElementId, itemsList) {
+            const container = document.getElementById(targetElementId);
+            if(!container) return;
+            
+            if(itemsList.length === 0) {
+                if(targetElementId === 'wishlist-grid') {
+                    container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#999; padding:60px 0; font-size:0.95rem;">No favorited items yet. Tap the heart icons on items you like!</div>`;
+                }
+                return;
+            }
+
+            container.innerHTML = itemsList.map(p => {
+                const isFav = wishlist.includes(p.id) ? 'favorited' : '';
+                return `
                 <div class="card" data-cat="${p.cat}">
                     <div class="image-container">
-                        <div class="slider-track" id="track-${p.id}">
-                            <img src="${p.img1}" onclick="openFS('${p.img1}')">
-                            <img src="${p.img2}" onclick="openFS('${p.img2}')">
-                        </div>
-                        <button class="slide-btn" onclick="rotateSlide(${p.id})">❯</button>
+                        <img src="${p.img1}" onclick="openDetails(${p.id})" alt="${p.name}">
+                        <button class="wishlist-heart-btn ${isFav}" data-id="${p.id}" onclick="toggleWishlist(event, ${p.id})">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        </button>
                     </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
-                        <div>
-                            <h3 style="font-size: 0.8rem; margin:0; font-weight:800;">${p.name}</h3>
-                            <p style="color: var(--text-grey); font-size:0.7rem; margin:5px 0 0 0;">GHS ${p.price}</p>
-                        </div>
-                        <button onclick="openDetails(${p.id})" style="width:30px; height:30px; border-radius:50%; border:none; background:black; color:white; cursor:pointer;">+</button>
+                    <div class="card-details-box">
+                        <h3 class="card-title">${p.name}</h3>
+                        <p class="card-meta">${p.meta}</p>
+                        <p class="card-price">GH₵ ${p.price.toFixed(2)}</p>
+                        <button class="card-add-trigger" onclick="openDetails(${p.id})">+</button>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
+        }
+
+        function initGrid() {
+            renderGridContainer('main-grid', products);
+        }
+
+        function toggleWishlist(e, id) {
+            if(e) e.stopPropagation(); 
+            if(wishlist.includes(id)){
+                wishlist = wishlist.filter(item => item !== id);
+            } else {
+                wishlist.push(id);
+            }
+            
+            document.getElementById('fav-count').innerText = wishlist.length;
+            
+            document.querySelectorAll(`.wishlist-heart-btn[data-id="${id}"]`).forEach(btn => {
+                btn.classList.toggle('favorited', wishlist.includes(id));
+            });
+
+            const modalWish = document.getElementById('modalWishBtn');
+            if(selection.id === id) {
+                modalWish.classList.toggle('favorited', wishlist.includes(id));
+            }
+
+            const favoritedObjects = products.filter(p => wishlist.includes(p.id));
+            renderGridContainer('wishlist-grid', favoritedObjects);
         }
 
         function openDetails(id) {
             const p = products.find(item => item.id == id);
-            selection = { size: "", color: "Black", qty: 1 };
-            document.getElementById('modalQty').innerText = "1";
-            document.querySelectorAll('.modal .opt-btn').forEach(b => b.classList.remove('selected'));
+            if(!p) return;
             
-            document.getElementById('modalImg1').src = p.img1;
-            document.getElementById('modalImg2').src = p.img2;
+            activeProductMediaList = p.images || [p.img1];
+            activeDetailImgIndex = 0;
+            
+            selection = { id: p.id, size: "", color: "", qty: 1, img: activeProductMediaList[0] }; 
+            
+            updateDetailCarouselView();
             document.getElementById('modalTitle').innerText = p.name;
-            document.getElementById('modalPrice').innerText = 'GHS ' + p.price;
+            document.getElementById('modalPrice').innerText = 'GH₵ ' + p.price.toFixed(2);
+            document.getElementById('productDetails').innerText = p.details;
+
+            const modalWish = document.getElementById('modalWishBtn');
+            modalWish.classList.toggle('favorited', wishlist.includes(p.id));
+            modalWish.onclick = () => toggleWishlist(null, p.id);
+
+            document.getElementById('modalShareBtn').onclick = () => {
+                if (navigator.share) {
+                    navigator.share({
+                        title: `Zamil's Streetwear - ${p.name}`,
+                        text: `Check out the ${p.name} on Zamil's streetwear catalog for GH₵ ${p.price.toFixed(2)}!`,
+                        url: window.location.href
+                    }).catch(err => console.log(err));
+                } else {
+                    navigator.clipboard.writeText(`${window.location.href} - Product: ${p.name}`);
+                    alert('Product link copied to clipboard!');
+                }
+            };
+
+            const stripContainer = document.getElementById('modalThumbnailsStrip');
+            stripContainer.innerHTML = activeProductMediaList.map((imgSrc, index) => `
+                <img src="${imgSrc}" class="modal-thumb-img ${index === 0 ? 'selected' : ''}" onclick="jumpToDetailSlide(${index})" alt="Preview View Node">
+            `).join('');
+
+            const colorContainer = document.getElementById('color-opts');
+            colorContainer.innerHTML = p.colors.map((c, index) => {
+                const targetSrc = activeProductMediaList[index] || activeProductMediaList[0];
+                return `<div class="color-swatch" style="background-color: ${c.hex};" title="${c.name}" onclick="setOptSwatch(this, 'color', '${c.name}', ${index}, '${targetSrc}')"></div>`;
+            }).join('');
 
             const sizeContainer = document.getElementById('size-options-container');
             sizeContainer.innerHTML = p.sizes.map(s => `
-                <button class="opt-btn" onclick="setOpt(this, 'size', '${s}')">${s}</button>
+                <div class="size-outline-box" onclick="setOptSwatch(this, 'size', '${s}')">${s}</div>
             `).join('');
 
-            document.getElementById('productModal').style.display = 'block';
+            const modal = document.getElementById('productModal');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
             
             document.getElementById('modalAddBtn').onclick = () => {
-                if(!selection.size) return alert("Please select a size!");
+                if(!selection.color) return alert("Please select a color option!");
+                if(!selection.size) return alert("Please select your fit size!");
+                
                 bag.push({id: Date.now(), name: p.name, price: p.price, ...selection});
                 updateCart();
                 closeModal();
+                showPage('cart');
             };
+        }
+
+        function updateDetailCarouselView() {
+            const displayHeroImg = document.getElementById('modalImg');
+            displayHeroImg.style.opacity = 0.3;
+            
+            setTimeout(() => {
+                displayHeroImg.src = activeProductMediaList[activeDetailImgIndex];
+                displayHeroImg.style.opacity = 1;
+            }, 150);
+
+            document.getElementById('imageIndexTracker').innerText = `${activeDetailImgIndex + 1} / ${activeProductMediaList.length}`;
+            
+            document.querySelectorAll('.modal-thumb-img').forEach((thumb, index) => {
+                thumb.classList.toggle('selected', index === activeDetailImgIndex);
+            });
+        }
+
+        function changeDetailSlide(direction) {
+            activeDetailImgIndex = (activeDetailImgIndex + direction + activeProductMediaList.length) % activeProductMediaList.length;
+            selection.img = activeProductMediaList[activeDetailImgIndex];
+            updateDetailCarouselView();
+        }
+
+        function jumpToDetailSlide(index) {
+            activeDetailImgIndex = index;
+            selection.img = activeProductMediaList[activeDetailImgIndex];
+            updateDetailCarouselView();
+        }
+
+        function setOptSwatch(el, type, val, activeColorIndex, optImageUrl) {
+            el.parentElement.querySelectorAll('.' + el.className.split(' ')[0]).forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            selection[type] = val;
+
+            if(type === 'color' && optImageUrl) {
+                const matchedMediaIndex = activeProductMediaList.indexOf(optImageUrl);
+                if(matchedMediaIndex !== -1) {
+                    jumpToDetailSlide(matchedMediaIndex);
+                } else {
+                    document.getElementById('modalImg').src = optImageUrl;
+                    selection.img = optImageUrl;
+                }
+            }
         }
 
         function handleSearch() {
             const term = document.getElementById('searchInput').value.toLowerCase();
-            document.querySelectorAll('.card').forEach(card => {
-                const name = card.querySelector('h3').innerText.toLowerCase();
-                card.style.display = name.includes(term) ? 'block' : 'none';
+            document.querySelectorAll('#main-grid .card').forEach(card => {
+                const name = card.querySelector('.card-title').innerText.toLowerCase();
+                card.style.display = name.includes(term) ? 'flex' : 'none';
             });
         }
 
         function filterItems(cat, btn) {
             document.getElementById('searchInput').value = '';
-            document.querySelectorAll('#shop .opt-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('#shop .cat-pill').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            document.querySelectorAll('.card').forEach(c => {
+            document.querySelectorAll('#main-grid .card').forEach(c => {
                 if (cat === 'all') {
-                    c.style.display = 'block';
+                    c.style.display = 'flex';
                 } else {
-                    c.style.display = (c.dataset.cat === cat) ? 'block' : 'none';
+                    c.style.display = (c.dataset.cat === cat) ? 'flex' : 'none';
                 }
             });
         }
 
-        function changeQty(val) {
-            selection.qty = Math.max(1, selection.qty + val);
-            document.getElementById('modalQty').innerText = selection.qty;
+        function updateBagItemQty(uniqueId, amount) {
+            const targetItem = bag.find(item => item.id === uniqueId);
+            if(targetItem) {
+                targetItem.qty = Math.max(1, targetItem.qty + amount);
+                updateCart();
+            }
         }
 
         function updateCart() {
             const list = document.getElementById('cart-list');
+            if(!list) return;
+            
             if(bag.length === 0) {
-                list.innerHTML = `<p style="text-align:center; color:#999; padding:20px 0;">Your bag is empty</p>`;
-                document.getElementById('total-val').innerText = 0;
-                document.getElementById('count').innerText = 0;
+                list.innerHTML = `<p style="text-align:center; color:#999; padding:40px 0; font-size: 0.95rem; margin:0;">Your bag is empty</p>`;
+                document.getElementById('subtotal-val').innerText = "0.00";
+                document.getElementById('delivery-val').innerText = "0.00";
+                document.getElementById('total-val').innerText = "0.00";
+                document.getElementById('count').innerText = "0";
                 return;
             }
+            
             list.innerHTML = bag.map(item => `
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                    <div><span style="font-weight:bold; font-size:0.85rem; display:block;">${item.name} (x${item.qty})</span>
-                    <span style="color:var(--text-grey); font-size:0.7rem;">${item.color} | Size: ${item.size}</span></div>
-                    <div style="display:flex; align-items:center; gap:15px;"><span style="font-weight:900;">GHS ${item.price * item.qty}</span>
-                    <button class="remove-btn" onclick="removeItem(${item.id})">×</button></div>
+                <div style="display:flex; align-items: flex-start; gap:15px; padding: 20px 0; border-bottom: 1px solid #f3f4f6; position: relative;">
+                    <img src="${item.img}" style="width: 90px; height: 90px; object-fit: cover; border-radius: 12px; background: #f3f4f6; flex-shrink: 0;" alt="Bag Product">
+                    
+                    <div style="flex: 1; min-width: 0;">
+                        <h4 style="margin: 0 0 4px 0; font-weight: 700; font-size: 1rem; color: #000; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.name}</h4>
+                        <p style="margin: 0 0 10px 0; font-size: 0.8rem; color: #777; font-weight: 500;">${item.color} / ${item.size}</p>
+                        <p style="margin: 0 0 12px 0; font-weight: 800; font-size: 0.95rem; color: #000;">GH₵ ${(item.price).toFixed(2)}</p>
+                        
+                        <div class="cart-qty-selector">
+                            <button class="cart-qty-btn" onclick="updateBagItemQty(${item.id}, -1)">−</button>
+                            <span class="cart-qty-val">${item.qty}</span>
+                            <button class="cart-qty-btn" onclick="updateBagItemQty(${item.id}, 1)">+</button>
+                        </div>
+                    </div>
+                    
+                    <button onclick="removeItem(${item.id})" style="background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; opacity: 0.7; margin-left: 10px;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                    </button>
                 </div>
             `).join('');
-            document.getElementById('total-val').innerText = bag.reduce((a,b) => a + (b.price * b.qty), 0);
-            document.getElementById('count').innerText = bag.reduce((a,b) => a + b.qty, 0);
+            
+            const subtotal = bag.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const total = subtotal + FIXED_DELIVERY_FEE;
+            
+            document.getElementById('subtotal-val').innerText = subtotal.toFixed(2);
+            document.getElementById('delivery-val').innerText = FIXED_DELIVERY_FEE.toFixed(2);
+            document.getElementById('total-val').innerText = total.toFixed(2);
+            
+            document.getElementById('count').innerText = bag.reduce((sum, item) => sum + item.qty, 0);
         }
 
         function removeItem(uniqueId) { bag = bag.filter(item => item.id !== uniqueId); updateCart(); }
-        function setOpt(btn, type, val) { btn.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); selection[type] = val; }
-        function closeModal() { document.getElementById('productModal').style.display = 'none'; }
+        
+        function closeModal() { 
+            document.getElementById('productModal').style.display = 'none'; 
+            document.body.style.overflow = '';
+        }
         
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(id).classList.add('active-page');
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            document.getElementById('l-' + id).classList.add('active');
+            const dynamicLink = document.getElementById('l-' + id);
+            if(dynamicLink) dynamicLink.classList.add('active');
             window.scrollTo(0,0);
         }
 
-        function process() {
-            if(!bag.length) return alert("Bag is empty");
-            const details = bag.map(i => `• ${i.name} x${i.qty} (${i.color}, Size: ${i.size})`).join("%0A");
-            const total = document.getElementById('total-val').innerText;
-            window.location.href = `https://wa.me/233503612876?text=New Order:%0A${details}%0A%0ATotal: GHS ${total}`;
+        // IMPROVED TWO-CHANNEL CHECKOUT SYSTEM (PAYSTACK & PAY ON DELIVERY)
+        function processPayment(method) {
+            if(!bag.length) return alert("Your shopping bag is empty");
+            
+            // Collect Form Values
+            const emailInput = document.getElementById('customer-email').value.trim();
+            const phoneInput = document.getElementById('customer-phone').value.trim();
+            const regionSelect = document.getElementById('customer-region').value;
+            const cityInput = document.getElementById('customer-city').value.trim();
+            const addressInput = document.getElementById('customer-address').value.trim();
+
+            // Validate Form Entries
+            if(!emailInput || !emailInput.includes('@')) {
+                return alert("Please enter a valid email address.");
+            }
+            if(!phoneInput || phoneInput.length < 9) {
+                return alert("Please enter a valid working phone number.");
+            }
+            if(!regionSelect) {
+                return alert("Please select your destination region.");
+            }
+            if(!cityInput) {
+                return alert("Please enter your delivery town or city.");
+            }
+            if(!addressInput) {
+                return alert("Please provide clear location or digital address cues.");
+            }
+
+            const rawTotalString = document.getElementById('total-val').innerText;
+            const absoluteTotalFloat = parseFloat(rawTotalString);
+            const itemsDetailsString = bag.map(i => `• ${i.name} x${i.qty} (${i.color}, Size: ${i.size})`).join("%0A");
+
+            if (method === 'paystack') {
+                // Initialize Paystack Iframe Loop
+                const calculatedSubUnitValue = Math.round(absoluteTotalFloat * 100);
+
+                let handler = PaystackPop.setup({
+                    key: 'pk_test_b9b5a105d06c04199ea401533da067d8c5635fa7',
+                    email: emailInput,
+                    amount: calculatedSubUnitValue,
+                    currency: 'GHS',
+                    ref: 'ZAMIL-' + Date.now(), 
+                    callback: function(response) {
+                        alert('Payment successful! Reference: ' + response.reference + '. Redirecting to finalize delivery layout details on WhatsApp...');
+                        
+                        const orderText = `*NEW PAID ORDER (PAYSTACK)*%0A%0A` +
+                                          `*Payment Ref:* ${response.reference}%0A` +
+                                          `*Customer Email:* ${emailInput}%0A` +
+                                          `*Phone:* ${phoneInput}%0A%0A` +
+                                          `*Delivery Address:*%0A${addressInput}, ${cityInput} (${regionSelect} Region)%0A%0A` +
+                                          `*Items Ordered:*%0A${itemsDetailsString}%0A%0A` +
+                                          `*Total Paid:* GH₵ ${absoluteTotalFloat.toFixed(2)}`;
+                                          
+                        clearBagAndRedirect(orderText);
+                    },
+                    onClose: function() {
+                        alert('Transaction canceled. Your items are safe in your shopping bag.');
+                    }
+                });
+                handler.openIframe();
+
+            } else if (method === 'cod') {
+                // Initialize Pay on Delivery Channel
+                if(confirm("Confirm your Pay on Delivery order? You will pay a total of GH₵ " + absoluteTotalFloat.toFixed(2) + " upon arrival.")) {
+                    const orderText = `*NEW ORDER (PAY ON DELIVERY)*%0A%0A` +
+                                      `*Customer Email:* ${emailInput}%0A` +
+                                      `*Phone:* ${phoneInput}%0A%0A` +
+                                      `*Delivery Address:*%0A${addressInput}, ${cityInput} (${regionSelect} Region)%0A%0A` +
+                                      `*Items Ordered:*%0A${itemsDetailsString}%0A%0A` +
+                                      `*Total to Pay:* GH₵ ${absoluteTotalFloat.toFixed(2)}`;
+                                      
+                    clearBagAndRedirect(orderText);
+                }
+            }
         }
 
-        function rotateSlide(id) {
-            const track = document.getElementById('track-' + id);
-            track.style.transform = (track.style.transform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
-        }
-
-        function rotateModal() {
-            const track = document.getElementById('modalSlider');
-            track.style.transform = (track.style.transform === 'translateX(-50%)') ? 'translateX(0%)' : 'translateX(-50%)';
+        function clearBagAndRedirect(orderText) {
+            bag = [];
+            updateCart();
+            showPage('home');
+            window.location.href = `https://wa.me/233503612876?text=${orderText}`;
         }
 
         initGrid();
+        updateCart(); 
+        renderGridContainer('wishlist-grid', []);
     </script>
 </body>
 </html>
