@@ -124,11 +124,19 @@
         .cat-pill.selected { background: black; color: white; font-weight: 700; }
 
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; }
-        .card { background: transparent; border-radius: 0px; box-shadow: none; display: flex; flex-direction: column; }
+        .card { background: transparent; border-radius: 0px; box-shadow: none; display: flex; flex-direction: column; position: relative; }
         
         .image-container { position: relative; width: 100%; height: 260px; overflow: hidden; border-radius: 20px; background: #fff; }
         .image-container img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
         
+        .sold-out-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.7); display: flex; justify-content: center;
+            align-items: center; font-weight: 900; font-size: 1rem; color: #fff;
+            background: rgba(0, 0, 0, 0.4); text-transform: uppercase; letter-spacing: 2px;
+            pointer-events: none; z-index: 5;
+        }
+
         .wishlist-heart-btn {
             position: absolute; top: 12px; right: 12px; background: white; border: none;
             width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
@@ -142,24 +150,31 @@
         .card-title { font-size: 0.85rem; margin: 0 0 3px 0; font-weight: 700; color: #222; }
         .card-meta { font-size: 0.75rem; margin: 0 0 8px 0; color: #777; font-weight: 500; }
         .card-price { font-size: 0.85rem; margin: 0; font-weight: 800; color: #000; }
+        
         .card-add-trigger {
             position: absolute; right: 2px; bottom: 5px; width: 28px; height: 28px; 
             border-radius: 50%; border: none; background: black; color: white; 
             cursor: pointer; font-weight: bold; font-size: 1rem; display: flex; 
             align-items: center; justify-content: center;
         }
+        .card-add-trigger.disabled-sold-out {
+            background: #e5e7eb; color: #999; font-size: 0.6rem; font-weight: 800;
+            width: auto; height: auto; padding: 6px 12px; border-radius: 8px; cursor: not-allowed;
+        }
 
+        /* --- FIXED & OPTIMIZED MODAL --- */
         .modal { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.4); z-index: 1000; align-items: flex-end; justify-content: center;
+            background: rgba(0,0,0,0.6); z-index: 1000; align-items: flex-end; justify-content: center;
         }
         .modal-content { 
             background: white; max-width: 500px; width: 100%; border-radius: 30px 30px 0 0; 
-            padding: 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.15); max-height: 92vh; 
-            overflow-y: auto; position: relative; box-sizing: border-box; display: flex; flex-direction: column;
+            padding: 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.15); 
+            height: 86vh; max-height: 86vh; display: flex; flex-direction: column; 
+            overflow: hidden; position: relative; box-sizing: border-box;
         }
         
-        .modal-hero-area { position: relative; width: 100%; height: 380px; background: #f5f5f5; flex-shrink: 0; }
+        .modal-hero-area { position: relative; width: 100%; height: 38vh; min-height: 280px; background: #f5f5f5; flex-shrink: 0; }
         .modal-hero-area img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease; }
         
         .modal-arrow-btn {
@@ -171,7 +186,7 @@
         .modal-arrow-left { left: 15px; }
         .modal-arrow-right { right: 15px; }
 
-        .modal-thumb-row { display: flex; gap: 8px; margin: 15px 0 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .modal-thumb-row { display: flex; gap: 8px; margin: 5px 0 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; flex-shrink: 0; }
         .modal-thumb-row::-webkit-scrollbar { display: none; }
         .modal-thumb-img { width: 54px; height: 54px; border-radius: 10px; object-fit: cover; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: 0.2s; }
         .modal-thumb-img.selected { border-color: black; transform: scale(1.05); }
@@ -190,7 +205,10 @@
             color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.5px; z-index: 6;
         }
 
-        .modal-body-container { padding: 24px; }
+        .modal-body-container { 
+            padding: 24px 24px 120px; /* Deep bottom padding allows elements to slide under action bar */
+            overflow-y: auto; flex-grow: 1; -webkit-overflow-scrolling: touch; 
+        }
         
         .color-label-head { font-size: 0.8rem; color: #777; font-weight: 500; margin-bottom: 8px; }
         .color-swatch-box { display: flex; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -209,11 +227,19 @@
         }
         .size-outline-box.selected { background: black; color: white; border-color: black; font-weight: 700; }
 
-        .action-tray-footer { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
+        /* Fixed Action Tray at Bottom of Modal */
+        .action-tray-footer { 
+            position: absolute; bottom: 0; left: 0; width: 100%; background: white;
+            padding: 16px 24px 24px; border-top: 1px solid #f0f0f0; box-sizing: border-box;
+            display: flex; gap: 12px; align-items: center; z-index: 20;
+        }
         .btn-add-main-action { 
-            background: var(--brand-black); color: white; border: none; height: 50px;
-            border-radius: 12px; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px;
+            background: var(--brand-black); color: white; border: none; height: 52px;
+            border-radius: 14px; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px;
             cursor: pointer; text-transform: uppercase; flex: 1; text-align: center; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-add-main-action:disabled {
+            background: #ccc; color: #fff; cursor: not-allowed;
         }
 
         .cart-qty-selector {
@@ -269,8 +295,11 @@
             .card-meta { font-size: 0.7rem; margin-bottom: 4px; }
             .card-price { font-size: 0.8rem; }
             
-            .modal-content { border-radius: 24px 24px 0 0; }
-            .modal-hero-area { height: 320px; }
+            /* Responsive Mobile Screen Fixes */
+            .modal-content { height: 90vh; max-height: 90vh; border-radius: 24px 24px 0 0; }
+            .modal-hero-area { height: 35vh; min-height: 230px; }
+            .modal-body-container { padding: 20px 20px 100px; }
+            .action-tray-footer { padding: 12px 20px 20px; }
         }
     </style>
 </head>
@@ -338,11 +367,12 @@
       
                 <div class="size-label-head">Size</div>
                 <div class="size-row-options" id="size-options-container"></div>
-
-                <div class="action-tray-footer">
-                    <button id="modalAddBtn" class="btn-add-main-action">Add To Cart</button>
-                </div>
+                
                 <p style="font-size: 0.7rem; color: #777; text-align: center; margin: 20px 0 5px; font-weight: 500;">⚡ Fast secure delivery across Ghana</p>
+            </div>
+
+            <div class="action-tray-footer">
+                <button id="modalAddBtn" class="btn-add-main-action">Add To Cart</button>
             </div>
         </div>
     </div>
@@ -547,6 +577,7 @@
                 cat: 'joggers', 
                 name: 'Essential Joggers', 
                 price: 380, 
+                stock: 5,
                 sizes: ['S', 'M', 'L', 'XL'], 
                 colors: [{name:'Black', hex:'#111'}, {name:'Grey', hex:'#9e9e9e'}], 
                 img1: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000', 
@@ -563,6 +594,7 @@
                 cat: 'cargo-pants', 
                 name: 'Tactical Cargo Pants', 
                 price: 450, 
+                stock: 5,
                 sizes: ['S', 'M', 'L', 'XL', 'XXL'], 
                 colors: [{name:'Black', hex:'#111'}, {name:'Olive Green', hex:'#3b4432'}, {name:'Khaki', hex:'#c3b091'}], 
                 img1: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1000', 
@@ -579,6 +611,7 @@
                 cat: 't-shirts', 
                 name: 'Heavyweight Oversized Tee', 
                 price: 280, 
+                stock: 5,
                 sizes: ['M', 'L', 'XL', 'XXL'], 
                 colors: [{name:'Charcoal Black', hex:'#111'}, {name:'Chalk White', hex:'#fff'}], 
                 img1: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000', 
@@ -595,6 +628,7 @@
                 cat: 'hoodies', 
                 name: 'Cyber Graphic Hoodie', 
                 price: 550, 
+                stock: 5,
                 sizes: ['M', 'L', 'XL'], 
                 colors: [{name:'Matte Black', hex:'#111'}, {name:'Charcoal', hex:'#2f3542'}], 
                 img1: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000', 
@@ -611,6 +645,7 @@
                 cat: 'sneakers', 
                 name: 'Zamil Retro Court Sneakers', 
                 price: 750, 
+                stock: 5,
                 sizes: ['41', '42', '43', '44', '45'], 
                 colors: [{name:'Off-White Premium', hex:'#f5f5f5'}], 
                 img1: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000', 
@@ -627,6 +662,7 @@
                 cat: 't-shirts', 
                 name: 'Minimal Basic Tee', 
                 price: 220, 
+                stock: 5, 
                 sizes: ['S', 'M', 'L', 'XL'], 
                 colors: [{name:'Beige Suede', hex:'#e1d7c6'}, {name:'Core Black', hex:'#111'}],
                 img1: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 
@@ -642,10 +678,26 @@
 
         let bag = [];
         let wishlist = []; 
-        let selection = { id: null, size: "", color: "", qty: 1, img: "" };
+        let selection = { productId: null, size: "", color: "", qty: 1, img: "" };
         let activeDetailImgIndex = 0;
         let activeProductMediaList = [];
         const FIXED_DELIVERY_FEE = 35; 
+
+        function listenToLiveStockUpdates() {
+            database.ref('inventory_stock').on('value', (snapshot) => {
+                const stockData = snapshot.val();
+                if(stockData) {
+                    products.forEach(p => {
+                        if(stockData[p.id] !== undefined) {
+                            p.stock = stockData[p.id];
+                        }
+                    });
+                    renderGridContainer('main-grid', products);
+                    const favoritedObjects = products.filter(p => wishlist.includes(p.id));
+                    renderGridContainer('wishlist-grid', favoritedObjects);
+                }
+            });
+        }
 
         function renderGridContainer(targetElementId, itemsList) {
             const container = document.getElementById(targetElementId);
@@ -660,19 +712,25 @@
 
             container.innerHTML = itemsList.map(p => {
                 const isFav = wishlist.includes(p.id) ? 'favorited' : '';
+                const isSoldOut = p.stock <= 0;
+                
                 return `
                 <div class="card" data-cat="${p.cat}">
                     <div class="image-container">
-                        <img src="${p.img1}" onclick="openDetails(${p.id})" alt="${p.name}">
+                        ${isSoldOut ? '<div class="sold-out-overlay">SOLD OUT</div>' : ''}
+                        <img src="${p.img1}" onclick="${isSoldOut ? "alert('This absolute drop is currently sold out!')" : `openDetails(${p.id})`}" alt="${p.name}">
                         <button class="wishlist-heart-btn ${isFav}" data-id="${p.id}" onclick="toggleWishlist(event, ${p.id})">
                             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                         </button>
                     </div>
                     <div class="card-details-box">
                         <h3 class="card-title">${p.name}</h3>
-                        <p class="card-meta">${p.meta}</p>
+                        <p class="card-meta">${p.meta} <span style="color:#888;">(Qty: ${p.stock})</span></p>
                         <p class="card-price">GH₵ ${p.price.toFixed(2)}</p>
-                        <button class="card-add-trigger" onclick="openDetails(${p.id})">+</button>
+                        ${isSoldOut ? 
+                            `<button class="card-add-trigger disabled-sold-out" disabled>SOLD OUT</button>` : 
+                            `<button class="card-add-trigger" onclick="openDetails(${p.id})">+</button>`
+                        }
                     </div>
                 </div>
             `}).join('');
@@ -680,6 +738,7 @@
 
         function initGrid() {
             renderGridContainer('main-grid', products);
+            listenToLiveStockUpdates();
         }
 
         function toggleWishlist(e, id) {
@@ -697,7 +756,7 @@
             });
 
             const modalWish = document.getElementById('modalWishBtn');
-            if(selection.id === id) {
+            if(selection.productId === id) {
                 modalWish.classList.toggle('favorited', wishlist.includes(id));
             }
 
@@ -707,12 +766,12 @@
 
         function openDetails(id) {
             const p = products.find(item => item.id == id);
-            if(!p) return;
+            if(!p || p.stock <= 0) return;
             
             activeProductMediaList = p.images || [p.img1];
             activeDetailImgIndex = 0;
             
-            selection = { id: p.id, size: "", color: "", qty: 1, img: activeProductMediaList[0] }; 
+            selection = { productId: p.id, size: "", color: "", qty: 1, img: activeProductMediaList[0] }; 
             
             updateDetailCarouselView();
             document.getElementById('modalTitle').innerText = p.name;
@@ -756,9 +815,17 @@
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             
-            document.getElementById('modalAddBtn').onclick = () => {
+            const mainActionAddBtn = document.getElementById('modalAddBtn');
+            mainActionAddBtn.innerText = "Add To Cart";
+            mainActionAddBtn.disabled = false;
+
+            mainActionAddBtn.onclick = () => {
                 if(!selection.color) return alert("Please select a color option!");
                 if(!selection.size) return alert("Please select your fit size!");
+                
+                if (selection.qty > p.stock) {
+                    return alert(`Sorry, we only have ${p.stock} units left in stock.`);
+                }
                 
                 bag.push({id: Date.now(), name: p.name, price: p.price, ...selection});
                 updateCart();
@@ -835,6 +902,10 @@
         function updateBagItemQty(uniqueId, amount) {
             const targetItem = bag.find(item => item.id === uniqueId);
             if(targetItem) {
+                const originalProductObj = products.find(p => p.id === targetItem.productId);
+                if (originalProductObj && amount > 0 && targetItem.qty >= originalProductObj.stock) {
+                    return alert("You've selected maximum remaining stock for this drop.");
+                }
                 targetItem.qty = Math.max(1, targetItem.qty + amount);
                 updateCart();
             }
@@ -921,6 +992,13 @@
             if(!cityInput) return alert("Please enter your delivery town or city.");
             if(!addressInput) return alert("Please provide clear location or digital address cues.");
 
+            for(let item of bag) {
+                let pObj = products.find(p => p.id === item.productId);
+                if(pObj && pObj.stock < item.qty) {
+                    return alert(`Stock shortage! "${item.name}" only has ${pObj.stock} units left. Please adjust your bag.`);
+                }
+            }
+
             const absoluteTotalFloat = parseFloat(document.getElementById('total-val').innerText);
 
             if (method === 'paystack') {
@@ -977,7 +1055,19 @@
                 timestamp: new Date().toISOString()
             };
 
-            database.ref('orders/' + orderIdCode).set(orderPayload)
+            const inventoryUpdatesMap = {};
+            bag.forEach(item => {
+                const targetProduct = products.find(p => p.id === item.productId);
+                if(targetProduct) {
+                    const dynamicNewStockCalculated = Math.max(0, targetProduct.stock - item.qty);
+                    inventoryUpdatesMap[`inventory_stock/${item.productId}`] = dynamicNewStockCalculated;
+                }
+            });
+
+            database.ref().update({
+                [`orders/${orderIdCode}`]: orderPayload,
+                ...inventoryUpdatesMap
+            })
             .then(() => {
                 alert('🎉 Order successful! Your drops have been streamed straight to the admin dashboard.');
                 bag = [];
@@ -985,8 +1075,8 @@
                 showPage('home');
             })
             .catch(err => {
-                console.error('Firebase DB Sync Interruption Error:', err);
-                alert('Failed to transmit data to Admin App: ' + err.message);
+                console.error('Database sync update error context:', err);
+                alert('Failed to transmit data: ' + err.message);
             });
         }
 
