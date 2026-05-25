@@ -32,7 +32,7 @@
             background-color: var(--soft-bg);
             color: var(--brand-black);
             overflow-x: hidden;
-            padding-bottom: 120px; /* Restored original spacing so cards aren't cut off by nav */
+            padding-bottom: 120px;
         }
 
         #fullscreen-overlay {
@@ -62,7 +62,6 @@
         .main-title { font-size: 2.8rem; font-weight: 900; letter-spacing: 1px; margin: 0; text-transform: uppercase; color: var(--brand-black); }
         .sub-tagline { letter-spacing: 3px; color: var(--brand-black); font-size: 0.7rem; margin-top: 4px; font-weight: bold; text-transform: uppercase; opacity: 0.6; }
 
-        /* FIXED LAYOUT UPDATED: Stays at the bottom, animations added for keyboard hide feature */
         nav {
             display: flex; justify-content: center; gap: 0px; padding: 25px 20px; background: var(--glass);
             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); 
@@ -513,7 +512,6 @@
     <footer>&copy; 2026 ZAMIL'S STREETWEAR EVOLUTION</footer>
 
     <script>
-        // INITIALIZE FIREBASE CORE SYSTEM STORAGE NODE
         const firebaseConfig = {
             databaseURL: "https://delivery-82561-default-rtdb.europe-west1.firebasedatabase.app/" 
         };
@@ -929,10 +927,11 @@
                 const calculatedSubUnitValue = Math.round(absoluteTotalFloat * 100);
 
                 let handler = PaystackPop.setup({
-                    key: 'pk_test_b9b5a105d06c04199ea401533da067d8c5635fa7',
+                    key: 'pk_live_f2da1b091950f3e4e699a216ae6375a1d8adf79f',
                     email: emailInput,
                     amount: calculatedSubUnitValue,
                     currency: 'GHS',
+                    channels: ['mobile_money', 'card', 'bank_transfer'],
                     ref: 'ZAMIL-' + Date.now(), 
                     callback: function(response) {
                         sendOrderToApp(method, response.reference);
@@ -950,7 +949,6 @@
             }
         }
 
-        // ENGINE: DIRECT FIREBASE DATABASE PIPELINE LINK
         function sendOrderToApp(paymentMethod, transactionRef) {
             const orderIdCode = Math.floor(100000 + Math.random() * 900000).toString();
             const subtotal = bag.reduce((sum, item) => sum + (item.price * item.qty), 0);
@@ -996,18 +994,15 @@
         updateCart(); 
         renderGridContainer('wishlist-grid', []);
 
-        // ENGINE FIX: SMART KEYBOARD DETECTOR TO HIDE NAVIGATION PANEL
         const mobileNavElement = document.querySelector('nav');
         const originalViewportHeight = window.innerHeight;
 
         window.addEventListener('resize', () => {
-            // Check if height dropped significantly (keyboard sliding up)
             if (originalViewportHeight - window.innerHeight > 150) {
                 mobileNavElement.style.opacity = '0';
                 mobileNavElement.style.visibility = 'hidden';
-                mobileNavElement.style.transform = 'translate(-50%, 30px)'; // Displace out of view bounds cleanly
+                mobileNavElement.style.transform = 'translate(-50%, 30px)'; 
             } else {
-                // Keyboard closed
                 mobileNavElement.style.opacity = '1';
                 mobileNavElement.style.visibility = 'visible';
                 mobileNavElement.style.transform = 'translate(-50%, 0)';
