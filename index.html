@@ -12,6 +12,9 @@
 
     <script src="https://js.paystack.co/v1/inline.js"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         :root {
             --brand-black: #000000;
@@ -29,10 +32,9 @@
             background-color: var(--soft-bg);
             color: var(--brand-black);
             overflow-x: hidden;
-            padding-bottom: 120px;
+            padding-bottom: 120px; /* Restored original spacing so cards aren't cut off by nav */
         }
 
-        /* FULLSCREEN OVERLAY STYLE */
         #fullscreen-overlay {
             display: none;
             position: fixed;
@@ -60,10 +62,13 @@
         .main-title { font-size: 2.8rem; font-weight: 900; letter-spacing: 1px; margin: 0; text-transform: uppercase; color: var(--brand-black); }
         .sub-tagline { letter-spacing: 3px; color: var(--brand-black); font-size: 0.7rem; margin-top: 4px; font-weight: bold; text-transform: uppercase; opacity: 0.6; }
 
+        /* FIXED LAYOUT UPDATED: Stays at the bottom, animations added for keyboard hide feature */
         nav {
-            display: flex; justify-content: center; gap: 0px; padding: 12px 20px; background: var(--glass);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            display: flex; justify-content: center; gap: 0px; padding: 25px 20px; background: var(--glass);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); 
+            position: fixed; bottom: 0px; left: 50%; transform: translateX(-50%);
             width: fit-content; margin: 0 auto; border-radius: 100px; z-index: 100; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: transform 0.2s ease, opacity 0.2s ease, visibility 0.2s;
         }
 
         nav a { color: var(--text-grey); text-decoration: none; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; cursor: pointer; padding: 10px 16px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; }
@@ -155,7 +160,6 @@
             overflow-y: auto; position: relative; box-sizing: border-box; display: flex; flex-direction: column;
         }
         
-        /* MODAL HERO INTERACTIVE CAROUSEL */
         .modal-hero-area { position: relative; width: 100%; height: 380px; background: #f5f5f5; flex-shrink: 0; }
         .modal-hero-area img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease; }
         
@@ -168,7 +172,6 @@
         .modal-arrow-left { left: 15px; }
         .modal-arrow-right { right: 15px; }
 
-        /* THUMBNAILS CONTAINER STYLE */
         .modal-thumb-row { display: flex; gap: 8px; margin: 15px 0 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
         .modal-thumb-row::-webkit-scrollbar { display: none; }
         .modal-thumb-img { width: 54px; height: 54px; border-radius: 10px; object-fit: cover; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: 0.2s; }
@@ -288,7 +291,7 @@
         <a onclick="showPage('home')" id="l-home" class="active">Home</a>
         <a onclick="showPage('shop')" id="l-shop">Collection</a>
         <a onclick="showPage('cart')" id="l-cart">Bag (<span id="count">0</span>)</a>
-        <a onclick="showPage('wishlist')" id="l-wishlist">Favorit (<span id="fav-count">0</span>)</a>
+        <a onclick="showPage('wishlist')" id="l-wishlist">Favorite (<span id="fav-count">0</span>)</a>
     </nav>
 
     <div id="productModal" class="modal" onclick="if(event.target===this) closeModal()">
@@ -436,6 +439,11 @@
                 <h3 style="margin: 0 0 15px; font-size: 1.1rem; font-weight: 800; letter-spacing: -0.3px;">DELIVERY INFORMATION</h3>
                 
                 <div class="form-group">
+                    <label for="customer-name" class="form-label">Full Name *</label>
+                    <input type="text" id="customer-name" class="form-input" placeholder="e.g. Kwame Mensah">
+                </div>
+
+                <div class="form-group">
                     <label for="customer-email" class="form-label">Email Address *</label>
                     <input type="email" id="customer-email" class="form-input" placeholder="e.g. name@example.com">
                 </div>
@@ -505,6 +513,13 @@
     <footer>&copy; 2026 ZAMIL'S STREETWEAR EVOLUTION</footer>
 
     <script>
+        // INITIALIZE FIREBASE CORE SYSTEM STORAGE NODE
+        const firebaseConfig = {
+            databaseURL: "https://delivery-82561-default-rtdb.europe-west1.firebasedatabase.app/" 
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const database = firebase.database();
+
         function openFS(src) {
             document.getElementById('fs-img-tag').src = src;
             document.getElementById('fullscreen-overlay').style.display = 'flex';
@@ -615,7 +630,7 @@
                 name: 'Minimal Basic Tee', 
                 price: 220, 
                 sizes: ['S', 'M', 'L', 'XL'], 
-                colors: [{name:'Beige Suede', hex:'#e1d7c6'}, {name:'Core Black', hex:'#111'}, {name:'Pure White', hex:'#fff'}], 
+                colors: [{name:'Beige Suede', hex:'#e1d7c6'}, {name:'Core Black', hex:'#111'}],
                 img1: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 
                 images: [
                     'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 
@@ -891,40 +906,26 @@
             window.scrollTo(0,0);
         }
 
-        // IMPROVED TWO-CHANNEL CHECKOUT SYSTEM (PAYSTACK & PAY ON DELIVERY)
         function processPayment(method) {
             if(!bag.length) return alert("Your shopping bag is empty");
             
-            // Collect Form Values
+            const nameInput = document.getElementById('customer-name').value.trim();
             const emailInput = document.getElementById('customer-email').value.trim();
             const phoneInput = document.getElementById('customer-phone').value.trim();
             const regionSelect = document.getElementById('customer-region').value;
             const cityInput = document.getElementById('customer-city').value.trim();
             const addressInput = document.getElementById('customer-address').value.trim();
 
-            // Validate Form Entries
-            if(!emailInput || !emailInput.includes('@')) {
-                return alert("Please enter a valid email address.");
-            }
-            if(!phoneInput || phoneInput.length < 9) {
-                return alert("Please enter a valid working phone number.");
-            }
-            if(!regionSelect) {
-                return alert("Please select your destination region.");
-            }
-            if(!cityInput) {
-                return alert("Please enter your delivery town or city.");
-            }
-            if(!addressInput) {
-                return alert("Please provide clear location or digital address cues.");
-            }
+            if(!nameInput) return alert("Please enter your full name.");
+            if(!emailInput || !emailInput.includes('@')) return alert("Please enter a valid email address.");
+            if(!phoneInput || phoneInput.length < 9) return alert("Please enter a valid working phone number.");
+            if(!regionSelect) return alert("Please select your destination region.");
+            if(!cityInput) return alert("Please enter your delivery town or city.");
+            if(!addressInput) return alert("Please provide clear location or digital address cues.");
 
-            const rawTotalString = document.getElementById('total-val').innerText;
-            const absoluteTotalFloat = parseFloat(rawTotalString);
-            const itemsDetailsString = bag.map(i => `• ${i.name} x${i.qty} (${i.color}, Size: ${i.size})`).join("%0A");
+            const absoluteTotalFloat = parseFloat(document.getElementById('total-val').innerText);
 
             if (method === 'paystack') {
-                // Initialize Paystack Iframe Loop
                 const calculatedSubUnitValue = Math.round(absoluteTotalFloat * 100);
 
                 let handler = PaystackPop.setup({
@@ -934,17 +935,7 @@
                     currency: 'GHS',
                     ref: 'ZAMIL-' + Date.now(), 
                     callback: function(response) {
-                        alert('Payment successful! Reference: ' + response.reference + '. Redirecting to finalize delivery layout details on WhatsApp...');
-                        
-                        const orderText = `*NEW PAID ORDER (PAYSTACK)*%0A%0A` +
-                                          `*Payment Ref:* ${response.reference}%0A` +
-                                          `*Customer Email:* ${emailInput}%0A` +
-                                          `*Phone:* ${phoneInput}%0A%0A` +
-                                          `*Delivery Address:*%0A${addressInput}, ${cityInput} (${regionSelect} Region)%0A%0A` +
-                                          `*Items Ordered:*%0A${itemsDetailsString}%0A%0A` +
-                                          `*Total Paid:* GH₵ ${absoluteTotalFloat.toFixed(2)}`;
-                                          
-                        clearBagAndRedirect(orderText);
+                        sendOrderToApp(method, response.reference);
                     },
                     onClose: function() {
                         alert('Transaction canceled. Your items are safe in your shopping bag.');
@@ -953,30 +944,75 @@
                 handler.openIframe();
 
             } else if (method === 'cod') {
-                // Initialize Pay on Delivery Channel
-                if(confirm("Confirm your Pay on Delivery order? You will pay a total of GH₵ " + absoluteTotalFloat.toFixed(2) + " upon arrival.")) {
-                    const orderText = `*NEW ORDER (PAY ON DELIVERY)*%0A%0A` +
-                                      `*Customer Email:* ${emailInput}%0A` +
-                                      `*Phone:* ${phoneInput}%0A%0A` +
-                                      `*Delivery Address:*%0A${addressInput}, ${cityInput} (${regionSelect} Region)%0A%0A` +
-                                      `*Items Ordered:*%0A${itemsDetailsString}%0A%0A` +
-                                      `*Total to Pay:* GH₵ ${absoluteTotalFloat.toFixed(2)}`;
-                                      
-                    clearBagAndRedirect(orderText);
+                if(confirm("Confirm your Pay on Delivery order? Total: GH₵ " + absoluteTotalFloat.toFixed(2))) {
+                    sendOrderToApp(method, 'CASH_ON_DELIVERY');
                 }
             }
         }
 
-        function clearBagAndRedirect(orderText) {
-            bag = [];
-            updateCart();
-            showPage('home');
-            window.location.href = `https://wa.me/233503612876?text=${orderText}`;
+        // ENGINE: DIRECT FIREBASE DATABASE PIPELINE LINK
+        function sendOrderToApp(paymentMethod, transactionRef) {
+            const orderIdCode = Math.floor(100000 + Math.random() * 900000).toString();
+            const subtotal = bag.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const absoluteTotalFloat = subtotal + FIXED_DELIVERY_FEE;
+            const totalQuantityCount = bag.reduce((sum, item) => sum + item.qty, 0);
+
+            const itemsListStringArray = bag.map(i => `${i.name} (${i.color}/${i.size}) x${i.qty}`);
+
+            const orderPayload = {
+                id: orderIdCode,
+                customerName: document.getElementById('customer-name').value.trim(),
+                email: document.getElementById('customer-email').value.trim(),
+                phone: document.getElementById('customer-phone').value.trim(),
+                region: document.getElementById('customer-region').value,
+                city: document.getElementById('customer-city').value.trim(),
+                address: document.getElementById('customer-address').value.trim(),
+                paymentMethod: paymentMethod === 'paystack' ? 'Mobile Money / Paystack' : 'Cash On Delivery',
+                transactionReference: transactionRef,
+                itemQty: totalQuantityCount,
+                itemThumb: bag[0] ? bag[0].img : '',
+                itemsList: itemsListStringArray,
+                subtotal: subtotal,
+                deliveryFee: FIXED_DELIVERY_FEE,
+                total: absoluteTotalFloat,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+
+            database.ref('orders/' + orderIdCode).set(orderPayload)
+            .then(() => {
+                alert('🎉 Order successful! Your drops have been streamed straight to the admin dashboard.');
+                bag = [];
+                updateCart();
+                showPage('home');
+            })
+            .catch(err => {
+                console.error('Firebase DB Sync Interruption Error:', err);
+                alert('Failed to transmit data to Admin App: ' + err.message);
+            });
         }
 
         initGrid();
         updateCart(); 
         renderGridContainer('wishlist-grid', []);
+
+        // ENGINE FIX: SMART KEYBOARD DETECTOR TO HIDE NAVIGATION PANEL
+        const mobileNavElement = document.querySelector('nav');
+        const originalViewportHeight = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            // Check if height dropped significantly (keyboard sliding up)
+            if (originalViewportHeight - window.innerHeight > 150) {
+                mobileNavElement.style.opacity = '0';
+                mobileNavElement.style.visibility = 'hidden';
+                mobileNavElement.style.transform = 'translate(-50%, 30px)'; // Displace out of view bounds cleanly
+            } else {
+                // Keyboard closed
+                mobileNavElement.style.opacity = '1';
+                mobileNavElement.style.visibility = 'visible';
+                mobileNavElement.style.transform = 'translate(-50%, 0)';
+            }
+        });
     </script>
 </body>
 </html>
