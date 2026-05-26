@@ -11,7 +11,6 @@
     <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=180">
 
     <script src="https://js.paystack.co/v1/inline.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -24,6 +23,7 @@
             --text-grey: #666666;
             --border-light: #e5e7eb;
             --heart-red: #ff4d4d;
+            --accent-green: #2ed573;
         }
 
         body {
@@ -84,9 +84,75 @@
             outline: none; font-size: 0.95rem; box-sizing: border-box; background: #f0f0f0; 
             color: #333; transition: 0.3s; font-weight: 500;
         }
-        .filter-settings-btn {
+        
+        .hamburger-menu-btn {
             background: #f0f0f0; border: none; border-radius: 20px; width: 54px; height: 54px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; 
+            cursor: pointer; flex-shrink: 0; transition: background 0.2s;
+        }
+        .hamburger-menu-btn:hover { background: #e5e7eb; }
+        .hamburger-bar { width: 22px; height: 2.5px; background-color: var(--brand-black); border-radius: 2px; }
+
+        .side-drawer-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); z-index: 2000; display: none;
+        }
+        .side-drawer {
+            position: fixed; top: 0; left: -320px; width: 320px; height: 100%;
+            background: white; z-index: 2001; box-shadow: 5px 0 30px rgba(0,0,0,0.15);
+            display: flex; flex-direction: column; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-sizing: border-box; padding: 24px; overflow-y: auto;
+        }
+        .side-drawer.open { left: 0; }
+        .drawer-close-btn {
+            align-self: flex-end; background: none; border: none; font-size: 1.8rem;
+            font-weight: bold; cursor: pointer; color: #888; line-height: 1; margin-bottom: 20px;
+        }
+
+        .tracker-section-title { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.3px; margin: 0 0 4px 0; text-transform: uppercase; }
+        .tracker-section-subtitle { font-size: 0.75rem; color: #777; margin: 0 0 20px 0; font-weight: 500; }
+        
+        .timeline-container { display: flex; flex-direction: column; position: relative; padding-left: 32px; margin-top: 15px; }
+        .timeline-container::before {
+            content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px; 
+            width: 2px; background: #e5e7eb; z-index: 1;
+        }
+        .timeline-step { position: relative; margin-bottom: 28px; }
+        .timeline-step:last-child { margin-bottom: 0; }
+        
+        .timeline-node {
+            position: absolute; left: -32px; top: 2px; width: 24px; height: 24px;
+            border-radius: 50%; background: white; border: 2px solid #d1d5db;
+            box-sizing: border-box; z-index: 2; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s;
+        }
+        .timeline-node::after {
+            content: ''; width: 8px; height: 8px; background: #d1d5db; border-radius: 50%; display: block;
+        }
+        
+        .timeline-info h4 { margin: 0 0 2px 0; font-size: 0.85rem; font-weight: 700; color: #888; transition: color 0.3s; }
+        .timeline-info p { margin: 0; font-size: 0.72rem; color: #aaa; font-weight: 400; line-height: 1.3; }
+        
+        .timeline-step.active .timeline-node { border-color: var(--brand-black); background: var(--brand-black); }
+        .timeline-step.active .timeline-node::after { background: white; }
+        .timeline-step.active .timeline-info h4 { color: var(--brand-black); }
+        .timeline-step.active .timeline-info p { color: #555; }
+
+        .timeline-step.completed .timeline-node { border-color: var(--accent-green); background: var(--accent-green); }
+        .timeline-step.completed .timeline-node::after {
+            content: '✓'; color: white; font-size: 11px; font-weight: 900; background: transparent;
+        }
+        .timeline-step.completed .timeline-info h4 { color: #1e7e43; }
+        .timeline-step.completed .timeline-info p { color: #666; }
+
+        .tracking-search-box { display: flex; gap: 8px; margin-bottom: 25px; }
+        .tracking-input {
+            flex: 1; padding: 10px 14px; border-radius: 10px; border: 1px solid #e5e7eb;
+            font-size: 0.8rem; outline: none; font-family: inherit;
+        }
+        .tracking-btn {
+            background: black; color: white; border: none; padding: 0 14px; 
+            border-radius: 10px; font-size: 0.75rem; font-weight: 700; cursor: pointer;
         }
 
         .collection-banner {
@@ -114,6 +180,7 @@
             display: flex; gap: 8px; overflow-x: auto; white-space: nowrap; 
             max-width: 1000px; margin: 0 auto 25px; padding: 5px 2px;
             scrollbar-width: none; -ms-overflow-style: none;
+            align-items: center;
         }
         .categories-scroll::-webkit-scrollbar { display: none; }
         .cat-pill {
@@ -157,12 +224,7 @@
             cursor: pointer; font-weight: bold; font-size: 1rem; display: flex; 
             align-items: center; justify-content: center;
         }
-        .card-add-trigger.disabled-sold-out {
-            background: #e5e7eb; color: #999; font-size: 0.6rem; font-weight: 800;
-            width: auto; height: auto; padding: 6px 12px; border-radius: 8px; cursor: not-allowed;
-        }
 
-        /* --- FIXED & OPTIMIZED MODAL --- */
         .modal { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.6); z-index: 1000; align-items: flex-end; justify-content: center;
@@ -182,7 +244,6 @@
             border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center;
             justify-content: center; cursor: pointer; z-index: 6; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
-        .modal-arrow-btn:hover { background: white; }
         .modal-arrow-left { left: 15px; }
         .modal-arrow-right { right: 15px; }
 
@@ -206,7 +267,7 @@
         }
 
         .modal-body-container { 
-            padding: 24px 24px 120px; /* Deep bottom padding allows elements to slide under action bar */
+            padding: 24px 24px 120px; 
             overflow-y: auto; flex-grow: 1; -webkit-overflow-scrolling: touch; 
         }
         
@@ -227,7 +288,6 @@
         }
         .size-outline-box.selected { background: black; color: white; border-color: black; font-weight: 700; }
 
-        /* Fixed Action Tray at Bottom of Modal */
         .action-tray-footer { 
             position: absolute; bottom: 0; left: 0; width: 100%; background: white;
             padding: 16px 24px 24px; border-top: 1px solid #f0f0f0; box-sizing: border-box;
@@ -237,9 +297,6 @@
             background: var(--brand-black); color: white; border: none; height: 52px;
             border-radius: 14px; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px;
             cursor: pointer; text-transform: uppercase; flex: 1; text-align: center; display: flex; align-items: center; justify-content: center;
-        }
-        .btn-add-main-action:disabled {
-            background: #ccc; color: #fff; cursor: not-allowed;
         }
 
         .cart-qty-selector {
@@ -255,12 +312,11 @@
         .form-group { margin-top: 15px; }
         .form-label { display: block; font-size: 0.8rem; font-weight: 700; color: #333; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         .form-input, .form-select { width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 0.9rem; outline: none; box-sizing: border-box; font-family: inherit; background: white; }
-        
+
         .checkout-actions-container { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
         .btn-checkout-paystack { width: 100%; background: #000000; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; padding: 18px; border-radius: 15px; border: none; box-sizing: border-box; cursor: pointer; }
         .btn-checkout-cod { width: 100%; background: white; color: black; border: 2px solid black; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; padding: 16px; border-radius: 15px; box-sizing: border-box; cursor: pointer; transition: 0.2s; }
-        .btn-checkout-cod:hover { background: #f5f5f5; }
-
+        
         footer { text-align: center; padding: 40px 20px 60px; color: var(--text-grey); font-size: 0.6rem; letter-spacing: 1px; }
 
         .hero-container { 
@@ -291,11 +347,7 @@
             
             .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 2px; }
             .image-container { height: 210px; border-radius: 16px; }
-            .card-title { font-size: 0.8rem; }
-            .card-meta { font-size: 0.7rem; margin-bottom: 4px; }
-            .card-price { font-size: 0.8rem; }
             
-            /* Responsive Mobile Screen Fixes */
             .modal-content { height: 90vh; max-height: 90vh; border-radius: 24px 24px 0 0; }
             .modal-hero-area { height: 35vh; min-height: 230px; }
             .modal-body-container { padding: 20px 20px 100px; }
@@ -308,6 +360,52 @@
     <div id="fullscreen-overlay" onclick="closeFS()">
         <span class="close-fs">&times;</span>
         <img id="fs-img-tag" src="" alt="Fullscreen view">
+    </div>
+
+    <div id="sideDrawerOverlay" class="side-drawer-overlay" onclick="closeDrawer()"></div>
+    <div id="sideDrawer" class="side-drawer">
+        <button class="drawer-close-btn" onclick="closeDrawer()">&times;</button>
+        
+        <h3 class="tracker-section-title">Track Live Order</h3>
+        <p class="tracker-section-subtitle">See your delivery timeline process</p>
+        
+        <div class="tracking-search-box">
+            <input type="text" id="trackInput" class="tracking-input" placeholder="Enter Order ID (e.g. 581492)">
+            <button class="tracking-btn" onclick="lookupLiveOrderTrack()">Track</button>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #f0f0f0; margin-bottom: 25px;">
+
+        <div id="timelineTrackerDisplay" class="timeline-container">
+            <div id="step-placed" class="timeline-step">
+                <div class="timeline-node"></div>
+                <div class="timeline-info">
+                    <h4>Order Placed</h4>
+                    <p id="time-placed">Waiting for order intake...</p>
+                </div>
+            </div>
+            <div id="step-processing" class="timeline-step">
+                <div class="timeline-node"></div>
+                <div class="timeline-info">
+                    <h4>Processing</h4>
+                    <p id="time-processing">Sorting fits at storage base</p>
+                </div>
+            </div>
+            <div id="step-dispatch" class="timeline-step">
+                <div class="timeline-node"></div>
+                <div class="timeline-info">
+                    <h4>Out for Delivery</h4>
+                    <p id="time-dispatch">Dispatched via Moto courier</p>
+                </div>
+            </div>
+            <div id="step-arrived" class="timeline-step">
+                <div class="timeline-node"></div>
+                <div class="timeline-info">
+                    <h4>Arrived / Delivered</h4>
+                    <p id="time-arrived">Received safely package secure</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <header>
@@ -330,10 +428,10 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                     </button>
                     <div style="display: flex; gap: 10px;">
-                        <button class="modal-circle-nav-btn" id="modalShareBtn" title="Share Product">
+                        <button class="modal-circle-nav-btn" id="modalShareBtn">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
                         </button>
-                        <button class="modal-circle-nav-btn" id="modalWishBtn" title="Favorite Product">
+                        <button class="modal-circle-nav-btn" id="modalWishBtn">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                         </button>
                     </div>
@@ -348,7 +446,6 @@
 
             <div class="modal-body-container">
                 <h2 id="modalTitle" style="margin: 0 0 8px 0; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px;"></h2>
-                
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                     <span id="modalPrice" style="font-weight: 800; font-size: 1.3rem; color: #000;"></span>
                     <div style="display: flex; align-items: center; gap: 4px; font-size: 0.9rem; font-weight: bold;">
@@ -357,20 +454,13 @@
                         <span style="color: #888; font-weight: 400; font-size: 0.85rem;">(142)</span>
                     </div>
                 </div>
-
                 <div class="modal-thumb-row" id="modalThumbnailsStrip"></div>
-                
                 <p id="productDetails" style="font-size: 0.9rem; color: #555; margin: 0 0 24px 0; line-height: 1.5; font-weight: 400;"></p>
-
                 <div class="color-label-head">Color</div>
                 <div class="color-swatch-box" id="color-opts"></div>
-      
                 <div class="size-label-head">Size</div>
                 <div class="size-row-options" id="size-options-container"></div>
-                
-                <p style="font-size: 0.7rem; color: #777; text-align: center; margin: 20px 0 5px; font-weight: 500;">⚡ Fast secure delivery across Ghana</p>
             </div>
-
             <div class="action-tray-footer">
                 <button id="modalAddBtn" class="btn-add-main-action">Add To Cart</button>
             </div>
@@ -385,7 +475,6 @@
                 <p style="color: var(--text-grey); margin-bottom: 30px; font-size: 0.9rem; line-height: 1.5;">Experience the next evolution of streetwear with our 2026 collection.</p>
                 <button class="btn-pill" onclick="showPage('shop')">Shop Now</button>
             </div>
-            
             <div class="hero-image">
                 <div class="slider-wrapper">
                     <div id="home-slider">
@@ -413,8 +502,10 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 <input type="text" id="searchInput" class="search-input" placeholder="Search for products..." onkeyup="handleSearch()">
             </div>
-            <button class="filter-settings-btn" onclick="alert('Filters assigned: sorting newest items first.')">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+            <button class="hamburger-menu-btn" onclick="openDrawer()" title="Open Tracking Timeline Menu">
+                <div class="hamburger-bar"></div>
+                <div class="hamburger-bar"></div>
+                <div class="hamburger-bar"></div>
             </button>
         </div>
 
@@ -450,13 +541,13 @@
             <div id="cart-list"></div>
             
             <div id="cart-summary" style="margin-top: 25px; background: #f9f9f9; padding: 20px; border-radius: 20px; box-sizing: border-box;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: #444; margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: #444; padding-bottom: 10px;">
                     <span>Subtotal</span>
                     <span style="font-weight: 600; color: #000;">GH₵ <span id="subtotal-val">0.00</span></span>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: #444; padding-bottom: 15px; border-bottom: 1px solid #e5e7eb;">
-                    <span>Delivery Fee</span>
-                    <span style="font-weight: 600; color: #000;">GH₵ <span id="delivery-val">0.00</span></span>
+                    <span>Delivery Fee (Paid Online)</span>
+                    <span style="font-weight: 600; color: #000;">GH₵ <span id="delivery-val">35.00</span></span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 1.3rem; margin-top: 15px; color: #000;">
                     <span>Total</span>
@@ -466,22 +557,18 @@
 
             <div style="margin-top: 25px; padding-top: 10px; border-top: 1px dashed #e5e7eb;">
                 <h3 style="margin: 0 0 15px; font-size: 1.1rem; font-weight: 800; letter-spacing: -0.3px;">DELIVERY INFORMATION</h3>
-                
                 <div class="form-group">
                     <label for="customer-name" class="form-label">Full Name *</label>
                     <input type="text" id="customer-name" class="form-input" placeholder="e.g. Kwame Mensah">
                 </div>
-
                 <div class="form-group">
                     <label for="customer-email" class="form-label">Email Address *</label>
                     <input type="email" id="customer-email" class="form-input" placeholder="e.g. name@example.com">
                 </div>
-
                 <div class="form-group">
                     <label for="customer-phone" class="form-label">Phone Number *</label>
                     <input type="tel" id="customer-phone" class="form-input" placeholder="e.g. 0503612876">
                 </div>
-
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px;">
                     <div>
                         <label for="customer-region" class="form-label">Region *</label>
@@ -495,14 +582,6 @@
                             <option value="Volta">Volta</option>
                             <option value="Northern">Northern</option>
                             <option value="Bono">Bono</option>
-                            <option value="Bono East">Bono East</option>
-                            <option value="Ahafo">Ahafo</option>
-                            <option value="Upper East">Upper East</option>
-                            <option value="Upper West">Upper West</option>
-                            <option value="Savannah">Savannah</option>
-                            <option value="North East">North East</option>
-                            <option value="Oti">Oti</option>
-                            <option value="Western North">Western North</option>
                         </select>
                     </div>
                     <div>
@@ -510,21 +589,19 @@
                         <input type="text" id="customer-city" class="form-input" placeholder="e.g. Accra / Kumasi">
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label for="customer-address" class="form-label">Digital Address / Street Info *</label>
-                    <input type="text" id="customer-address" class="form-input" placeholder="e.g. GA-123-4567 or near Stadium Gate">
+                    <input type="text" id="customer-address" class="form-input" placeholder="e.g. GA-123-4567">
                 </div>
             </div>
 
             <div class="checkout-actions-container">
-                <button class="btn-checkout-paystack" onclick="processPayment('paystack')">
-                    <span>PAY ONLINE VIA PAYSTACK</span>
+                <button id="checkoutPaystackBtn" class="btn-checkout-paystack" onclick="processPayment('paystack')">
+                    <span>PAY ALL ONLINE NOW</span>
                     <span style="font-size: 1.1rem; font-weight: 300;">→</span>
                 </button>
-                
-                <button class="btn-checkout-cod" onclick="processPayment('cod')">
-                    <span>PAY ON DELIVERY (CASH/MOMO)</span>
+                <button id="checkoutCodBtn" class="btn-checkout-cod" onclick="processPayment('cod')">
+                    <span>PAY ON DELIVERY (PAY DELIVERY FEE NOW)</span>
                     <span style="font-size: 1.1rem; font-weight: 300;">📦</span>
                 </button>
             </div>
@@ -534,7 +611,6 @@
     <section id="wishlist" class="page">
         <div style="max-width: 1000px; margin: 0 auto 20px;">
             <h3 style="margin:0 0 5px 0; font-size:1.5rem; font-weight:900; letter-spacing:-0.5px; text-transform: uppercase; text-align: center;">Your Favorites</h3>
-            <p style="margin: 0 0 25px 0; color: var(--text-grey); font-size: 0.85rem; text-align: center;">Items you have saved to your personal collection.</p>
         </div>
         <div class="grid" id="wishlist-grid"></div>
     </section>
@@ -548,12 +624,94 @@
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const database = firebase.database();
 
+        const FLAT_DELIVERY_FEE = 35.00;
+
         function openFS(src) {
             document.getElementById('fs-img-tag').src = src;
             document.getElementById('fullscreen-overlay').style.display = 'flex';
         }
-        function closeFS() {
-            document.getElementById('fullscreen-overlay').style.display = 'none';
+        function closeFS() { document.getElementById('fullscreen-overlay').style.display = 'none'; }
+
+        function openDrawer() {
+            document.getElementById('sideDrawerOverlay').style.display = 'block';
+            setTimeout(() => { document.getElementById('sideDrawer').classList.add('open'); }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+        function closeDrawer() {
+            document.getElementById('sideDrawer').classList.remove('open');
+            setTimeout(() => { document.getElementById('sideDrawerOverlay').style.display = 'none'; }, 300);
+            document.body.style.overflow = '';
+        }
+
+        function lookupLiveOrderTrack() {
+            const idVal = document.getElementById('trackInput').value.trim();
+            if(!idVal) return alert("Please enter a valid Order Code.");
+
+            database.ref(`orders/${idVal}`).once('value', (snapshot) => {
+                const order = snapshot.val();
+                if(!order) {
+                    resetTimelineView();
+                    return alert("Order code not found in system database registry logs.");
+                }
+                renderTimelineProgress(order.status, order.timestamp);
+            });
+        }
+
+        function resetTimelineView() {
+            document.querySelectorAll('.timeline-step').forEach(step => {
+                step.classList.remove('active', 'completed');
+            });
+            document.getElementById('time-placed').innerText = "Waiting for order intake...";
+            document.getElementById('time-processing').innerText = "Sorting fits at storage base";
+            document.getElementById('time-dispatch').innerText = "Dispatched via Moto courier";
+            document.getElementById('time-arrived').innerText = "Received safely package secure";
+        }
+
+        function renderTimelineProgress(status, timestamp) {
+            resetTimelineView();
+            const steps = ['placed', 'processing', 'dispatch', 'arrived'];
+            let activeIdx = steps.indexOf(status);
+            if(activeIdx === -1) activeIdx = 0;
+
+            const baseTime = new Date(timestamp);
+            
+            // Generate clean human-readable date & time windows for historical reference
+            const formatTime = (dateObj) => {
+                const dateStr = dateObj.toLocaleDateString([], { month: 'short', day: 'numeric' });
+                const timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                return `${dateStr} at ${timeStr}`;
+            };
+
+            steps.forEach((step, i) => {
+                const el = document.getElementById(`step-${step}`);
+                const label = document.getElementById(`time-${step}`);
+                
+                // Simulate chronological progressive baseline times (+0m, +15m, +45m, +1h30m)
+                let stepTime = new Date(baseTime.getTime());
+                if(step === 'processing') stepTime.setMinutes(stepTime.getMinutes() + 15);
+                if(step === 'dispatch') stepTime.setMinutes(stepTime.getMinutes() + 45);
+                if(step === 'arrived') stepTime.setMinutes(stepTime.getMinutes() + 90);
+
+                const renderTime = formatTime(stepTime);
+
+                if (i < activeIdx) {
+                    el.classList.add('completed');
+                    if(step === 'placed') label.innerText = `Confirmed on ${renderTime}`;
+                    if(step === 'processing') label.innerText = `Sorted & packed on ${renderTime}`;
+                    if(step === 'dispatch') label.innerText = `Departed storage hub on ${renderTime}`;
+                } else if (i === activeIdx) {
+                    el.classList.add('active');
+                    if(step === 'placed') label.innerText = `Order received on ${renderTime}. Awaiting base verification.`;
+                    if(step === 'processing') label.innerText = `Active: Pulling items to packing docks (${renderTime}).`;
+                    if(step === 'dispatch') label.innerText = `Out for delivery! Courier on route since ${renderTime}.`;
+                    if(step === 'arrived') label.innerText = `Delivered! Package securely transferred on ${renderTime}.`;
+                } else {
+                    // Future upcoming baseline metrics
+                    if(step === 'processing') label.innerText = "Pending warehouse allocation and verification checks";
+                    if(step === 'dispatch') label.innerText = "Awaiting handover to local route motor courier units";
+                    if(step === 'arrived') label.innerText = "Pending dropoff confirmation at your chosen address location";
+                }
+            });
         }
 
         let homeIndex = 0;
@@ -572,108 +730,12 @@
         setInterval(autoSlideHome, 4000);
 
         const products = [
-            { 
-                id: 1, 
-                cat: 'joggers', 
-                name: 'Essential Joggers', 
-                price: 380, 
-                stock: 5,
-                sizes: ['S', 'M', 'L', 'XL'], 
-                colors: [{name:'Black', hex:'#111'}, {name:'Grey', hex:'#9e9e9e'}], 
-                img1: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000', 
-                images: [
-                    'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000',
-                    'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000',
-                    'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000'
-                ],
-                details: 'High quality essential track pants built with premium breathable heavy-weave fleece yarn. Tailored deep side-seam zipper pockets, an elastic drawstring waistband, and a curated minimalist streetwear silhouette designed for daily rotations.', 
-                meta: 'Black / Grey' 
-            },
-            { 
-                id: 2, 
-                cat: 'cargo-pants', 
-                name: 'Tactical Cargo Pants', 
-                price: 450, 
-                stock: 5,
-                sizes: ['S', 'M', 'L', 'XL', 'XXL'], 
-                colors: [{name:'Black', hex:'#111'}, {name:'Olive Green', hex:'#3b4432'}, {name:'Khaki', hex:'#c3b091'}], 
-                img1: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1000', 
-                images: [
-                    'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1000', 
-                    'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 
-                    'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000'
-                ],
-                details: 'Engineered high-spec tactical cargo pants. Structured with ultra-durable cotton ripstop canvas, modular geometric utility pockets, reinforced accent stitch lines, and adjustable ankle strap configurations for tailored techwear fits.', 
-                meta: 'Multi-Color Pack' 
-            },
-            { 
-                id: 3, 
-                cat: 't-shirts', 
-                name: 'Heavyweight Oversized Tee', 
-                price: 280, 
-                stock: 5,
-                sizes: ['M', 'L', 'XL', 'XXL'], 
-                colors: [{name:'Charcoal Black', hex:'#111'}, {name:'Chalk White', hex:'#fff'}], 
-                img1: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000', 
-                images: [
-                    'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000', 
-                    'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1000',
-                    'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000'
-                ],
-                details: 'Signature drop-shoulder boxy silhouette knitted from 260GSM organic combed long-staple cotton. Featuring clean high-density silicone typography on the back collar mesh line and structural tight-fit ribbing that preserves shape.', 
-                meta: 'Charcoal Black' 
-            },
-            { 
-                id: 4, 
-                cat: 'hoodies', 
-                name: 'Cyber Graphic Hoodie', 
-                price: 550, 
-                stock: 5,
-                sizes: ['M', 'L', 'XL'], 
-                colors: [{name:'Matte Black', hex:'#111'}, {name:'Charcoal', hex:'#2f3542'}], 
-                img1: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000', 
-                images: [
-                    'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000', 
-                    'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 
-                    'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000'
-                ],
-                details: 'Luxury isolated loopback cotton construction weighing 420GSM. Designed with custom dystopian screen-printed iconography across the spine, raw-edge aesthetic overlays, and a thick double-layered hood without strings for clean visuals.', 
-                meta: 'Matte Black' 
-            },
-            { 
-                id: 5, 
-                cat: 'sneakers', 
-                name: 'Zamil Retro Court Sneakers', 
-                price: 750, 
-                stock: 5,
-                sizes: ['41', '42', '43', '44', '45'], 
-                colors: [{name:'Off-White Premium', hex:'#f5f5f5'}], 
-                img1: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000', 
-                images: [
-                    'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000',
-                    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000',
-                    'https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=1000'
-                ],
-                details: 'Premium structured full-grain calf leather shoes built on a customized vintage rubber cupsole cup matrix. Upgraded with responsive OrthoLite modular inner padding and subtle side perforated styling cues.', 
-                meta: 'Off-White Premium' 
-            },
-            { 
-                id: 6, 
-                cat: 't-shirts', 
-                name: 'Minimal Basic Tee', 
-                price: 220, 
-                stock: 5, 
-                sizes: ['S', 'M', 'L', 'XL'], 
-                colors: [{name:'Beige Suede', hex:'#e1d7c6'}, {name:'Core Black', hex:'#111'}],
-                img1: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 
-                images: [
-                    'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 
-                    'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000', 
-                    'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1000'
-                ],
-                details: 'Premium tailored daily wear standard. Woven with luxurious sand-washed combed cotton interlock blends, creating an incredibly soft texture that regulates body temperature through modern active lifestyle movements.', 
-                meta: 'Beige Suede' 
-            }
+            { id: 1, cat: 'joggers', name: 'Essential Joggers', price: 380, stock: 5, sizes: ['S', 'M', 'L', 'XL'], colors: [{name:'Black', hex:'#111'}, {name:'Grey', hex:'#9e9e9e'}], img1: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000', images: ['https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000','https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000','https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000'], details: 'Premium breathable fleece pants. Tailored deep side pockets.', meta: 'Black / Grey' },
+            { id: 2, cat: 'cargo-pants', name: 'Tactical Cargo Pants', price: 450, stock: 5, sizes: ['S', 'M', 'L', 'XL'], colors: [{name:'Black', hex:'#111'}, {name:'Olive', hex:'#3b4432'}], img1: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1000', images: ['https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1000'], details: 'Cotton ripstop canvas with modular geometric utility pockets.', meta: 'Multi-Color Pack' },
+            { id: 3, cat: 't-shirts', name: 'Heavyweight Oversized Tee', price: 280, stock: 5, sizes: ['M', 'L', 'XL'], colors: [{name:'Charcoal', hex:'#111'}, {name:'White', hex:'#fff'}], img1: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000', images: ['https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000'], details: '260GSM organic long-staple cotton drop-shoulder drop fit.', meta: 'Charcoal Black' },
+            { id: 4, cat: 'hoodies', name: 'Cyber Graphic Hoodie', price: 550, stock: 5, sizes: ['M', 'L', 'XL'], colors: [{name:'Matte Black', hex:'#111'}], img1: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000', images: ['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000'], details: '420GSM Isolated loopback cotton luxury graphic printing.', meta: 'Matte Black' },
+            { id: 5, cat: 'sneakers', name: 'Zamil Retro Court Sneakers', price: 750, stock: 5, sizes: ['41', '42', '43', '44'], colors: [{name:'Off-White', hex:'#f5f5f5'}], img1: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000', images: ['https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000'], details: 'Full-grain leather shoes built on customized cupsole matrices.', meta: 'Off-White Premium' },
+            { id: 6, cat: 't-shirts', name: 'Minimal Basic Tee', price: 220, stock: 5, sizes: ['S', 'M', 'L'], colors: [{name:'Beige', hex:'#e1d7c6'}], img1: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', images: ['https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000'], details: 'Sand-washed combed luxury cotton daily basic wear standard.', meta: 'Beige Suede' }
         ];
 
         let bag = [];
@@ -681,20 +743,15 @@
         let selection = { productId: null, size: "", color: "", qty: 1, img: "" };
         let activeDetailImgIndex = 0;
         let activeProductMediaList = [];
-        const FIXED_DELIVERY_FEE = 35; 
 
         function listenToLiveStockUpdates() {
             database.ref('inventory_stock').on('value', (snapshot) => {
                 const stockData = snapshot.val();
                 if(stockData) {
                     products.forEach(p => {
-                        if(stockData[p.id] !== undefined) {
-                            p.stock = stockData[p.id];
-                        }
+                        if(stockData[p.id] !== undefined) p.stock = stockData[p.id];
                     });
                     renderGridContainer('main-grid', products);
-                    const favoritedObjects = products.filter(p => wishlist.includes(p.id));
-                    renderGridContainer('wishlist-grid', favoritedObjects);
                 }
             });
         }
@@ -702,23 +759,20 @@
         function renderGridContainer(targetElementId, itemsList) {
             const container = document.getElementById(targetElementId);
             if(!container) return;
-            
             if(itemsList.length === 0) {
                 if(targetElementId === 'wishlist-grid') {
-                    container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#999; padding:60px 0; font-size:0.95rem;">No favorited items yet. Tap the heart icons on items you like!</div>`;
+                    container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#999; padding:60px 0;">Your configuration space is clean. Save favorites!</div>`;
                 }
                 return;
             }
-
             container.innerHTML = itemsList.map(p => {
                 const isFav = wishlist.includes(p.id) ? 'favorited' : '';
                 const isSoldOut = p.stock <= 0;
-                
                 return `
                 <div class="card" data-cat="${p.cat}">
                     <div class="image-container">
                         ${isSoldOut ? '<div class="sold-out-overlay">SOLD OUT</div>' : ''}
-                        <img src="${p.img1}" onclick="${isSoldOut ? "alert('This absolute drop is currently sold out!')" : `openDetails(${p.id})`}" alt="${p.name}">
+                        <img src="${p.img1}" onclick="${isSoldOut ? "alert('Sold out!')" : `openDetails(${p.id})`}">
                         <button class="wishlist-heart-btn ${isFav}" data-id="${p.id}" onclick="toggleWishlist(event, ${p.id})">
                             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                         </button>
@@ -727,156 +781,62 @@
                         <h3 class="card-title">${p.name}</h3>
                         <p class="card-meta">${p.meta} <span style="color:#888;">(Qty: ${p.stock})</span></p>
                         <p class="card-price">GH₵ ${p.price.toFixed(2)}</p>
-                        ${isSoldOut ? 
-                            `<button class="card-add-trigger disabled-sold-out" disabled>SOLD OUT</button>` : 
-                            `<button class="card-add-trigger" onclick="openDetails(${p.id})">+</button>`
-                        }
+                        <button class="card-add-trigger" onclick="openDetails(${p.id})">+</button>
                     </div>
                 </div>
             `}).join('');
         }
 
-        function initGrid() {
-            renderGridContainer('main-grid', products);
-            listenToLiveStockUpdates();
-        }
-
         function toggleWishlist(e, id) {
-            if(e) e.stopPropagation(); 
-            if(wishlist.includes(id)){
-                wishlist = wishlist.filter(item => item !== id);
-            } else {
-                wishlist.push(id);
-            }
-            
+            if(e) e.stopPropagation();
+            if(wishlist.includes(id)) wishlist = wishlist.filter(item => item !== id);
+            else wishlist.push(id);
             document.getElementById('fav-count').innerText = wishlist.length;
-            
-            document.querySelectorAll(`.wishlist-heart-btn[data-id="${id}"]`).forEach(btn => {
-                btn.classList.toggle('favorited', wishlist.includes(id));
-            });
-
-            const modalWish = document.getElementById('modalWishBtn');
-            if(selection.productId === id) {
-                modalWish.classList.toggle('favorited', wishlist.includes(id));
-            }
-
-            const favoritedObjects = products.filter(p => wishlist.includes(p.id));
-            renderGridContainer('wishlist-grid', favoritedObjects);
+            renderGridContainer('wishlist-grid', products.filter(p => wishlist.includes(p.id)));
         }
 
         function openDetails(id) {
             const p = products.find(item => item.id == id);
-            if(!p || p.stock <= 0) return;
-            
+            if(!p) return;
             activeProductMediaList = p.images || [p.img1];
             activeDetailImgIndex = 0;
-            
-            selection = { productId: p.id, size: "", color: "", qty: 1, img: activeProductMediaList[0] }; 
+            selection = { productId: p.id, size: "", color: "", qty: 1, img: activeProductMediaList[0] };
             
             updateDetailCarouselView();
             document.getElementById('modalTitle').innerText = p.name;
             document.getElementById('modalPrice').innerText = 'GH₵ ' + p.price.toFixed(2);
             document.getElementById('productDetails').innerText = p.details;
 
-            const modalWish = document.getElementById('modalWishBtn');
-            modalWish.classList.toggle('favorited', wishlist.includes(p.id));
-            modalWish.onclick = () => toggleWishlist(null, p.id);
-
-            document.getElementById('modalShareBtn').onclick = () => {
-                if (navigator.share) {
-                    navigator.share({
-                        title: `Zamil's Streetwear - ${p.name}`,
-                        text: `Check out the ${p.name} on Zamil's streetwear catalog for GH₵ ${p.price.toFixed(2)}!`,
-                        url: window.location.href
-                    }).catch(err => console.log(err));
-                } else {
-                    navigator.clipboard.writeText(`${window.location.href} - Product: ${p.name}`);
-                    alert('Product link copied to clipboard!');
-                }
-            };
-
             const stripContainer = document.getElementById('modalThumbnailsStrip');
-            stripContainer.innerHTML = activeProductMediaList.map((imgSrc, index) => `
-                <img src="${imgSrc}" class="modal-thumb-img ${index === 0 ? 'selected' : ''}" onclick="jumpToDetailSlide(${index})" alt="Preview View Node">
+            stripContainer.innerHTML = activeProductMediaList.map((imgSrc, idx) => `
+                <img src="${imgSrc}" class="modal-thumb-img ${idx === 0 ? 'selected' : ''}" onclick="jumpToDetailSlide(${idx})">
             `).join('');
 
             const colorContainer = document.getElementById('color-opts');
-            colorContainer.innerHTML = p.colors.map((c, index) => {
-                const targetSrc = activeProductMediaList[index] || activeProductMediaList[0];
-                return `<div class="color-swatch" style="background-color: ${c.hex};" title="${c.name}" onclick="setOptSwatch(this, 'color', '${c.name}', ${index}, '${targetSrc}')"></div>`;
-            }).join('');
-
-            const sizeContainer = document.getElementById('size-options-container');
-            sizeContainer.innerHTML = p.sizes.map(s => `
-                <div class="size-outline-box" onclick="setOptSwatch(this, 'size', '${s}')">${s}</div>
+            colorContainer.innerHTML = p.colors.map((c, idx) => `
+                <div class="color-swatch" style="background-color: ${c.hex};" onclick="setOptSwatch(this, 'color', '${c.name}', ${idx}, '${activeProductMediaList[idx] || p.img1}')"></div>
             `).join('');
 
-            const modal = document.getElementById('productModal');
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            
-            const mainActionAddBtn = document.getElementById('modalAddBtn');
-            mainActionAddBtn.innerText = "Add To Cart";
-            mainActionAddBtn.disabled = false;
+            const sizeContainer = document.getElementById('size-options-container');
+            sizeContainer.innerHTML = p.sizes.map(s => `<div class="size-outline-box" onclick="setOptSwatch(this, 'size', '${s}')">${s}</div>`).join('');
 
-            mainActionAddBtn.onclick = () => {
-                if(!selection.color) return alert("Please select a color option!");
-                if(!selection.size) return alert("Please select your fit size!");
-                
-                if (selection.qty > p.stock) {
-                    return alert(`Sorry, we only have ${p.stock} units left in stock.`);
-                }
-                
+            document.getElementById('productModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            document.getElementById('modalAddBtn').onclick = () => {
+                if(!selection.color || !selection.size) return alert("Please select options!");
                 bag.push({id: Date.now(), name: p.name, price: p.price, ...selection});
-                updateCart();
-                closeModal();
-                showPage('cart');
+                updateCart(); closeModal(); showPage('cart');
             };
         }
 
         function updateDetailCarouselView() {
-            const displayHeroImg = document.getElementById('modalImg');
-            displayHeroImg.style.opacity = 0.3;
-            
-            setTimeout(() => {
-                displayHeroImg.src = activeProductMediaList[activeDetailImgIndex];
-                displayHeroImg.style.opacity = 1;
-            }, 150);
-
+            document.getElementById('modalImg').src = activeProductMediaList[activeDetailImgIndex];
             document.getElementById('imageIndexTracker').innerText = `${activeDetailImgIndex + 1} / ${activeProductMediaList.length}`;
-            
-            document.querySelectorAll('.modal-thumb-img').forEach((thumb, index) => {
-                thumb.classList.toggle('selected', index === activeDetailImgIndex);
-            });
         }
-
-        function changeDetailSlide(direction) {
-            activeDetailImgIndex = (activeDetailImgIndex + direction + activeProductMediaList.length) % activeProductMediaList.length;
-            selection.img = activeProductMediaList[activeDetailImgIndex];
-            updateDetailCarouselView();
-        }
-
-        function jumpToDetailSlide(index) {
-            activeDetailImgIndex = index;
-            selection.img = activeProductMediaList[activeDetailImgIndex];
-            updateDetailCarouselView();
-        }
-
-        function setOptSwatch(el, type, val, activeColorIndex, optImageUrl) {
-            el.parentElement.querySelectorAll('.' + el.className.split(' ')[0]).forEach(b => b.classList.remove('selected'));
-            el.classList.add('selected');
-            selection[type] = val;
-
-            if(type === 'color' && optImageUrl) {
-                const matchedMediaIndex = activeProductMediaList.indexOf(optImageUrl);
-                if(matchedMediaIndex !== -1) {
-                    jumpToDetailSlide(matchedMediaIndex);
-                } else {
-                    document.getElementById('modalImg').src = optImageUrl;
-                    selection.img = optImageUrl;
-                }
-            }
-        }
+        function changeDetailSlide(dir) { activeDetailImgIndex = (activeDetailImgIndex + dir + activeProductMediaList.length) % activeProductMediaList.length; updateDetailCarouselView(); }
+        function jumpToDetailSlide(idx) { activeDetailImgIndex = idx; updateDetailCarouselView(); }
+        function setOptSwatch(el, type, val) { el.parentElement.querySelectorAll('.selected').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); selection[type] = val; }
 
         function handleSearch() {
             const term = document.getElementById('searchInput').value.toLowerCase();
@@ -887,217 +847,129 @@
         }
 
         function filterItems(cat, btn) {
-            document.getElementById('searchInput').value = '';
             document.querySelectorAll('#shop .cat-pill').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            document.querySelectorAll('#main-grid .card').forEach(c => {
-                if (cat === 'all') {
-                    c.style.display = 'flex';
-                } else {
-                    c.style.display = (c.dataset.cat === cat) ? 'flex' : 'none';
-                }
-            });
+            document.querySelectorAll('#main-grid .card').forEach(c => { c.style.display = (cat === 'all' || c.dataset.cat === cat) ? 'flex' : 'none'; });
         }
 
         function updateBagItemQty(uniqueId, amount) {
-            const targetItem = bag.find(item => item.id === uniqueId);
-            if(targetItem) {
-                const originalProductObj = products.find(p => p.id === targetItem.productId);
-                if (originalProductObj && amount > 0 && targetItem.qty >= originalProductObj.stock) {
-                    return alert("You've selected maximum remaining stock for this drop.");
-                }
-                targetItem.qty = Math.max(1, targetItem.qty + amount);
-                updateCart();
-            }
+            const target = bag.find(item => item.id === uniqueId);
+            if(target) { target.qty = Math.max(1, target.qty + amount); updateCart(); }
         }
 
         function updateCart() {
             const list = document.getElementById('cart-list');
             if(!list) return;
-            
+
             if(bag.length === 0) {
-                list.innerHTML = `<p style="text-align:center; color:#999; padding:40px 0; font-size: 0.95rem; margin:0;">Your bag is empty</p>`;
+                list.innerHTML = `<p style="text-align:center; color:#999; padding:40px 0;">Your bag is currently clean and empty</p>`;
                 document.getElementById('subtotal-val').innerText = "0.00";
                 document.getElementById('delivery-val').innerText = "0.00";
                 document.getElementById('total-val').innerText = "0.00";
                 document.getElementById('count').innerText = "0";
                 return;
             }
-            
             list.innerHTML = bag.map(item => `
-                <div style="display:flex; align-items: flex-start; gap:15px; padding: 20px 0; border-bottom: 1px solid #f3f4f6; position: relative;">
-                    <img src="${item.img}" style="width: 90px; height: 90px; object-fit: cover; border-radius: 12px; background: #f3f4f6; flex-shrink: 0;" alt="Bag Product">
-                    
-                    <div style="flex: 1; min-width: 0;">
-                        <h4 style="margin: 0 0 4px 0; font-weight: 700; font-size: 1rem; color: #000; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.name}</h4>
-                        <p style="margin: 0 0 10px 0; font-size: 0.8rem; color: #777; font-weight: 500;">${item.color} / ${item.size}</p>
-                        <p style="margin: 0 0 12px 0; font-weight: 800; font-size: 0.95rem; color: #000;">GH₵ ${(item.price).toFixed(2)}</p>
-                        
+                <div style="display:flex; gap:15px; padding: 15px 0; border-bottom: 1px solid #f3f4f6;">
+                    <img src="${item.img}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px;">
+                    <div style="flex: 1;">
+                        <h4 style="margin:0 0 4px 0; font-size:0.95rem;">${item.name}</h4>
+                        <p style="margin:0 0 8px 0; font-size:0.75rem; color:#777;">${item.color} / ${item.size}</p>
                         <div class="cart-qty-selector">
                             <button class="cart-qty-btn" onclick="updateBagItemQty(${item.id}, -1)">−</button>
                             <span class="cart-qty-val">${item.qty}</span>
                             <button class="cart-qty-btn" onclick="updateBagItemQty(${item.id}, 1)">+</button>
                         </div>
                     </div>
-                    
-                    <button onclick="removeItem(${item.id})" style="background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; opacity: 0.7; margin-left: 10px;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2">
-                            <polyline points="3 6 5 6 21 6"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        </svg>
-                    </button>
+                    <button onclick="removeItem(${item.id})" style="background:none; border:none; font-weight:bold; cursor:pointer;">&times;</button>
                 </div>
             `).join('');
             
             const subtotal = bag.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const total = subtotal + FIXED_DELIVERY_FEE;
-            
+            const total = subtotal + FLAT_DELIVERY_FEE;
+
             document.getElementById('subtotal-val').innerText = subtotal.toFixed(2);
-            document.getElementById('delivery-val').innerText = FIXED_DELIVERY_FEE.toFixed(2);
+            document.getElementById('delivery-val').innerText = FLAT_DELIVERY_FEE.toFixed(2);
             document.getElementById('total-val').innerText = total.toFixed(2);
-            
             document.getElementById('count').innerText = bag.reduce((sum, item) => sum + item.qty, 0);
         }
 
-        function removeItem(uniqueId) { bag = bag.filter(item => item.id !== uniqueId); updateCart(); }
-        
-        function closeModal() { 
-            document.getElementById('productModal').style.display = 'none'; 
-            document.body.style.overflow = '';
-        }
-        
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.getElementById(id).classList.add('active-page');
-            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            const dynamicLink = document.getElementById('l-' + id);
-            if(dynamicLink) dynamicLink.classList.add('active');
-            window.scrollTo(0,0);
-        }
+        function removeItem(id) { bag = bag.filter(i => i.id !== id); updateCart(); }
+        function closeModal() { document.getElementById('productModal').style.display = 'none'; document.body.style.overflow = ''; }
+        function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); document.querySelectorAll('nav a').forEach(a => a.classList.remove('active')); const l = document.getElementById('l-' + id); if(l) l.classList.add('active'); }
 
         function processPayment(method) {
-            if(!bag.length) return alert("Your shopping bag is empty");
-            
-            const nameInput = document.getElementById('customer-name').value.trim();
-            const emailInput = document.getElementById('customer-email').value.trim();
-            const phoneInput = document.getElementById('customer-phone').value.trim();
-            const regionSelect = document.getElementById('customer-region').value;
-            const cityInput = document.getElementById('customer-city').value.trim();
-            const addressInput = document.getElementById('customer-address').value.trim();
+            const name = document.getElementById('customer-name').value.trim();
+            const email = document.getElementById('customer-email').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            const region = document.getElementById('customer-region').value;
+            const city = document.getElementById('customer-city').value.trim();
+            const address = document.getElementById('customer-address').value.trim();
 
-            if(!nameInput) return alert("Please enter your full name.");
-            if(!emailInput || !emailInput.includes('@')) return alert("Please enter a valid email address.");
-            if(!phoneInput || phoneInput.length < 9) return alert("Please enter a valid working phone number.");
-            if(!regionSelect) return alert("Please select your destination region.");
-            if(!cityInput) return alert("Please enter your delivery town or city.");
-            if(!addressInput) return alert("Please provide clear location or digital address cues.");
-
-            for(let item of bag) {
-                let pObj = products.find(p => p.id === item.productId);
-                if(pObj && pObj.stock < item.qty) {
-                    return alert(`Stock shortage! "${item.name}" only has ${pObj.stock} units left. Please adjust your bag.`);
-                }
+            if(!name || !email || !phone || !region || !city || !address) {
+                return alert("Please complete all required delivery and contact details!");
             }
 
-            const absoluteTotalFloat = parseFloat(document.getElementById('total-val').innerText);
+            const productSubtotal = bag.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const fullAbsoluteTotal = productSubtotal + FLAT_DELIVERY_FEE;
 
-            if (method === 'paystack') {
-                const calculatedSubUnitValue = Math.round(absoluteTotalFloat * 100);
-
+            if(method === 'paystack') {
                 let handler = PaystackPop.setup({
                     key: 'pk_live_f2da1b091950f3e4e699a216ae6375a1d8adf79f',
-                    email: emailInput,
-                    amount: calculatedSubUnitValue,
-                    currency: 'GHS',
-                    channels: ['mobile_money', 'card', 'bank_transfer'],
-                    ref: 'ZAMIL-' + Date.now(), 
-                    callback: function(response) {
-                        sendOrderToApp(method, response.reference);
-                    },
-                    onClose: function() {
-                        alert('Transaction canceled. Your items are safe in your shopping bag.');
-                    }
+                    email: email, amount: Math.round(fullAbsoluteTotal * 100), currency: 'GHS',
+                    ref: 'ZAMIL-FULL-' + Date.now(),
+                    callback: function(res) { sendOrderToApp('paystack', res.reference, 0); }
                 });
                 handler.openIframe();
-
-            } else if (method === 'cod') {
-                if(confirm("Confirm your Pay on Delivery order? Total: GH₵ " + absoluteTotalFloat.toFixed(2))) {
-                    sendOrderToApp(method, 'CASH_ON_DELIVERY');
+            } else if(method === 'cod') {
+                if(confirm(`To confirm your Pay on Delivery order, you must pay the GH₵ ${FLAT_DELIVERY_FEE.toFixed(2)} delivery fee right now. The product balance of GH₵ ${productSubtotal.toFixed(2)} will be paid to the courier dynamic balance upon arrival. proceed?`)) {
+                    let handler = PaystackPop.setup({
+                        key: 'pk_live_f2da1b091950f3e4e699a216ae6375a1d8adf79f',
+                        email: email, amount: Math.round(FLAT_DELIVERY_FEE * 100), currency: 'GHS',
+                        ref: 'ZAMIL-DELIVERY-MANDATORY-' + Date.now(),
+                        callback: function(res) { sendOrderToApp('cod', res.reference, productSubtotal); }
+                    });
+                    handler.openIframe();
                 }
             }
         }
 
-        function sendOrderToApp(paymentMethod, transactionRef) {
-            const orderIdCode = Math.floor(100000 + Math.random() * 900000).toString();
-            const subtotal = bag.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const absoluteTotalFloat = subtotal + FIXED_DELIVERY_FEE;
-            const totalQuantityCount = bag.reduce((sum, item) => sum + item.qty, 0);
-
-            const itemsListStringArray = bag.map(i => `${i.name} (${i.color}/${i.size}) x${i.qty}`);
-
-            const orderPayload = {
-                id: orderIdCode,
+        function sendOrderToApp(method, ref, outstandingBalance) {
+            const codeId = Math.floor(100000 + Math.random() * 900000).toString();
+            const sub = bag.reduce((sum, i) => sum + (i.price * i.qty), 0);
+            const total = sub + FLAT_DELIVERY_FEE;
+            
+            const payload = {
+                id: codeId,
                 customerName: document.getElementById('customer-name').value.trim(),
                 email: document.getElementById('customer-email').value.trim(),
                 phone: document.getElementById('customer-phone').value.trim(),
                 region: document.getElementById('customer-region').value,
                 city: document.getElementById('customer-city').value.trim(),
                 address: document.getElementById('customer-address').value.trim(),
-                paymentMethod: paymentMethod === 'paystack' ? 'Mobile Money / Paystack' : 'Cash On Delivery',
-                transactionReference: transactionRef,
-                itemQty: totalQuantityCount,
-                itemThumb: bag[0] ? bag[0].img : '',
-                itemsList: itemsListStringArray,
-                subtotal: subtotal,
-                deliveryFee: FIXED_DELIVERY_FEE,
-                total: absoluteTotalFloat,
-                status: 'pending',
-                timestamp: new Date().toISOString()
+                paymentMethod: method, 
+                transactionReference: ref,
+                deliveryFeePaidOnline: FLAT_DELIVERY_FEE,
+                amountDueOnDelivery: outstandingBalance, 
+                itemsList: bag.map(i => `${i.name} (${i.size}) x${i.qty}`),
+                subtotal: sub, 
+                deliveryFee: FLAT_DELIVERY_FEE,
+                total: total,
+                status: 'placed', timestamp: new Date().toISOString()
             };
 
-            const inventoryUpdatesMap = {};
-            bag.forEach(item => {
-                const targetProduct = products.find(p => p.id === item.productId);
-                if(targetProduct) {
-                    const dynamicNewStockCalculated = Math.max(0, targetProduct.stock - item.qty);
-                    inventoryUpdatesMap[`inventory_stock/${item.productId}`] = dynamicNewStockCalculated;
+            database.ref(`orders/${codeId}`).set(payload).then(() => {
+                let successMessage = `🎉 Success! Delivery Fee payment processed.\n\nOrder Code: ${codeId}`;
+                if(outstandingBalance > 0) {
+                    successMessage += `\n\nNote: Please have GH₵ ${outstandingBalance.toFixed(2)} ready to pay the dispatcher upon arrival.`;
                 }
-            });
-
-            database.ref().update({
-                [`orders/${orderIdCode}`]: orderPayload,
-                ...inventoryUpdatesMap
-            })
-            .then(() => {
-                alert('🎉 Order successful! Your drops have been streamed straight to the admin dashboard.');
-                bag = [];
-                updateCart();
-                showPage('home');
-            })
-            .catch(err => {
-                console.error('Database sync update error context:', err);
-                alert('Failed to transmit data: ' + err.message);
+                alert(successMessage);
+                bag = []; updateCart(); showPage('home');
             });
         }
 
-        initGrid();
-        updateCart(); 
-        renderGridContainer('wishlist-grid', []);
-
-        const mobileNavElement = document.querySelector('nav');
-        const originalViewportHeight = window.innerHeight;
-
-        window.addEventListener('resize', () => {
-            if (originalViewportHeight - window.innerHeight > 150) {
-                mobileNavElement.style.opacity = '0';
-                mobileNavElement.style.visibility = 'hidden';
-                mobileNavElement.style.transform = 'translate(-50%, 30px)'; 
-            } else {
-                mobileNavElement.style.opacity = '1';
-                mobileNavElement.style.visibility = 'visible';
-                mobileNavElement.style.transform = 'translate(-50%, 0)';
-            }
-        });
+        renderGridContainer('main-grid', products);
+        listenToLiveStockUpdates();
     </script>
 </body>
 </html>
