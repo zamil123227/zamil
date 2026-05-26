@@ -7,8 +7,6 @@
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ZAMIL'S">
-    <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=180">
 
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -22,7 +20,6 @@
             --glass: rgba(255, 255, 255, 0.85);
             --text-grey: #666666;
             --border-light: #e5e7eb;
-            --heart-red: #ff4d4d;
             --accent-green: #2ed573;
         }
 
@@ -117,7 +114,7 @@
             content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px; 
             width: 2px; background: #e5e7eb; z-index: 1;
         }
-        .timeline-step { position: relative; margin-bottom: 28px; }
+        .timeline-step { position: relative; margin-bottom: 28px; background: transparent; }
         .timeline-step:last-child { margin-bottom: 0; }
         
         .timeline-node {
@@ -196,6 +193,12 @@
         .image-container { position: relative; width: 100%; height: 260px; overflow: hidden; border-radius: 20px; background: #fff; }
         .image-container img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
         
+        .grid-img-counter {
+            position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.6);
+            color: #fff; font-size: 0.7rem; font-weight: 600; padding: 3px 8px; border-radius: 30px;
+            z-index: 6; pointer-events: none; backdrop-filter: blur(4px);
+        }
+
         .sold-out-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255,255,255,0.7); display: flex; justify-content: center;
@@ -204,14 +207,16 @@
             pointer-events: none; z-index: 5;
         }
 
+        /* Cleaned floating catalog favorite selector layout styles */
         .wishlist-heart-btn {
-            position: absolute; top: 12px; right: 12px; background: white; border: none;
-            width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            transition: transform 0.2s ease; z-index: 10;
+            position: absolute; top: 12px; right: 12px; background: transparent; border: none;
+            width: 32px; height: 32px; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; transition: transform 0.2s ease; z-index: 10;
+            filter: drop-shadow(0px 1px 3px rgba(0,0,0,0.4)); padding: 0;
         }
+        .wishlist-heart-btn svg { fill: transparent; stroke: #ffffff; stroke-width: 2.5; }
         .wishlist-heart-btn:active { transform: scale(0.85); }
-        .wishlist-heart-btn.favorited svg { fill: var(--heart-red); stroke: var(--heart-red); }
+        .wishlist-heart-btn.favorited svg { fill: #ffffff; stroke: #ffffff; }
 
         .card-details-box { display: flex; flex-direction: column; padding: 12px 2px 5px; position: relative; }
         .card-title { font-size: 0.85rem; margin: 0 0 3px 0; font-weight: 700; color: #222; }
@@ -225,78 +230,166 @@
             align-items: center; justify-content: center;
         }
 
+        /* Modal viewport overlays layout boards */
         .modal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.6); z-index: 1000; align-items: flex-end; justify-content: center;
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            background: var(--brand-black); 
+            z-index: 1000; 
+            align-items: center; 
+            justify-content: center;
         }
         .modal-content { 
-            background: white; max-width: 500px; width: 100%; border-radius: 30px 30px 0 0; 
-            padding: 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.15); 
-            height: 86vh; max-height: 86vh; display: flex; flex-direction: column; 
-            overflow: hidden; position: relative; box-sizing: border-box;
+            background: #ffffff; 
+            width: 100%; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+            position: relative; 
+            box-sizing: border-box;
         }
         
-        .modal-hero-area { position: relative; width: 100%; height: 38vh; min-height: 280px; background: #f5f5f5; flex-shrink: 0; }
-        .modal-hero-area img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease; }
+        .modal-hero-area { 
+            position: relative; 
+            width: 100%; 
+            height: 54%; 
+            background: #ffffff; 
+            flex-shrink: 0; 
+            overflow: hidden;
+        }
+        .modal-hero-area img { width: 100%; height: 100%; object-fit: cover; }
         
-        .modal-arrow-btn {
-            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.85);
-            border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; cursor: pointer; z-index: 6; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        .modal-back-arrow-trigger {
+            position: absolute; top: 44px; left: 24px; background: transparent; border: none; cursor: pointer; z-index: 15; padding: 5px;
+            filter: drop-shadow(0px 1px 3px rgba(0,0,0,0.3));
         }
-        .modal-arrow-left { left: 15px; }
-        .modal-arrow-right { right: 15px; }
-
-        .modal-thumb-row { display: flex; gap: 8px; margin: 5px 0 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; flex-shrink: 0; }
-        .modal-thumb-row::-webkit-scrollbar { display: none; }
-        .modal-thumb-img { width: 54px; height: 54px; border-radius: 10px; object-fit: cover; cursor: pointer; border: 2px solid transparent; flex-shrink: 0; transition: 0.2s; }
-        .modal-thumb-img.selected { border-color: black; transform: scale(1.05); }
-
-        .modal-nav-overlay {
-            position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 5;
-        }
-        .modal-circle-nav-btn {
-            background: rgba(255, 255, 255, 0.9); border: none; width: 40px; height: 40px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
-        }
-        .modal-circle-nav-btn.favorited svg { fill: var(--heart-red); stroke: var(--heart-red); }
+        .modal-back-arrow-trigger svg { stroke: #ffffff; }
         
-        .modal-img-counter {
-            position: absolute; bottom: 20px; right: 20px; background: rgba(0, 0, 0, 0.6);
-            color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.5px; z-index: 6;
+        /* Removed white background box block rings - cleanly floats over hero presentation elements */
+        .modal-favorite-heart-trigger {
+            position: absolute; top: 44px; right: 24px; background: transparent; border: none;
+            width: 36px; height: 36px; display: flex; align-items: center;
+            justify-content: center; cursor: pointer; z-index: 15; padding: 0;
+            filter: drop-shadow(0px 1px 3px rgba(0,0,0,0.4));
         }
+        .modal-favorite-heart-trigger svg { fill: transparent; stroke: #ffffff; transition: transform 0.2s; }
+        .modal-favorite-heart-trigger.favorited svg { fill: #ffffff; stroke: #ffffff; }
+        
+        .modal-slider-dots-container {
+            position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 6px; z-index: 6;
+        }
+        .modal-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: 0.2s; }
+        .modal-dot.active { background: #ffffff; }
 
         .modal-body-container { 
-            padding: 24px 24px 120px; 
-            overflow-y: auto; flex-grow: 1; -webkit-overflow-scrolling: touch; 
+            background: #ffffff;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            margin-top: -20px;
+            position: relative;
+            z-index: 10;
+            padding: 30px 24px; 
+            overflow-y: auto; 
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch; 
         }
         
-        .color-label-head { font-size: 0.8rem; color: #777; font-weight: 500; margin-bottom: 8px; }
-        .color-swatch-box { display: flex; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
-        .color-swatch {
-            width: 32px; height: 32px; border-radius: 8px; cursor: pointer; position: relative;
-            box-sizing: border-box; border: 1px solid rgba(0,0,0,0.06); transition: 0.2s ease;
+        .modal-main-title-text { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 1.85rem; 
+            font-weight: 800; 
+            line-height: 1.2; 
+            letter-spacing: -0.5px; 
+            margin: 0 0 12px 0; 
+            color: #000000;
         }
-        .color-swatch.selected { outline: 2px solid #000; outline-offset: 3px; }
+        
+        .product-description-paragraph { 
+            font-size: 0.88rem; 
+            color: #555555; 
+            margin: 0 0 4px 0; 
+            line-height: 1.5; 
+            font-weight: 400; 
+        }
+        .read-more-toggle-trigger { 
+            display: inline-block; 
+            background: none; 
+            border: none; 
+            font-size: 0.88rem; 
+            font-weight: 700; 
+            color: #000000; 
+            padding: 0; 
+            cursor: pointer; 
+            margin-bottom: 24px; 
+            text-align: left;
+            text-decoration: underline;
+        }
 
-        .size-label-head { font-size: 0.8rem; color: #777; font-weight: 500; margin-bottom: 8px; }
-        .size-row-options { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
-        .size-outline-box {
-            min-width: 44px; height: 32px; border: 1px solid var(--border-light); background: white;
-            color: #222; font-size: 0.8rem; font-weight: 500; display: flex; align-items: center;
-            justify-content: center; border-radius: 8px; cursor: pointer; transition: 0.2s; padding: 0 6px; box-sizing: border-box;
+        .color-label-head, .size-label-head { 
+            font-size: 0.85rem; 
+            color: #000000; 
+            font-weight: 600; 
+            margin-bottom: 12px; 
+            text-transform: capitalize;
         }
-        .size-outline-box.selected { background: black; color: white; border-color: black; font-weight: 700; }
+        
+        .color-swatch-box { display: flex; gap: 12px; margin-bottom: 24px; align-items: center; }
+        .color-swatch-ring-wrapper {
+            width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1.5px solid transparent; box-sizing: border-box;
+        }
+        .color-swatch-ring-wrapper.selected { border-color: #000000; }
+        .color-swatch-circle { width: 26px; height: 26px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.08); box-sizing: border-box; }
+
+        .size-row-options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; }
+        .size-outline-box {
+            min-width: 44px; height: 36px; border: 1px solid #000000; background: #ffffff;
+            color: #000000; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center;
+            justify-content: center; border-radius: 20px; cursor: pointer; transition: 0.15s; padding: 0 14px; box-sizing: border-box;
+        }
+        .size-outline-box.selected { background: #000000; color: #ffffff; }
+        .size-outline-box.out-of-stock { color: #cbd5e1; border-color: #e2e8f0; background: #ffffff; cursor: not-allowed; opacity: 0.4; }
 
         .action-tray-footer { 
-            position: absolute; bottom: 0; left: 0; width: 100%; background: white;
-            padding: 16px 24px 24px; border-top: 1px solid #f0f0f0; box-sizing: border-box;
-            display: flex; gap: 12px; align-items: center; z-index: 20;
+            margin-top: auto;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding-top: 15px;
+            padding-bottom: env(safe-area-inset-bottom, 15px);
+            box-sizing: border-box;
+            border-top: 1px solid #f3f4f6;
         }
+        
+        .modal-price-stack-layout { display: flex; flex-direction: column; }
+        .modal-slashed-original-price { font-size: 0.85rem; color: #999999; text-decoration: line-through; font-weight: 500; margin-bottom: 2px; }
+        .modal-active-bold-price { font-size: 1.5rem; font-weight: 800; color: #000000; }
+
         .btn-add-main-action { 
-            background: var(--brand-black); color: white; border: none; height: 52px;
-            border-radius: 14px; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px;
-            cursor: pointer; text-transform: uppercase; flex: 1; text-align: center; display: flex; align-items: center; justify-content: center;
+            background: #ffffff; 
+            color: #000000; 
+            border: 1.5px solid #000000; 
+            height: 48px;
+            border-radius: 24px; 
+            font-weight: 700; 
+            font-size: 0.9rem; 
+            padding: 0 44px;
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .btn-add-main-action:active { background: #000000; color: #ffffff; }
+        .btn-add-main-action.disabled {
+            background: #f1f5f9 !important; color: #cbd5e1 !important; border-color: #e2e8f0 !important; cursor: not-allowed !important;
         }
 
         .cart-qty-selector {
@@ -347,11 +440,6 @@
             
             .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 2px; }
             .image-container { height: 210px; border-radius: 16px; }
-            
-            .modal-content { height: 90vh; max-height: 90vh; border-radius: 24px 24px 0 0; }
-            .modal-hero-area { height: 35vh; min-height: 230px; }
-            .modal-body-container { padding: 20px 20px 100px; }
-            .action-tray-footer { padding: 12px 20px 20px; }
         }
     </style>
 </head>
@@ -422,47 +510,38 @@
 
     <div id="productModal" class="modal" onclick="if(event.target===this) closeModal()">
         <div class="modal-content">
-            <div class="modal-hero-area">
-                <div class="modal-nav-overlay">
-                    <button class="modal-circle-nav-btn" onclick="closeModal()">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                    </button>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="modal-circle-nav-btn" id="modalShareBtn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                        </button>
-                        <button class="modal-circle-nav-btn" id="modalWishBtn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                        </button>
-                    </div>
-                </div>
+            <div class="modal-hero-area" id="modalSwipeZone">
+                <button class="modal-back-arrow-trigger" onclick="closeModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="modal-favorite-heart-trigger" id="modalWishBtn" onclick="toggleModalWishlist(event)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                </button>
                 
-                <button class="modal-arrow-btn modal-arrow-left" onclick="changeDetailSlide(-1)">‹</button>
-                <img id="modalImg" src="" onclick="openFS(this.src)" alt="Product Zoom View">
-                <button class="modal-arrow-btn modal-arrow-right" onclick="changeDetailSlide(1)">›</button>
+                <img id="modalImg" src="" onclick="openFS(this.src)" alt="Product Canvas Presentation UI View">
                 
-                <div class="modal-img-counter" id="imageIndexTracker">1/3</div>
+                <div class="modal-slider-dots-container" id="modalDotsWrapper"></div>
             </div>
 
             <div class="modal-body-container">
-                <h2 id="modalTitle" style="margin: 0 0 8px 0; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px;"></h2>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <span id="modalPrice" style="font-weight: 800; font-size: 1.3rem; color: #000;"></span>
-                    <div style="display: flex; align-items: center; gap: 4px; font-size: 0.9rem; font-weight: bold;">
-                        <span>4.8</span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#f1c40f" stroke="#f1c40f"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        <span style="color: #888; font-weight: 400; font-size: 0.85rem;">(142)</span>
-                    </div>
-                </div>
-                <div class="modal-thumb-row" id="modalThumbnailsStrip"></div>
-                <p id="productDetails" style="font-size: 0.9rem; color: #555; margin: 0 0 24px 0; line-height: 1.5; font-weight: 400;"></p>
+                <h2 id="modalTitle" class="modal-main-title-text"></h2>
+                
+                <p id="productDetails" class="product-description-paragraph"></p>
+                <button id="readMoreToggle" class="read-more-toggle-trigger" onclick="toggleReadMoreText()">Read more</button>
+                
                 <div class="color-label-head">Color</div>
                 <div class="color-swatch-box" id="color-opts"></div>
+                
                 <div class="size-label-head">Size</div>
                 <div class="size-row-options" id="size-options-container"></div>
-            </div>
-            <div class="action-tray-footer">
-                <button id="modalAddBtn" class="btn-add-main-action">Add To Cart</button>
+                
+                <div class="action-tray-footer">
+                    <div class="modal-price-stack-layout">
+                        <span id="modalOriginalPrice" class="modal-slashed-original-price"></span>
+                        <span id="modalPrice" class="modal-active-bold-price"></span>
+                    </div>
+                    <button id="modalAddBtn" class="btn-add-main-action">Add to cart</button>
+                </div>
             </div>
         </div>
     </div>
@@ -651,7 +730,7 @@
                 const order = snapshot.val();
                 if(!order) {
                     resetTimelineView();
-                    return alert("Order code not found in system database registry logs.");
+                    return alert("Order code not found.");
                 }
                 renderTimelineProgress(order.status, order.timestamp);
             });
@@ -674,8 +753,6 @@
             if(activeIdx === -1) activeIdx = 0;
 
             const baseTime = new Date(timestamp);
-            
-            // Generate clean human-readable date & time windows for historical reference
             const formatTime = (dateObj) => {
                 const dateStr = dateObj.toLocaleDateString([], { month: 'short', day: 'numeric' });
                 const timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -686,7 +763,6 @@
                 const el = document.getElementById(`step-${step}`);
                 const label = document.getElementById(`time-${step}`);
                 
-                // Simulate chronological progressive baseline times (+0m, +15m, +45m, +1h30m)
                 let stepTime = new Date(baseTime.getTime());
                 if(step === 'processing') stepTime.setMinutes(stepTime.getMinutes() + 15);
                 if(step === 'dispatch') stepTime.setMinutes(stepTime.getMinutes() + 45);
@@ -701,15 +777,14 @@
                     if(step === 'dispatch') label.innerText = `Departed storage hub on ${renderTime}`;
                 } else if (i === activeIdx) {
                     el.classList.add('active');
-                    if(step === 'placed') label.innerText = `Order received on ${renderTime}. Awaiting base verification.`;
+                    if(step === 'placed') label.innerText = `Order received on ${renderTime}. Awaiting verification.`;
                     if(step === 'processing') label.innerText = `Active: Pulling items to packing docks (${renderTime}).`;
                     if(step === 'dispatch') label.innerText = `Out for delivery! Courier on route since ${renderTime}.`;
                     if(step === 'arrived') label.innerText = `Delivered! Package securely transferred on ${renderTime}.`;
                 } else {
-                    // Future upcoming baseline metrics
-                    if(step === 'processing') label.innerText = "Pending warehouse allocation and verification checks";
-                    if(step === 'dispatch') label.innerText = "Awaiting handover to local route motor courier units";
-                    if(step === 'arrived') label.innerText = "Pending dropoff confirmation at your chosen address location";
+                    if(step === 'processing') label.innerText = "Pending warehouse allocation";
+                    if(step === 'dispatch') label.innerText = "Awaiting handover to route couriers";
+                    if(step === 'arrived') label.innerText = "Pending dropoff confirmation";
                 }
             });
         }
@@ -730,12 +805,12 @@
         setInterval(autoSlideHome, 4000);
 
         const products = [
-            { id: 1, cat: 'joggers', name: 'Essential Joggers', price: 380, stock: 5, sizes: ['S', 'M', 'L', 'XL'], colors: [{name:'Black', hex:'#111'}, {name:'Grey', hex:'#9e9e9e'}], img1: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000', images: ['https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000','https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000','https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000'], details: 'Premium breathable fleece pants. Tailored deep side pockets.', meta: 'Black / Grey' },
-            { id: 2, cat: 'cargo-pants', name: 'Tactical Cargo Pants', price: 450, stock: 5, sizes: ['S', 'M', 'L', 'XL'], colors: [{name:'Black', hex:'#111'}, {name:'Olive', hex:'#3b4432'}], img1: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1000', images: ['https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1000'], details: 'Cotton ripstop canvas with modular geometric utility pockets.', meta: 'Multi-Color Pack' },
-            { id: 3, cat: 't-shirts', name: 'Heavyweight Oversized Tee', price: 280, stock: 5, sizes: ['M', 'L', 'XL'], colors: [{name:'Charcoal', hex:'#111'}, {name:'White', hex:'#fff'}], img1: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000', images: ['https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000'], details: '260GSM organic long-staple cotton drop-shoulder drop fit.', meta: 'Charcoal Black' },
-            { id: 4, cat: 'hoodies', name: 'Cyber Graphic Hoodie', price: 550, stock: 5, sizes: ['M', 'L', 'XL'], colors: [{name:'Matte Black', hex:'#111'}], img1: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000', images: ['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000'], details: '420GSM Isolated loopback cotton luxury graphic printing.', meta: 'Matte Black' },
-            { id: 5, cat: 'sneakers', name: 'Zamil Retro Court Sneakers', price: 750, stock: 5, sizes: ['41', '42', '43', '44'], colors: [{name:'Off-White', hex:'#f5f5f5'}], img1: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000', images: ['https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000'], details: 'Full-grain leather shoes built on customized cupsole matrices.', meta: 'Off-White Premium' },
-            { id: 6, cat: 't-shirts', name: 'Minimal Basic Tee', price: 220, stock: 5, sizes: ['S', 'M', 'L'], colors: [{name:'Beige', hex:'#e1d7c6'}], img1: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', images: ['https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000'], details: 'Sand-washed combed luxury cotton daily basic wear standard.', meta: 'Beige Suede' }
+            { id: 4, cat: 'hoodies', name: 'Microsuede Cropped Braxton Hoodie', price: 550, originalPrice: 600, stock: 5, sizes: ['S', 'M', 'L', 'XL', 'XXL'], sizesOutOfStock: ['XXL'], colors: [{name:'Matte Black', hex:'#111'}, {name:'Slate Grey', hex:'#8e9399'}, {name:'Off White', hex:'#f6f5f0'}], img1: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000', images: ['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000', 'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=1000'], details: 'Total Microsuede Braxton Hoodie is crafted of microsuede and a vintage-washed satin lining. It fea...', meta: 'Matte Black Pack' },
+            { id: 1, cat: 'joggers', name: 'Essential Joggers', price: 380, originalPrice: 420, stock: 5, sizes: ['S', 'M', 'L', 'XL'], colors: [{name:'Black', hex:'#111'}, {name:'Grey', hex:'#9e9e9e'}], img1: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000', images: ['https://images.unsplash.com/photo-1552902865-b72c031ac5ea?q=80&w=1000','https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000'], details: 'Premium breathable fleece pants. Tailored deep side pockets with high density structural custom knit detailing.', meta: 'Black / Grey' },
+            { id: 2, cat: 'cargo-pants', name: 'Tactical Cargo Pants', price: 450, originalPrice: 500, stock: 5, sizes: ['S', 'M', 'L', 'XL'], colors: [{name:'Black', hex:'#111'}, {name:'Olive', hex:'#3b4432'}], img1: 'https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1000', images: ['https://images.unsplash.com/photo-1517445312882-bc9910d016b7?q=80&w=1000'], details: 'Cotton ripstop canvas with modular geometric utility pockets. Engineered structural multi-panel build layouts.', meta: 'Multi-Color Pack' },
+            { id: 3, cat: 't-shirts', name: 'Heavyweight Oversized Tee', price: 280, originalPrice: 310, stock: 5, sizes: ['M', 'L', 'XL'], colors: [{name:'Charcoal', hex:'#111'}, {name:'White', hex:'#fff'}], img1: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000', images: ['https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000'], details: '260GSM organic long-staple cotton drop-shoulder drop fit. Reinforced tight-knit crew collars.', meta: 'Charcoal Black' },
+            { id: 5, cat: 'sneakers', name: 'Zamil Retro Court Sneakers', price: 750, originalPrice: 850, stock: 5, sizes: ['41', '42', '43', '44'], colors: [{name:'Off-White', hex:'#f5f5f5'}], img1: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000', images: ['https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000'], details: 'Full-grain leather shoes built on customized cupsole matrices with premium cushioning liners inside.', meta: 'Off-White Premium' },
+            { id: 6, cat: 't-shirts', name: 'Minimal Basic Tee', price: 220, originalPrice: 250, stock: 5, sizes: ['S', 'M', 'L'], colors: [{name:'Beige', hex:'#e1d7c6'}], img1: 'https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000', images: ['https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000'], details: 'Sand-washed combed luxury cotton daily basic wear standard. Double stitch flat locked bottom seams.', meta: 'Beige Suede' }
         ];
 
         let bag = [];
@@ -743,15 +818,29 @@
         let selection = { productId: null, size: "", color: "", qty: 1, img: "" };
         let activeDetailImgIndex = 0;
         let activeProductMediaList = [];
+        let descriptionTruncated = true;
+        let fullDescriptionBackupText = "";
 
         function listenToLiveStockUpdates() {
             database.ref('inventory_stock').on('value', (snapshot) => {
                 const stockData = snapshot.val();
                 if(stockData) {
                     products.forEach(p => {
-                        if(stockData[p.id] !== undefined) p.stock = stockData[p.id];
+                        if(stockData[p.id] !== undefined) p.stock = parseInt(stockData[p.id]);
                     });
                     renderGridContainer('main-grid', products);
+                    
+                    if (selection.productId) {
+                        const activeProduct = products.find(p => p.id === selection.productId);
+                        const addBtn = document.getElementById('modalAddBtn');
+                        if (activeProduct && activeProduct.stock <= 0) {
+                            addBtn.innerText = "SOLD OUT";
+                            addBtn.classList.add('disabled');
+                        } else {
+                            addBtn.innerText = "Add to cart";
+                            addBtn.classList.remove('disabled');
+                        }
+                    }
                 }
             });
         }
@@ -761,27 +850,30 @@
             if(!container) return;
             if(itemsList.length === 0) {
                 if(targetElementId === 'wishlist-grid') {
-                    container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#999; padding:60px 0;">Your configuration space is clean. Save favorites!</div>`;
+                    container.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:#999; padding:60px 0;">No favorites yet!</div>`;
                 }
                 return;
             }
             container.innerHTML = itemsList.map(p => {
                 const isFav = wishlist.includes(p.id) ? 'favorited' : '';
                 const isSoldOut = p.stock <= 0;
+                const totalImagesCount = p.images ? p.images.length : 1;
+
                 return `
                 <div class="card" data-cat="${p.cat}">
                     <div class="image-container">
                         ${isSoldOut ? '<div class="sold-out-overlay">SOLD OUT</div>' : ''}
-                        <img src="${p.img1}" onclick="${isSoldOut ? "alert('Sold out!')" : `openDetails(${p.id})`}">
+                        <img src="${p.img1}" onclick="${isSoldOut ? "alert('This piece is currently sold out!')" : `openDetails(${p.id})`}">
+                        <div class="grid-img-counter">${totalImagesCount} ${totalImagesCount === 1 ? 'Pic' : 'Pics'}</div>
                         <button class="wishlist-heart-btn ${isFav}" data-id="${p.id}" onclick="toggleWishlist(event, ${p.id})">
-                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                         </button>
                     </div>
                     <div class="card-details-box">
                         <h3 class="card-title">${p.name}</h3>
                         <p class="card-meta">${p.meta} <span style="color:#888;">(Qty: ${p.stock})</span></p>
                         <p class="card-price">GH₵ ${p.price.toFixed(2)}</p>
-                        <button class="card-add-trigger" onclick="openDetails(${p.id})">+</button>
+                        <button class="card-add-trigger" onclick="${isSoldOut ? "alert('Sold out.')" : `openDetails(${p.id})`}">${isSoldOut ? '×' : '+'}</button>
                     </div>
                 </div>
             `}).join('');
@@ -792,51 +884,165 @@
             if(wishlist.includes(id)) wishlist = wishlist.filter(item => item !== id);
             else wishlist.push(id);
             document.getElementById('fav-count').innerText = wishlist.length;
+            
+            document.querySelectorAll(`.wishlist-heart-btn[data-id="${id}"]`).forEach(btn => {
+                if(wishlist.includes(id)) btn.classList.add('favorited');
+                else btn.classList.remove('favorited');
+            });
+
+            if(selection.productId === id) {
+                const modalBtn = document.getElementById('modalWishBtn');
+                if(wishlist.includes(id)) modalBtn.classList.add('favorited');
+                else modalBtn.classList.remove('favorited');
+            }
+
             renderGridContainer('wishlist-grid', products.filter(p => wishlist.includes(p.id)));
+        }
+
+        function toggleModalWishlist(e) {
+            if(e) e.stopPropagation();
+            if(selection.productId) {
+                toggleWishlist(null, selection.productId);
+            }
+        }
+
+        function toggleReadMoreText() {
+            const descriptionElement = document.getElementById('productDetails');
+            const toggleTrigger = document.getElementById('readMoreToggle');
+            
+            if (descriptionTruncated) {
+                descriptionElement.innerText = fullDescriptionBackupText;
+                toggleTrigger.innerText = "Read less";
+                descriptionTruncated = false;
+            } else {
+                descriptionElement.innerText = fullDescriptionBackupText.substring(0, 92) + "...";
+                toggleTrigger.innerText = "Read more";
+                descriptionTruncated = true;
+            }
         }
 
         function openDetails(id) {
             const p = products.find(item => item.id == id);
             if(!p) return;
+            if(p.stock <= 0) return alert("This item is sold out!");
+
             activeProductMediaList = p.images || [p.img1];
             activeDetailImgIndex = 0;
             selection = { productId: p.id, size: "", color: "", qty: 1, img: activeProductMediaList[0] };
             
+            buildModalDotsTrackers();
             updateDetailCarouselView();
+            
             document.getElementById('modalTitle').innerText = p.name;
+            
+            if (p.originalPrice) {
+                document.getElementById('modalOriginalPrice').style.display = 'block';
+                document.getElementById('modalOriginalPrice').innerText = 'GH₵ ' + p.originalPrice.toFixed(2);
+            } else {
+                document.getElementById('modalOriginalPrice').style.display = 'none';
+            }
             document.getElementById('modalPrice').innerText = 'GH₵ ' + p.price.toFixed(2);
+            
+            fullDescriptionBackupText = p.details;
             document.getElementById('productDetails').innerText = p.details;
+            document.getElementById('readMoreToggle').style.display = 'inline-block';
 
-            const stripContainer = document.getElementById('modalThumbnailsStrip');
-            stripContainer.innerHTML = activeProductMediaList.map((imgSrc, idx) => `
-                <img src="${imgSrc}" class="modal-thumb-img ${idx === 0 ? 'selected' : ''}" onclick="jumpToDetailSlide(${idx})">
-            `).join('');
+            const addBtn = document.getElementById('modalAddBtn');
+            addBtn.innerText = "Add to cart";
+            addBtn.classList.remove('disabled');
+
+            const modalWishBtn = document.getElementById('modalWishBtn');
+            if(wishlist.includes(p.id)) modalWishBtn.classList.add('favorited');
+            else modalWishBtn.classList.remove('favorited');
 
             const colorContainer = document.getElementById('color-opts');
             colorContainer.innerHTML = p.colors.map((c, idx) => `
-                <div class="color-swatch" style="background-color: ${c.hex};" onclick="setOptSwatch(this, 'color', '${c.name}', ${idx}, '${activeProductMediaList[idx] || p.img1}')"></div>
+                <div class="color-swatch-ring-wrapper" onclick="setOptSwatch(this, 'color', '${c.name}', ${idx}, '${activeProductMediaList[idx] || p.img1}')">
+                    <div class="color-swatch-circle" style="background-color: ${c.hex};"></div>
+                </div>
             `).join('');
 
             const sizeContainer = document.getElementById('size-options-container');
-            sizeContainer.innerHTML = p.sizes.map(s => `<div class="size-outline-box" onclick="setOptSwatch(this, 'size', '${s}')">${s}</div>`).join('');
+            sizeContainer.innerHTML = p.sizes.map(s => {
+                const isOOS = p.sizesOutOfStock && p.sizesOutOfStock.includes(s);
+                if (isOOS) {
+                    return `<div class="size-outline-box out-of-stock">${s}</div>`;
+                } else {
+                    return `<div class="size-outline-box" onclick="setOptSwatch(this, 'size', '${s}')">${s}</div>`;
+                }
+            }).join('');
+
+            if(colorContainer.querySelector('.color-swatch-ring-wrapper')) {
+                colorContainer.querySelector('.color-swatch-ring-wrapper').click();
+            }
+            if(sizeContainer.querySelector('.size-outline-box:not(.out-of-stock)')) {
+                sizeContainer.querySelectorAll('.size-outline-box:not(.out-of-stock)')[0].click(); 
+            }
 
             document.getElementById('productModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
 
             document.getElementById('modalAddBtn').onclick = () => {
+                const freshProductCheck = products.find(item => item.id == p.id);
+                if(freshProductCheck.stock <= 0) return alert("Sorry, this item just sold out!");
                 if(!selection.color || !selection.size) return alert("Please select options!");
-                bag.push({id: Date.now(), name: p.name, price: p.price, ...selection});
+                
+                const existingInBag = bag.filter(item => item.productId === p.id).reduce((sum, item) => sum + item.qty, 0);
+                if(existingInBag + 1 > freshProductCheck.stock) {
+                    return alert(`Cannot add more. Real-time warehouse limits reached! only ${freshProductCheck.stock} left.`);
+                }
+
+                bag.push({id: Date.now(), productId: p.id, name: p.name, price: p.price, ...selection});
                 updateCart(); closeModal(); showPage('cart');
             };
         }
 
+        function buildModalDotsTrackers() {
+            const wrapper = document.getElementById('modalDotsWrapper');
+            if(!wrapper) return;
+            wrapper.innerHTML = activeProductMediaList.map((_, idx) => `
+                <div class="modal-dot ${idx === 0 ? 'active' : ''}"></div>
+            `).join('');
+        }
+
         function updateDetailCarouselView() {
             document.getElementById('modalImg').src = activeProductMediaList[activeDetailImgIndex];
-            document.getElementById('imageIndexTracker').innerText = `${activeDetailImgIndex + 1} / ${activeProductMediaList.length}`;
+            document.querySelectorAll('#modalDotsWrapper .modal-dot').forEach((dot, idx) => {
+                if(idx === activeDetailImgIndex) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
         }
-        function changeDetailSlide(dir) { activeDetailImgIndex = (activeDetailImgIndex + dir + activeProductMediaList.length) % activeProductMediaList.length; updateDetailCarouselView(); }
-        function jumpToDetailSlide(idx) { activeDetailImgIndex = idx; updateDetailCarouselView(); }
-        function setOptSwatch(el, type, val) { el.parentElement.querySelectorAll('.selected').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); selection[type] = val; }
+        
+        function setOptSwatch(el, type, val, idx, optionalImg) { 
+            el.parentElement.querySelectorAll('.selected').forEach(b => b.classList.remove('selected')); 
+            el.classList.add('selected'); 
+            selection[type] = val; 
+            if(type === 'color' && optionalImg) {
+                activeDetailImgIndex = idx % activeProductMediaList.length;
+                updateDetailCarouselView();
+            }
+        }
+
+        let touchstartX = 0;
+        let touchendX = 0;
+        const swipeZone = document.getElementById('modalSwipeZone');
+
+        swipeZone.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; }, false);
+        swipeZone.addEventListener('touchend', e => { 
+            touchendX = e.changedTouches[0].screenX; 
+            handleSwipeGesture();
+        }, false);
+
+        function handleSwipeGesture() {
+            if (touchendX < touchstartX - 50) {
+                activeDetailImgIndex = (activeDetailImgIndex + 1) % activeProductMediaList.length;
+                updateDetailCarouselView();
+            }
+            if (touchendX > touchstartX + 50) {
+                activeDetailImgIndex = (activeDetailImgIndex - 1 + activeProductMediaList.length) % activeProductMediaList.length;
+                updateDetailCarouselView();
+            }
+        }
 
         function handleSearch() {
             const term = document.getElementById('searchInput').value.toLowerCase();
@@ -854,7 +1060,16 @@
 
         function updateBagItemQty(uniqueId, amount) {
             const target = bag.find(item => item.id === uniqueId);
-            if(target) { target.qty = Math.max(1, target.qty + amount); updateCart(); }
+            if(target) {
+                const pInfo = products.find(p => p.id === target.productId);
+                const itemsFromProduct = bag.filter(item => item.productId === target.productId && item.id !== uniqueId).reduce((sum, item) => sum + item.qty, 0);
+                
+                if (amount > 0 && (itemsFromProduct + target.qty + amount > pInfo.stock)) {
+                    return alert(`Stock threshold reached.`);
+                }
+                target.qty = Math.max(1, target.qty + amount); 
+                updateCart(); 
+            }
         }
 
         function updateCart() {
@@ -862,7 +1077,7 @@
             if(!list) return;
 
             if(bag.length === 0) {
-                list.innerHTML = `<p style="text-align:center; color:#999; padding:40px 0;">Your bag is currently clean and empty</p>`;
+                list.innerHTML = `<p style="text-align:center; color:#999; padding:40px 0;">Your bag is empty</p>`;
                 document.getElementById('subtotal-val').innerText = "0.00";
                 document.getElementById('delivery-val').innerText = "0.00";
                 document.getElementById('total-val').innerText = "0.00";
@@ -881,14 +1096,12 @@
                             <button class="cart-qty-btn" onclick="updateBagItemQty(${item.id}, 1)">+</button>
                         </div>
                     </div>
-<button onclick="removeItem(${item.id})" style="background: none; border: none; cursor: pointer; padding: 10px; align-self: flex-start; display: flex; align-items: center; justify-content: center;" title="Remove Item">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="3 6 5 6 21 6"></polyline>
-        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-        <line x1="10" y1="11" x2="10" y2="17"></line>
-        <line x1="14" y1="11" x2="14" y2="17"></line>
-    </svg>
-</button>
+                    <button onclick="removeItem(${item.id})" style="background: none; border: none; cursor: pointer; padding: 10px; align-self: flex-start; display: flex; align-items: center; justify-content: center;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                    </button>
                 </div>
               `).join('');
             
@@ -902,10 +1115,12 @@
         }
 
         function removeItem(id) { bag = bag.filter(i => i.id !== id); updateCart(); }
-        function closeModal() { document.getElementById('productModal').style.display = 'none'; document.body.style.overflow = ''; }
+        function closeModal() { document.getElementById('productModal').style.display = 'none'; document.body.style.overflow = ''; selection.productId = null; }
         function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); document.querySelectorAll('nav a').forEach(a => a.classList.remove('active')); const l = document.getElementById('l-' + id); if(l) l.classList.add('active'); }
 
         function processPayment(method) {
+            if(bag.length === 0) return alert("Your bag is empty.");
+            
             const name = document.getElementById('customer-name').value.trim();
             const email = document.getElementById('customer-email').value.trim();
             const phone = document.getElementById('customer-phone').value.trim();
@@ -914,31 +1129,49 @@
             const address = document.getElementById('customer-address').value.trim();
 
             if(!name || !email || !phone || !region || !city || !address) {
-                return alert("Please complete all required delivery and contact details!");
+                return alert("Please fulfill all mandatory custom tracking details!");
             }
 
-            const productSubtotal = bag.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const fullAbsoluteTotal = productSubtotal + FLAT_DELIVERY_FEE;
+            database.ref('inventory_stock').once('value', (snapshot) => {
+                const currentStock = snapshot.val() || {};
+                let stockValid = true;
+                const itemTotals = {};
+                bag.forEach(item => { itemTotals[item.productId] = (itemTotals[item.productId] || 0) + item.qty; });
 
-            if(method === 'paystack') {
-                let handler = PaystackPop.setup({
-                    key: 'pk_live_f2da1b091950f3e4e699a216ae6375a1d8adf79f',
-                    email: email, amount: Math.round(fullAbsoluteTotal * 100), currency: 'GHS',
-                    ref: 'ZAMIL-FULL-' + Date.now(),
-                    callback: function(res) { sendOrderToApp('paystack', res.reference, 0); }
-                });
-                handler.openIframe();
-            } else if(method === 'cod') {
-                if(confirm(`To confirm your Pay on Delivery order, you must pay the GH₵ ${FLAT_DELIVERY_FEE.toFixed(2)} delivery fee right now. The product balance of GH₵ ${productSubtotal.toFixed(2)} will be paid to the courier dynamic balance upon arrival. proceed?`)) {
+                for (let prodId in itemTotals) {
+                    const stockAvailable = currentStock[prodId] !== undefined ? parseInt(currentStock[prodId]) : 5;
+                    if (itemTotals[prodId] > stockAvailable) {
+                        stockValid = false;
+                        const pObj = products.find(p => p.id == prodId);
+                        alert(`Stock sync error: "${pObj.name}" is short on inventory supply.`);
+                        break;
+                    }
+                }
+
+                if (!stockValid) return;
+                const productSubtotal = bag.reduce((sum, item) => sum + (item.price * item.qty), 0);
+                const fullAbsoluteTotal = productSubtotal + FLAT_DELIVERY_FEE;
+
+                if(method === 'paystack') {
                     let handler = PaystackPop.setup({
                         key: 'pk_live_f2da1b091950f3e4e699a216ae6375a1d8adf79f',
-                        email: email, amount: Math.round(FLAT_DELIVERY_FEE * 100), currency: 'GHS',
-                        ref: 'ZAMIL-DELIVERY-MANDATORY-' + Date.now(),
-                        callback: function(res) { sendOrderToApp('cod', res.reference, productSubtotal); }
+                        email: email, amount: Math.round(fullAbsoluteTotal * 100), currency: 'GHS',
+                        ref: 'ZAMIL-FULL-' + Date.now(),
+                        callback: function(res) { sendOrderToApp('paystack', res.reference, 0); }
                     });
                     handler.openIframe();
+                } else if(method === 'cod') {
+                    if(confirm(`Confirm pay on delivery order arrangement setup?`)) {
+                        let handler = PaystackPop.setup({
+                            key: 'pk_live_f2da1b091950f3e4e699a216ae6375a1d8adf79f',
+                            email: email, amount: Math.round(FLAT_DELIVERY_FEE * 100), currency: 'GHS',
+                            ref: 'ZAMIL-DEL-MANDATORY-' + Date.now(),
+                            callback: function(res) { sendOrderToApp('cod', res.reference, productSubtotal); }
+                        });
+                        handler.openIframe();
+                    }
                 }
-            }
+            });
         }
 
         function sendOrderToApp(method, ref, outstandingBalance) {
@@ -947,31 +1180,39 @@
             const total = sub + FLAT_DELIVERY_FEE;
             
             const payload = {
-                id: codeId,
-                customerName: document.getElementById('customer-name').value.trim(),
+                id: codeId, customerName: document.getElementById('customer-name').value.trim(),
                 email: document.getElementById('customer-email').value.trim(),
                 phone: document.getElementById('customer-phone').value.trim(),
                 region: document.getElementById('customer-region').value,
                 city: document.getElementById('customer-city').value.trim(),
                 address: document.getElementById('customer-address').value.trim(),
-                paymentMethod: method, 
-                transactionReference: ref,
-                deliveryFeePaidOnline: FLAT_DELIVERY_FEE,
-                amountDueOnDelivery: outstandingBalance, 
+                paymentMethod: method, transactionReference: ref,
+                deliveryFeePaidOnline: FLAT_DELIVERY_FEE, amountDueOnDelivery: outstandingBalance, 
                 itemsList: bag.map(i => `${i.name} (${i.size}) x${i.qty}`),
-                subtotal: sub, 
-                deliveryFee: FLAT_DELIVERY_FEE,
-                total: total,
+                subtotal: sub, deliveryFee: FLAT_DELIVERY_FEE, total: total,
                 status: 'placed', timestamp: new Date().toISOString()
             };
 
-            database.ref(`orders/${codeId}`).set(payload).then(() => {
-                let successMessage = `🎉 Success! Delivery Fee payment processed.\n\nOrder Code: ${codeId}`;
-                if(outstandingBalance > 0) {
-                    successMessage += `\n\nNote: Please have GH₵ ${outstandingBalance.toFixed(2)} ready to pay the dispatcher upon arrival.`;
-                }
-                alert(successMessage);
-                bag = []; updateCart(); showPage('home');
+            database.ref('inventory_stock').once('value', (snapshot) => {
+                const currentStock = snapshot.val() || {};
+                const updateStockPayload = {};
+
+                bag.forEach(item => {
+                    const currentItemStock = currentStock[item.productId] !== undefined ? parseInt(currentStock[item.productId]) : 5;
+                    const computedNextStock = Math.max(0, currentItemStock - item.qty);
+                    updateStockPayload[item.productId] = computedNextStock;
+                    
+                    const localProductItem = products.find(p => p.id === item.productId);
+                    if(localProductItem) localProductItem.stock = computedNextStock;
+                });
+
+                Promise.all([
+                    database.ref(`orders/${codeId}`).set(payload),
+                    database.ref('inventory_stock').update(updateStockPayload)
+                ]).then(() => {
+                    alert(`🎉 Order Placed Successfully!\n\nOrder Code: ${codeId}`);
+                    bag = []; updateCart(); showPage('home');
+                });
             });
         }
 
