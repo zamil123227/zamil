@@ -508,43 +508,28 @@
         <a onclick="showPage('wishlist')" id="l-wishlist">Favorite (<span id="fav-count">0</span>)</a>
     </nav>
 
-    <div id="productModal" class="modal" onclick="if(event.target===this) closeModal()">
-        <div class="modal-content">
-            <div class="modal-hero-area" id="modalSwipeZone">
-                <button class="modal-back-arrow-trigger" onclick="closeModal()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                </button>
-                <button class="modal-favorite-heart-trigger" id="modalWishBtn" onclick="toggleModalWishlist(event)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                </button>
-                
-                <img id="modalImg" src="" onclick="openFS(this.src)" alt="Product Canvas Presentation UI View">
-                
-                <div class="modal-slider-dots-container" id="modalDotsWrapper"></div>
-            </div>
+    <div id="productModal" class="modal" onclick="if(event.target===this) closeModal()" style="display: none; background: #000;">
+    <div class="modal-content" style="background: transparent; position: relative;">
+        <img id="modalImg" src="" style="position: absolute; width: 100%; height: 100%; object-fit: cover;">
+        
+        <button class="modal-back-arrow-trigger" onclick="closeModal()" style="top: 44px; left: 24px; z-index: 20;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="modal-favorite-heart-trigger" id="modalWishBtn" onclick="toggleModalWishlist(event)" style="top: 44px; right: 24px; z-index: 20;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
 
-            <div class="modal-body-container">
-                <h2 id="modalTitle" class="modal-main-title-text"></h2>
-                
-                <p id="productDetails" class="product-description-paragraph"></p>
-                <button id="readMoreToggle" class="read-more-toggle-trigger" onclick="toggleReadMoreText()">Read more</button>
-                
-                <div class="color-label-head">Color</div>
-                <div class="color-swatch-box" id="color-opts"></div>
-                
-                <div class="size-label-head">Size</div>
-                <div class="size-row-options" id="size-options-container"></div>
-                
-                <div class="action-tray-footer">
-                    <div class="modal-price-stack-layout">
-                        <span id="modalOriginalPrice" class="modal-slashed-original-price"></span>
-                        <span id="modalPrice" class="modal-active-bold-price"></span>
-                    </div>
-                    <button id="modalAddBtn" class="btn-add-main-action">Add to cart</button>
-                </div>
-            </div>
+        <div class="modal-body-container" style="position: absolute; bottom: 0; width: 100%; background: rgba(255,255,255,0.15); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 40px 40px 0 0; padding: 30px; border-top: 1px solid rgba(255,255,255,0.2); z-index: 10;">
+            <h2 id="modalTitle" style="color: white; font-size: 1.8rem; margin: 0;"></h2>
+            <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 20px;">Urban Collection</p>
+            <div id="modalPrice" style="color: white; font-size: 2rem; font-weight: 800; margin-bottom: 20px;"></div>
+            
+            <div class="size-row-options" id="size-options-container" style="justify-content: flex-start; gap: 10px; margin-bottom: 20px;"></div>
+            
+            <button id="modalAddBtn" style="width: 100%; background: white; color: black; border: none; padding: 18px; border-radius: 30px; font-weight: 800; font-size: 1rem; cursor: pointer;">Buy Now</button>
         </div>
     </div>
+</div>
 
     <section id="home" class="page active-page">
         <div class="hero-container">
